@@ -44,11 +44,13 @@ Open http://localhost:5173.
 
 ## Presenting
 
-- The **Demo** button (bottom-left) jumps to any screen, triggers recovery states, and has **Reset demo** to start over.
+- The **Demo** button (bottom-left) jumps to any screen, triggers two recovery states (Rho sync failure, out-of-date recommendation), and has **Reset demo** to start over.
 - Progress saves in the browser, so a refresh keeps your place.
 - Suggested live moments:
-  1. On **Scenarios**, drag *NYC setup cost* from $60k to $35k and watch the downside stop breaking the reserve.
-     Then open **Home** — recommendations switch from “Test the NYC plan” to “Cap NYC setup at $35k” and “Start raise talks by Month 3”.
+  1. On **Scenarios**, drag *NYC setup cost* from $60k to $35k and watch the status flip from “Downside breaks the reserve in Month 6”
+     to “Reserve holds through Month 6”. Drag it back to $60k and click **See recommendation**.
+     Then open **Home** — recommendations switch from “Test the NYC plan” to “Start raise talks by Month 3” and
+     “Cap NYC setup at $35k, release the rest in stages”. (Home only switches once the analysis reaches the Recommendation step.)
   2. Click **See calculation** to show the month-by-month math and where every input comes from.
   3. **Upload a model** → **Use the sample model** → approve the formula fix and watch Month-6 cash drop from $240k to $150k.
 
@@ -67,7 +69,7 @@ Open http://localhost:5173.
 | 04b Recommendation | `#/recommendation` | Financial impact views, Update goals, Ask panel, decision brief, out-of-date state with Recalculate/Undo |
 | 05 Validate — upload | `#/validate` | Sample model or your own file (demo shows sample findings), unsupported-file error, coverage + partial review |
 | 06 Validate — findings | `#/findings` | 4 computed findings, approve/reject with Undo, save a reviewed version |
-| 07 Recovery states | Demo menu | Rho sync failure, out-of-date recommendation, failed connection (Brex), missing inputs (screen 03), partial review (screen 05) |
+| 07 Recovery states | Demo menu + in the flow | Demo menu: Rho sync failure (Retry sync clears it), out-of-date recommendation (Recalculate / Undo change). In the flow: failed connection (Brex fails on the first try, screen 01), missing inputs (clear a required field, screen 03), partial review (sample model, screen 05) |
 
 Only the NYC team decision is modeled. Other questions and decision areas show a “coming soon” message.
 
