@@ -4,8 +4,18 @@ const { useState, useEffect, useMemo, useRef, useCallback, useContext, createCon
 const StoreContext = createContext(null);
 const useStore = () => useContext(StoreContext);
 
+// Uka's F mark: a blue stroke over a lime stroke (Logo / Mark · Color in Figma).
 function BrandMark({ className = "" }) {
-  return <span className={"brand-mark " + className} aria-hidden="true" />;
+  return (
+    <svg className={"brand-mark " + className} viewBox="0 0 264 272" aria-hidden="true">
+      <path d="M100 0H214A50 50 0 0 1 214 100H118C58 100 14 110 4 134C2 139 0 138 0 132V100C0 45 45 0 100 0Z" style={{ fill: "var(--blue)" }} />
+      <path d="M96 122H158A42 42 0 0 1 158 206H120C106 206 99 213 99 223A49.5 49.5 0 0 1 0 223V196C0 151 42 122 96 122Z" style={{ fill: "var(--lime)" }} />
+    </svg>
+  );
+}
+
+function Wordmark() {
+  return <span className="wordmark">Finance<span>Bro</span></span>;
 }
 
 function TopBar({ setup = false }) {
@@ -15,7 +25,7 @@ function TopBar({ setup = false }) {
   return (
     <header className="topbar">
       <button className="brand" onClick={() => (setup ? null : go("home"))} aria-label="Finance Bro AI home">
-        <BrandMark /> Finance Bro AI
+        <BrandMark /> <Wordmark /> <span className="brand-tag">AI</span>
       </button>
       {setup ? (
         <div className="row small muted">

@@ -72,8 +72,8 @@ function HomeScreen() {
       <TopBar />
       <main className="page">
         <SyncBanner />
-        <section className="panel stack" style={{ padding: 26, gap: 16 }} aria-label="Ask">
-          <h1 className="h1">What do you want to decide today?</h1>
+        <section className="hero stack" style={{ gap: 18 }} aria-label="Ask">
+          <h1 className="display">What do you want to decide today?</h1>
           <form className="big-ask" onSubmit={(e) => { e.preventDefault(); submit(); }}>
             <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="e.g. How much can we afford for NYC team activities and equipment?" aria-label="Ask a business question" />
             <button className="btn btn-dark" type="submit">Ask →</button>

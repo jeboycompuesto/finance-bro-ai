@@ -1,11 +1,11 @@
 // Charts: hand-built SVG so every mark, tick and label comes from one scale.
 
 const SERIES_STYLE = {
-  focus: { stroke: "var(--accent)", strokeWidth: 3, dash: null },
+  focus: { stroke: "var(--chart-focus)", strokeWidth: 3, dash: null },
   dash: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "9 6" },
   dot: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "2 5" },
   muted: { stroke: "var(--chart-muted)", strokeWidth: 2, dash: null },
-  alt: { stroke: "var(--warn)", strokeWidth: 2, dash: "14 5 3 5" },
+  alt: { stroke: "var(--warn-fill)", strokeWidth: 2, dash: "14 5 3 5" },
 };
 
 // Points for a series, stopping where cash reaches zero (with the exact crossing).
@@ -79,7 +79,7 @@ function CashChart({ series, reserve, height = 300, width = 760, marker, showLeg
           ))}
           {reserve != null && (
             <g>
-              <line x1={pad.l} x2={W - pad.r} y1={y(reserve)} y2={y(reserve)} style={{ stroke: "var(--ink)", strokeWidth: 1.25, strokeDasharray: "4 4" }} />
+              <line x1={pad.l} x2={W - pad.r} y1={y(reserve)} y2={y(reserve)} style={{ stroke: "var(--crit-fill)", strokeWidth: 1.5, strokeDasharray: "5 4" }} />
               <text x={W - pad.r} y={y(reserve) - 7} textAnchor="end" style={{ fill: "var(--ink)", fontSize: 12, fontWeight: 600 }}>
                 Reserve floor {fmtK(reserve)}
               </text>
@@ -93,11 +93,11 @@ function CashChart({ series, reserve, height = 300, width = 760, marker, showLeg
             );
           })}
           {focusEnd && (
-            <circle cx={x(focusEnd[0])} cy={y(focusEnd[1])} r="5" style={{ fill: "var(--accent)", stroke: "var(--surface)", strokeWidth: 2 }} />
+            <circle cx={x(focusEnd[0])} cy={y(focusEnd[1])} r="5" style={{ fill: "var(--chart-focus)", stroke: "var(--surface)", strokeWidth: 2 }} />
           )}
           {marker && (
             <g>
-              <circle cx={x(marker.month)} cy={y(marker.value)} r="6" style={{ fill: "var(--surface)", stroke: "var(--crit)", strokeWidth: 2.5 }} />
+              <circle cx={x(marker.month)} cy={y(marker.value)} r="6" style={{ fill: "var(--surface)", stroke: "var(--crit-fill)", strokeWidth: 2.5 }} />
               <text x={x(marker.month) - 12} y={y(marker.value) + 22} textAnchor="end" style={{ fill: "var(--crit)", fontSize: 12, fontWeight: 600 }}>
                 {marker.label}
               </text>

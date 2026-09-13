@@ -23,10 +23,10 @@ function LoadingScreen() {
   return (
     <main className="loading-screen">
       <div className="loading-col">
-        <BrandMark className="loading-mark" />
-        <div className="stack" style={{ gap: 6, alignItems: "center" }}>
-          <h1 className="h1">Finance Bro AI</h1>
-          <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready." : "Getting your workspace ready…"}</p>
+        <span className="loading-art"><img src={BRODY_SRC} alt="Brody the Bull, the Finance Bro mascot, in a fleece vest holding a notebook" width="180" height="180" /></span>
+        <div className="stack" style={{ gap: 10, alignItems: "center" }}>
+          <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandMark /> <Wordmark /></h1>
+          <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Let’s ask something expensive." : "Getting your workspace ready…"}</p>
         </div>
         <div style={{ width: "100%" }} className="stack">
           <div className="progress good" aria-label="Loading progress"><span style={{ width: `${progress * 100}%` }} /></div>

@@ -10,6 +10,9 @@ recommended setup cap and recommendation text. Change an assumption or drag the 
 
 **Live demo:** https://jeboycompuesto.github.io/finance-bro-ai/ (GitHub Pages, served from `docs/`)
 
+**Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — lime hero, navy ink, flat neutral cards and pill buttons
+(Wise-inspired), Uka's F logo, Bricolage Grotesque / Figtree / JetBrains Mono.
+
 ## Run it
 
 No installs needed (Python 3 is already on macOS).
@@ -73,7 +76,8 @@ Only the NYC team decision is modeled. Other questions and decision areas show a
 ```
 build.py                 bundles src/ into dist/index.html
 src/index.template.html  page shell (fonts, CDN scripts)
-src/styles.css           design tokens (light + dark) and components
+src/styles.css           design tokens (light + dark) and components, from the Finance Bro AI design system
+src/brody.jpg            Brody illustration for the loading screen (inlined by build.py)
 src/data.js              sample company, integrations catalog, goals, initial state
 src/engine.js            calculation engine, recommendations, templated explanations
 src/ui.jsx               shared components (top bar, stepper, provenance tags, inputs, modal, toasts)
