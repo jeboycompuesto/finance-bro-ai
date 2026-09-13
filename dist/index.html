@@ -1,0 +1,3346 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finance Bro AI</title>
+<meta name="description" content="Finance Bro AI product demo: turn live financial data and a business question into a decision you can defend.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Finance Bro AI — product demo styles
+   Palette: a green-grey ledger ground with one deep "ledger green" accent.
+   Provenance is part of the visual language: ACTUAL chips are solid,
+   ASSUMPTION chips are dashed (forward-looking, not yet true). */
+
+:root {
+  --paper: #f5f7f4;
+  --surface: #ffffff;
+  --surface-2: #eef2ef;
+  --surface-3: #e5ebe7;
+  --ink: #15201b;
+  --ink-2: #34423b;
+  --muted: #5d6a63;
+  --rule: #dae1dc;
+  --rule-strong: #b7c3bc;
+  --accent: #0e6b4e;
+  --accent-hover: #0a5a41;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f0e9;
+  --warn: #a86412;
+  --warn-soft: #f8eedf;
+  --crit: #b42318;
+  --crit-soft: #fbe9e7;
+  --good: #0e6b4e;
+  --chart-muted: #8f9b95;
+  --chart-grid: #e6ebe7;
+  --overlay: rgba(21, 32, 27, 0.42);
+  --shadow: 0 1px 2px rgba(21, 32, 27, 0.05), 0 12px 32px -18px rgba(21, 32, 27, 0.28);
+
+  --font-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1311;
+    --surface: #151b18;
+    --surface-2: #1b2320;
+    --surface-3: #222b27;
+    --ink: #e4ebe7;
+    --ink-2: #c3cdc8;
+    --muted: #94a29b;
+    --rule: #27302c;
+    --rule-strong: #3b4641;
+    --accent: #4dc39a;
+    --accent-hover: #6dd3ae;
+    --accent-ink: #06140f;
+    --accent-soft: #123027;
+    --warn: #e2a65a;
+    --warn-soft: #2e2414;
+    --crit: #f08a7e;
+    --crit-soft: #351a1a;
+    --good: #4dc39a;
+    --chart-muted: #6f7c75;
+    --chart-grid: #222b27;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1311;
+  --surface: #151b18;
+  --surface-2: #1b2320;
+  --surface-3: #222b27;
+  --ink: #e4ebe7;
+  --ink-2: #c3cdc8;
+  --muted: #94a29b;
+  --rule: #27302c;
+  --rule-strong: #3b4641;
+  --accent: #4dc39a;
+  --accent-hover: #6dd3ae;
+  --accent-ink: #06140f;
+  --accent-soft: #123027;
+  --warn: #e2a65a;
+  --warn-soft: #2e2414;
+  --crit: #f08a7e;
+  --crit-soft: #351a1a;
+  --good: #4dc39a;
+  --chart-muted: #6f7c75;
+  --chart-grid: #222b27;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.num { font-variant-numeric: tabular-nums; }
+.boot { padding: 48px; color: var(--muted); font-family: var(--font-mono); font-size: 13px; }
+
+/* ---------- type ---------- */
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.h1 { font-size: 34px; line-height: 1.15; font-weight: 700; }
+.h2 { font-size: 21px; line-height: 1.25; font-weight: 600; }
+.h3 { font-size: 17px; line-height: 1.3; font-weight: 600; }
+.lede { color: var(--muted); font-size: 16px; max-width: 68ch; margin: 6px 0 0; }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.small { font-size: 13px; }
+.muted { color: var(--muted); }
+.strong { font-weight: 600; }
+.big-number { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+
+/* ---------- shell ---------- */
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 12px 32px; background: var(--surface); border-bottom: 1px solid var(--rule);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 17px; background: none; border: 0; padding: 0; }
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 7px; background: var(--ink); position: relative; flex: none;
+}
+.brand-mark::after { /* a tiny runway line */
+  content: ""; position: absolute; left: 5px; right: 5px; bottom: 7px; height: 2px; border-radius: 2px;
+  background: var(--accent); transform: rotate(-18deg); transform-origin: left center;
+}
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav button {
+  background: none; border: 0; padding: 6px 10px; border-radius: var(--r-sm);
+  color: var(--muted); font-weight: 500; font-size: 14px;
+}
+.nav button:hover { color: var(--ink); background: var(--surface-2); }
+.nav button[aria-current="page"] { color: var(--ink); font-weight: 600; }
+.sync { font-family: var(--font-mono); font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.nav .sync-bad { color: var(--crit); font-family: var(--font-mono); font-size: 12px; }
+.nav .sync-bad::before { background: var(--crit); }
+.banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px 18px; border-radius: var(--r-md); border: 1px solid var(--rule-strong); background: var(--surface); }
+.banner-crit { border-color: var(--crit); background: var(--crit-soft); }
+.banner-warn { border-color: var(--warn); background: var(--warn-soft); }
+.stale { opacity: 0.45; filter: grayscale(1); pointer-events: none; user-select: none; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--rule); }
+.tabs button { background: none; border: 0; padding: 10px 12px; font-weight: 600; font-size: 14px; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.modal.modal-wide { max-width: 980px; }
+.dropzone { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 36px 24px; border-radius: var(--r-lg); border: 2px dashed var(--rule-strong); background: var(--surface-2); text-align: center; }
+.dropzone.drag { border-color: var(--accent); background: var(--accent-soft); }
+.finding { display: flex; flex-direction: column; gap: 6px; text-align: left; width: 100%; padding: 14px; border-radius: var(--r-md); border: 1px solid var(--rule); background: var(--surface); }
+.finding:hover { border-color: var(--rule-strong); }
+.finding[aria-current="true"] { border: 2px solid var(--ink); padding: 13px; background: var(--surface-2); }
+.code { font-family: var(--font-mono); font-size: 14px; padding: 8px 12px; border-radius: 8px; background: var(--surface); border: 1px solid var(--rule); }
+.code.after { border: 2px solid var(--accent); }
+.tag.sev-High { background: var(--crit-soft); color: var(--crit); border-color: transparent; }
+.tag.sev-Medium { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.tag.sev-Low { background: var(--surface-2); color: var(--ink-2); }
+table.data.calc td, table.data.calc th { padding: 8px 10px; font-size: 13px; }
+table.data.calc td { text-align: right; }
+table.data.calc td:first-child, table.data.calc th:first-child { text-align: left; }
+table.data.calc th { text-align: right; }
+table.data tr.below td { color: var(--crit); }
+.inline-form { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 130px auto; gap: 10px; align-items: end; }
+@media (max-width: 900px) { .inline-form { grid-template-columns: minmax(0, 1fr); } }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-3); display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--ink-2); }
+
+.setupbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 10px 32px; background: var(--surface-2); border-bottom: 1px solid var(--rule);
+}
+.setup-steps { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.setup-steps .line { width: 22px; height: 1px; background: var(--rule-strong); }
+
+.page { width: 100%; max-width: 1240px; margin: 0 auto; padding: 28px 32px 72px; display: flex; flex-direction: column; gap: 22px; }
+.page-narrow { max-width: 940px; }
+.crumbs { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.crumbs button { background: none; border: 0; padding: 0; color: var(--muted); }
+.crumbs button:hover { color: var(--ink); text-decoration: underline; }
+.page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.grid-main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 22px; align-items: start; }
+.grid-main.rail-left { grid-template-columns: 380px minmax(0, 1fr); }
+.grid-main.rail-wide { grid-template-columns: minmax(0, 1fr) 440px; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wrap { flex-wrap: wrap; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 4px; flex-wrap: wrap; }
+
+@media (max-width: 1080px) {
+  .grid-main, .grid-main.rail-left, .grid-main.rail-wide { grid-template-columns: minmax(0, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: minmax(0, 1fr); }
+  .page { padding: 20px 16px 56px; }
+  .topbar, .setupbar { padding: 10px 16px; }
+  .nav .hide-sm, .sync, .nav .avatar { display: none; }
+  .brand { white-space: nowrap; font-size: 15px; }
+  .topbar { gap: 8px; }
+  .nav button { padding: 6px 7px; }
+  .h1 { font-size: 27px; }
+}
+
+/* ---------- surfaces ---------- */
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); }
+.pad { padding: 22px; }
+.pad-sm { padding: 16px; }
+.panel { background: var(--surface-2); border-radius: var(--r-md); padding: 16px; }
+.card-emph { border-color: var(--ink); box-shadow: var(--shadow); }
+.divider-list > * + * { border-top: 1px solid var(--rule); }
+
+/* ---------- controls ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; border-radius: 8px; border: 1px solid transparent;
+  font-weight: 600; font-size: 14px; line-height: 1.2; white-space: nowrap;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-dark { background: var(--ink); color: var(--paper); }
+.btn-dark:hover { background: var(--ink-2); }
+.btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--rule-strong); }
+.btn-secondary:hover { border-color: var(--ink); }
+.btn-ghost { background: none; color: var(--ink); padding-left: 6px; padding-right: 6px; }
+.btn-ghost:hover { text-decoration: underline; }
+.btn-quiet { background: none; border: 0; color: var(--muted); font-weight: 500; padding: 6px 4px; }
+.btn-quiet:hover { color: var(--ink); }
+.btn:disabled { background: var(--surface-3); color: var(--muted); border-color: transparent; cursor: not-allowed; }
+.btn-lg { padding: 13px 22px; font-size: 15px; }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--rule); font-size: 13px; font-weight: 500; color: var(--ink);
+}
+button.chip:hover { border-color: var(--rule-strong); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.tag {
+  display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 999px;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+  border: 1px solid var(--rule); color: var(--muted); background: var(--surface-2); white-space: nowrap;
+}
+.tag-actual { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.tag-assumption { background: transparent; color: var(--ink-2); border: 1px dashed var(--rule-strong); }
+.tag-goal { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.tag-good { background: var(--accent-soft); color: var(--good); border-color: transparent; }
+.tag-warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.tag-crit { background: var(--crit-soft); color: var(--crit); border-color: transparent; }
+.tag-dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tag-dot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label { font-weight: 600; font-size: 14px; }
+.help { font-size: 13px; color: var(--muted); }
+.input, .select {
+  width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--rule-strong);
+  background: var(--surface); font-size: 15px; font-variant-numeric: tabular-nums;
+}
+.input:focus, .select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+.input-money { position: relative; }
+.input-money .input { padding-left: 24px; }
+.input-money::before { content: "$"; position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.input-error { border-color: var(--crit); }
+.big-ask {
+  display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 18px; border-radius: 12px;
+  background: var(--surface); border: 1.5px solid var(--ink);
+}
+.big-ask input { flex: 1; border: 0; background: transparent; font-size: 18px; padding: 8px 0; min-width: 0; }
+.big-ask input:focus { outline: none; }
+.big-ask:focus-within { box-shadow: 0 0 0 3px var(--accent-soft); }
+
+.seg { display: inline-flex; align-self: flex-start; border: 1px solid var(--rule-strong); border-radius: 8px; overflow: hidden; }
+.seg button { background: var(--surface); border: 0; padding: 8px 14px; font-size: 13px; font-weight: 600; }
+.seg button + button { border-left: 1px solid var(--rule-strong); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+.check {
+  display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%;
+  padding: 14px; border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--rule);
+}
+.check:hover { border-color: var(--rule-strong); }
+.check[aria-pressed="true"] { border-color: var(--ink); background: var(--surface-2); }
+.check-box {
+  width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--rule-strong); flex: none; margin-top: 2px;
+  display: grid; place-items: center; color: var(--paper); font-size: 12px; line-height: 1;
+}
+.check[aria-pressed="true"] .check-box { background: var(--ink); border-color: var(--ink); }
+
+input[type="range"].slider { width: 100%; accent-color: var(--accent); height: 28px; }
+
+/* ---------- stepper ---------- */
+.stepper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.step {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 500; border: 1px solid var(--rule); background: var(--surface); color: var(--muted);
+}
+.step.done { color: var(--ink); background: var(--surface-2); }
+.step.current { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; }
+.step-line { width: 18px; height: 1px; background: var(--rule-strong); }
+
+/* ---------- lists & tables ---------- */
+.kv { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; }
+.kv .k { color: var(--muted); }
+.kv .v { font-weight: 600; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
+.table-wrap { overflow-x: auto; }
+table.data { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+table.data th {
+  text-align: left; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--rule);
+}
+table.data td { padding: 11px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.data td.first, table.data td:nth-child(2) { white-space: nowrap; }
+table.data tr:last-child td { border-bottom: 0; }
+table.data tr.emph td { background: var(--accent-soft); font-weight: 600; }
+table.data tr.emph td:first-child { border-radius: 8px 0 0 8px; }
+table.data tr.emph td:last-child { border-radius: 0 8px 8px 0; }
+table.data td.first { font-weight: 600; }
+table.data tr.total td { background: var(--surface-2); font-weight: 600; }
+
+.progress { height: 8px; border-radius: 4px; background: var(--surface-3); position: relative; }
+.progress > span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--ink); }
+.progress.good > span { background: var(--accent); }
+.progress.warn > span { background: var(--warn); }
+.progress.crit > span { background: var(--crit); }
+.progress .marker { position: absolute; top: -4px; width: 4px; height: 16px; border-radius: 2px; background: var(--surface); box-shadow: 0 0 0 2px var(--ink); }
+
+/* ---------- specific components ---------- */
+.integration {
+  display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: var(--r-md);
+  border: 1px solid var(--rule); background: var(--surface); text-align: left; min-height: 124px;
+}
+.integration.connected { border-color: var(--accent); background: var(--accent-soft); }
+.integration.planned { border-style: dashed; }
+.logo {
+  width: 30px; height: 30px; border-radius: 7px; background: var(--surface-3); display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--ink-2); flex: none;
+}
+.integration.connected .logo { background: var(--surface); }
+.spinner {
+  width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--rule-strong); border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.area-tile {
+  display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 14px; border-radius: var(--r-md);
+  background: var(--surface); border: 1px solid var(--rule);
+}
+.area-tile:hover { border-color: var(--ink); }
+.area-tile .t { font-weight: 600; font-size: 14px; }
+.area-tile .p { font-size: 12.5px; color: var(--muted); }
+.area-tile.live .t::after { content: " ●"; color: var(--accent); font-size: 10px; vertical-align: middle; }
+
+.provenance-legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--muted); }
+
+.rec-card { display: flex; flex-direction: column; gap: 12px; }
+.why { background: var(--surface-2); border-radius: 8px; padding: 12px 14px; }
+
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: 96px minmax(0, 1fr) 92px; gap: 12px; align-items: center; font-size: 14px; }
+.bar-track { height: 10px; background: var(--surface-2); border-radius: 0 4px 4px 0; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 0 4px 4px 0; }
+.bar-row .val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.chart-wrap { position: relative; }
+.chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart-tip {
+  position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--rule-strong);
+  box-shadow: var(--shadow); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; min-width: 190px; z-index: 5;
+}
+.chart-tip .tip-row { display: flex; justify-content: space-between; gap: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12.5px; color: var(--muted); }
+.legend-item { display: inline-flex; align-items: center; gap: 8px; }
+
+.lineage { display: flex; justify-content: space-between; gap: 12px; align-items: center; background: var(--surface-2); border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+
+.chat-q { align-self: flex-end; background: var(--ink); color: var(--paper); border-radius: 12px 12px 2px 12px; padding: 9px 12px; font-size: 14px; max-width: 90%; }
+.chat-a { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px 12px 12px 2px; padding: 10px 12px; font-size: 14px; }
+.suggest { text-align: left; background: var(--surface); border: 1px dashed var(--rule-strong); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+.suggest:hover { border-style: solid; border-color: var(--ink); }
+
+/* ---------- loading ---------- */
+.loading-screen { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; }
+.loading-col { width: 100%; max-width: 720px; display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+.loading-mark { width: 64px; height: 64px; border-radius: 16px; }
+.loading-mark::after { left: 12px; right: 12px; bottom: 18px; height: 4px; }
+.check-list { display: flex; flex-direction: column; gap: 6px; align-items: center; font-size: 15px; }
+.check-list .pending { color: var(--muted); }
+
+/* ---------- overlays ---------- */
+.toasts { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 60; }
+.toast {
+  background: var(--ink); color: var(--paper); padding: 11px 14px; border-radius: 10px; font-size: 14px;
+  box-shadow: var(--shadow); display: flex; gap: 14px; align-items: center; max-width: 420px;
+  animation: toast-in 0.2s ease-out;
+}
+.toast button { background: none; border: 0; color: var(--paper); font-weight: 600; text-decoration: underline; padding: 0; }
+@keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-back { position: fixed; inset: 0; background: var(--overlay); display: grid; place-items: center; z-index: 50; padding: 20px; }
+.modal { width: 100%; max-width: 640px; max-height: 90vh; overflow: auto; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.brief { white-space: pre-wrap; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; background: var(--surface-2); border-radius: 8px; padding: 14px; margin: 0; }
+
+.demo-menu { position: fixed; left: 16px; bottom: 16px; z-index: 40; }
+.demo-menu > button {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--surface); border: 1px dashed var(--rule-strong); color: var(--muted); padding: 6px 10px; border-radius: 999px;
+}
+.demo-menu .menu { position: absolute; bottom: 36px; left: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); padding: 6px; min-width: 260px; max-height: calc(100vh - 80px); overflow-y: auto; display: flex; flex-direction: column; }
+.demo-menu .menu button { text-align: left; background: none; border: 0; padding: 8px 10px; border-radius: 6px; font-size: 13px; }
+.demo-menu .menu button:hover { background: var(--surface-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+</style>
+<div id="root">
+  <div class="boot">Loading Finance Bro AI…</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+// ---- data.js ----
+// Sample company and catalog data for the demo.
+// Everything here is fictional. Numbers match the FigJam low-fi mockup (04).
+
+const COMPANY = {
+  name: "Fieldnote Labs",
+  stage: "Seed",
+  openingCash: 500000,
+  monthlyReceipts: 60000,
+  monthlyOutflows: 100000,
+  historyMonths: 18,
+  costDrivers: [
+    { label: "Payroll", amount: 62000 },
+    { label: "Rent", amount: 14000 },
+    { label: "Software", amount: 9000 },
+    { label: "Contractors", amount: 8000 },
+    { label: "Marketing", amount: 5000 },
+    { label: "Other", amount: 2000 },
+  ],
+  receiptsGrowth: 0.03, // average month-over-month growth in receipts, from bank history
+  uncategorizedDeposits: 3,
+  overlappingTools: { count: 3, monthlySaving: 1100 },
+  overdueInvoices: { count: 2, amount: 18000, days: 45 },
+};
+
+// kind decides what a source contributes to the baseline.
+const INTEGRATIONS = [
+  { id: "plaid", name: "Plaid", category: "banks", kind: "bank", desc: "Most banks and cards · balances, transactions", account: "Chase Savings ••9930" },
+  { id: "rho", name: "Rho", category: "banks", kind: "bank", desc: "Business banking, cards, bills", account: "Checking ••4821" },
+  { id: "mercury", name: "Mercury", category: "banks", kind: "bank", desc: "Business banking", account: "Checking ••1177" },
+  { id: "brex", name: "Brex", category: "banks", kind: "bank", desc: "Cards and spend management", account: "Card ••6620", failsFirst: true },
+  { id: "ramp", name: "Ramp", category: "banks", kind: "bank", desc: "Cards and spend management", account: "Card ••3051" },
+  { id: "quickbooks", name: "QuickBooks Online", category: "accounting", kind: "accounting", desc: "Chart of accounts, invoices, bills", account: "18 months of books" },
+  { id: "xero", name: "Xero", category: "accounting", kind: "accounting", desc: "Chart of accounts, invoices, bills", account: "Books" },
+  { id: "netsuite", name: "NetSuite", category: "accounting", kind: "accounting", desc: "ERP · departments, accruals", account: "ERP" },
+  { id: "sap", name: "SAP", category: "accounting", kind: "accounting", desc: "ERP · cost centers, entities", account: "ERP" },
+  { id: "gusto", name: "Gusto", category: "payroll", kind: "payroll", desc: "Payroll by role — sharper “Can we hire?” answers", account: "Payroll · 14 people", suggested: true },
+  { id: "rippling", name: "Rippling", category: "payroll", kind: "payroll", desc: "Payroll and headcount plans", account: "Payroll" },
+  { id: "deel", name: "Deel", category: "payroll", kind: "payroll", desc: "Global payroll and contractors", account: "Contractors" },
+  { id: "stripe", name: "Stripe", category: "revenue", kind: "revenue", desc: "Revenue, refunds, payout timing", account: "Payouts" },
+  { id: "salesforce", name: "Salesforce", category: "revenue", kind: "revenue", desc: "Pipeline → expected revenue timing", account: "Pipeline" },
+  { id: "hubspot", name: "HubSpot", category: "revenue", kind: "revenue", desc: "Pipeline → expected revenue timing", account: "Pipeline" },
+  { id: "csv", name: "Upload CSV or Excel", category: "files", kind: "file", desc: "Any export — we map the columns with you", account: "transactions.csv" },
+  { id: "sheets", name: "Google Sheets", category: "files", kind: "file", desc: "Live link to a sheet", planned: true },
+];
+
+const CATEGORIES = [
+  { id: "banks", label: "Banks & cards", note: "Cash balances and every transaction" },
+  { id: "accounting", label: "Accounting & ERP", note: "Categories, invoices, bills, accruals" },
+  { id: "payroll", label: "Payroll & HR", note: "Headcount costs by role and team" },
+  { id: "revenue", label: "Revenue & CRM", note: "When revenue actually lands" },
+  { id: "files", label: "Files", note: "When there’s no integration" },
+];
+
+// Goals the user can pick in setup. `target` links a goal to a money target row.
+const GOAL_OPTIONS = [
+  { id: "runway", label: "Extend runway", desc: "Make cash last longer before the next raise", target: "runway" },
+  { id: "hire", label: "Hire key roles", desc: "Plan headcount you can afford", target: "hiring" },
+  { id: "expand", label: "Expand to a new market", desc: "Test a city or region without risking the reserve", target: "nyc" },
+  { id: "reserve", label: "Build a cash reserve", desc: "Keep a safety floor you never dip below", target: "reserve" },
+  { id: "fundraise", label: "Prepare to fundraise", desc: "Know when to start and how much to raise" },
+  { id: "cut", label: "Cut costs", desc: "Find spend to reduce or renegotiate" },
+];
+
+const DECISION_AREAS = [
+  { id: "growth", label: "Revenue & growth", prompt: "Which channel is paying back?" },
+  { id: "invest", label: "Investments", prompt: "Where should the next $50k go?" },
+  { id: "expansion", label: "Market expansion", prompt: "Can we fund a NYC team?", live: true },
+  { id: "hiring", label: "Hiring & comp", prompt: "Can we hire two engineers?" },
+  { id: "raise", label: "Raise capital", prompt: "Should we raise now or in six months?" },
+  { id: "budget", label: "Budgeting", prompt: "Runway if revenue slips 20%?" },
+  { id: "cost", label: "Cost reduction", prompt: "Where can we cut $10k/mo?" },
+  { id: "wc", label: "Working capital", prompt: "Which invoices to chase first?" },
+  { id: "procure", label: "Procurement", prompt: "Buy or lease equipment?" },
+  { id: "risk", label: "Risk", prompt: "What breaks if our top client churns?" },
+];
+
+const NYC_QUESTION = "How much can we afford for NYC team activities and equipment?";
+
+// Deposits the bank shows but accounting hasn't categorized.
+const FLAGGED_DEPOSITS = [
+  { id: "d1", date: "Aug 2", from: "Transfer from Chase Savings ••9930", amount: 25000, suggested: "transfer" },
+  { id: "d2", date: "Jul 14", from: "Wire · Northbeam Capital", amount: 50000, suggested: "loan" },
+  { id: "d3", date: "Jul 3", from: "Deposit · M. Reyes", amount: 10000, suggested: "owner" },
+];
+const DEPOSIT_TYPES = [
+  { value: "revenue", label: "Revenue" },
+  { value: "transfer", label: "Transfer between accounts" },
+  { value: "loan", label: "Loan or credit line" },
+  { value: "owner", label: "Owner or investor money" },
+];
+
+const SAMPLE_MODEL = {
+  fileName: "NYC-team-plan.xlsx",
+  size: "412 KB",
+  sheets: ["Assumptions", "Forecast", "Summary"],
+  formulas: 415,
+  checked: 412,
+  unchecked: ["1 macro (Forecast!Z2)", "2 external links"],
+  question: "Can we fund the NYC team and keep a $150,000 cash reserve?",
+};
+
+const SETUP_TIMING = [
+  { value: 0, label: "Before Month 1" },
+  { value: 1, label: "In Month 1" },
+  { value: 2, label: "In Month 2" },
+  { value: 3, label: "In Month 3" },
+];
+const TEAM_TIMING = [
+  { value: 1, label: "Months 1–12" },
+  { value: 2, label: "From Month 2" },
+  { value: 3, label: "From Month 3" },
+];
+
+const INITIAL_STATE = {
+  route: "loading",
+  manage: false, // true when a setup screen is opened from Home instead of during setup
+  sources: {}, // id -> "connecting" | "connected"
+  goals: {
+    stage: "Seed",
+    team: "11–50",
+    selected: { runway: true, hire: true, expand: true, reserve: true, fundraise: false, cut: false },
+    reserve: 150000,
+    nyc: { target: 60000, by: "Month 2", saved: 21000 },
+    hiring: { target: 90000, by: "Month 6", saved: 30000 },
+    runwayTarget: 18,
+    custom: [], // [{ id, name, target, by, saved }]
+  },
+  analysis: {
+    status: "none", // none | draft | done
+    setup: 60000,
+    setupRange: null, // null, or { low, high } when the user isn't sure (setup = high)
+    setupMonth: 0, // 0 = before Month 1
+    teamCost: 15000,
+    teamStart: 1,
+    newReceipts: 10000,
+    receiptsStart: 3,
+    reserve: null, // null = use the goal
+    funding: null, // null (optional) | "no" | "yes" | "unsure"
+    testSetup: 60000,
+    custom: null, // { name, setup, newReceipts, receiptsStart } — one extra scenario
+    computedWith: null, // inputs behind the last recommendation; differs from current = stale
+    version: 1,
+  },
+  validation: {
+    stage: "empty", // empty | parsing | ready
+    fileName: null,
+    question: SAMPLE_MODEL.question,
+    decisions: {}, // findingId -> "approved" | "rejected"
+    selected: "formula",
+    savedVersion: null, // { approved: n, rejected: n }
+  },
+  syncIssue: null, // null | "failed" | "accepted"
+  depositsReviewed: false,
+  nycTargetUpdated: false,
+  hiddenRecs: {},
+};
+
+
+// ---- engine.js ----
+// Calculation engine. Deterministic: the same inputs always give the same numbers.
+// The UI never invents figures; it renders what these functions return.
+// Written "explanations" are templates filled from these numbers.
+
+const HORIZON = 12; // months shown
+const PROTECT_THROUGH = 6; // keep the reserve intact through this month while raising
+const RAISE_LEAD_MONTHS = 4; // assumed time from first investor talks to cash in the bank
+const PAYROLL_LOAD = 0.2; // employer taxes + benefits suggested for the "missing driver" finding
+
+// ---------- formatting ----------
+const fmtMoney = (n) => {
+  const sign = n < 0 ? "−" : "";
+  return sign + "$" + Math.round(Math.abs(n)).toLocaleString("en-US");
+};
+const fmtK = (n) => {
+  if (Math.round(n) === 0) return "$0";
+  const sign = n < 0 ? "−" : "";
+  const k = Math.abs(n) / 1000;
+  return sign + "$" + (Number.isInteger(k) ? k : k.toFixed(1)) + "k";
+};
+const fmtMonths = (m) => (m === Infinity ? "24+" : m.toFixed(1)) + " months";
+const fmtMonthsShort = (m) => (m === Infinity ? "24+" : m.toFixed(1));
+const setupWhen = (month) => (month === 0 ? "before Month 1" : `in Month ${month}`);
+
+// ---------- projection ----------
+// Cash at month-end for M0..HORIZON. Runway keeps projecting past the horizon until cash reaches zero.
+// `rows` is the month-by-month breakdown shown in "See calculation".
+function project({
+  opening, receipts, outflows,
+  setup = 0, setupMonth = 0,
+  extraCost = 0, extraStart = 1,
+  newReceipts = 0, newStart = 999, growth = 0,
+}) {
+  const c0 = opening - (setupMonth === 0 ? setup : 0);
+  const cash = [c0];
+  const rows = [{ m: 0, start: opening, receipts: 0, newRec: 0, outflows: 0, extra: 0, setup: setupMonth === 0 ? setup : 0, end: c0 }];
+  let c = c0;
+  let runway = c <= 0 ? 0 : null;
+  for (let m = 1; m <= 120; m++) {
+    const newRec = m >= newStart ? newReceipts * Math.pow(1 + growth, m - newStart) : 0;
+    const extra = m >= extraStart ? extraCost : 0;
+    const oneOff = m === setupMonth ? setup : 0;
+    const n = receipts + newRec - outflows - extra - oneOff;
+    const prev = c;
+    c = prev + n;
+    if (m <= HORIZON) {
+      cash.push(c);
+      rows.push({ m, start: prev, receipts, newRec, outflows, extra, setup: oneOff, end: c });
+    }
+    if (runway === null && c <= 0) runway = m - 1 + (n < 0 ? prev / -n : 0);
+    if (runway !== null && m >= HORIZON) break;
+  }
+  return { cash, rows, runway: runway === null ? Infinity : runway };
+}
+
+function firstMonthBelow(cash, floor) {
+  for (let m = 1; m < cash.length; m++) if (cash[m] < floor) return m;
+  return null;
+}
+
+// Inputs that decide the answer. If these change after a recommendation, it is out of date.
+const ANSWER_INPUTS = ["setup", "setupMonth", "teamCost", "teamStart", "newReceipts", "receiptsStart", "reserve"];
+function answerInputs(state) {
+  const a = state.analysis;
+  const out = {};
+  ANSWER_INPUTS.forEach((k) => (out[k] = k === "reserve" ? a.reserve ?? state.goals.reserve : a[k]));
+  return out;
+}
+function isStale(state) {
+  const a = state.analysis;
+  if (a.status !== "done" || !a.computedWith) return false;
+  const now = answerInputs(state);
+  return ANSWER_INPUTS.some((k) => now[k] !== a.computedWith[k]);
+}
+function withInputs(state, inputs) {
+  const { reserve, ...rest } = inputs;
+  return { ...state, analysis: { ...state.analysis, ...rest, reserve } };
+}
+
+// ---------- the NYC analysis ----------
+const BASELINE = () => ({ opening: COMPANY.openingCash, receipts: COMPANY.monthlyReceipts, outflows: COMPANY.monthlyOutflows });
+
+function buildModel(state) {
+  const a = state.analysis;
+  const reserve = a.reserve ?? state.goals.reserve;
+  const netBurnToday = COMPANY.monthlyOutflows - COMPANY.monthlyReceipts;
+
+  const none = project(BASELINE());
+  const run = (setup, kind, over = {}) =>
+    project({
+      ...BASELINE(),
+      setup,
+      setupMonth: a.setupMonth,
+      extraCost: a.teamCost,
+      extraStart: a.teamStart,
+      newReceipts: kind === "base" ? a.newReceipts : a.newReceipts / 2,
+      newStart: kind === "base" ? a.receiptsStart : a.receiptsStart + 1,
+      ...over,
+    });
+
+  const downsideAtZero = run(0, "downside");
+  const rawCap = downsideAtZero.cash[PROTECT_THROUGH] - reserve;
+  const cap = Math.max(0, Math.floor(rawCap / 5000) * 5000);
+  const planHolds = cap >= a.setup;
+  const chosen = planHolds ? a.setup : cap;
+
+  const plan = { base: run(a.setup, "base"), downside: run(a.setup, "downside") };
+  const rec = { base: run(chosen, "base"), downside: run(chosen, "downside") };
+  const test = { base: run(a.testSetup, "base"), downside: run(a.testSetup, "downside") };
+  const custom = a.custom
+    ? run(a.custom.setup, "base", { newReceipts: a.custom.newReceipts, newStart: a.custom.receiptsStart })
+    : null;
+
+  const breach = firstMonthBelow(rec.downside.cash, reserve);
+  const raiseBy = breach ? Math.max(1, breach - RAISE_LEAD_MONTHS) : null;
+  const verdict = rawCap <= 0 ? "Not viable yet" : planHolds ? "Viable as planned" : "Viable with conditions";
+
+  const downStart = a.receiptsStart + 1;
+  const downReceipts = COMPANY.monthlyReceipts + a.newReceipts / 2;
+  const costsWithNyc = COMPANY.monthlyOutflows + a.teamCost;
+  const burnBefore = costsWithNyc - COMPANY.monthlyReceipts;
+  const burnAfter = costsWithNyc - downReceipts;
+
+  const planM6 = plan.downside.cash[PROTECT_THROUGH];
+  const range = a.setupRange;
+  const rangeNote = !range
+    ? null
+    : cap >= range.high
+      ? `Your whole ${fmtK(range.low)}–${fmtK(range.high)} range keeps the reserve.`
+      : cap >= range.low
+        ? `Only the low end of your ${fmtK(range.low)}–${fmtK(range.high)} range is safe: up to ${fmtK(cap)}.`
+        : `Even the low end of your ${fmtK(range.low)}–${fmtK(range.high)} range breaks the reserve.`;
+
+  const headline = verdict === "Not viable yet"
+    ? `Hold off on NYC — even with no setup cost, the downside breaks your ${fmtK(reserve)} reserve by Month ${PROTECT_THROUGH}.`
+    : planHolds
+      ? `Your ${fmtK(a.setup)} NYC plan holds — start fundraising conversations by Month ${raiseBy ?? HORIZON}.`
+      : `Cap NYC setup at ${fmtK(cap)} — and start fundraising conversations by Month ${raiseBy}.`;
+
+  const what = planM6 < reserve
+    ? `At ${fmtK(a.setup)} setup, the downside case drops to ${fmtK(planM6)} by Month ${PROTECT_THROUGH} — ${fmtK(reserve - planM6)} below your ${fmtK(reserve)} reserve.`
+    : `At ${fmtK(a.setup)} setup, the downside case still holds ${fmtK(planM6)} at Month ${PROTECT_THROUGH}, above your ${fmtK(reserve)} reserve.`;
+  const why = `Setup is paid ${a.setupMonth === 0 ? "upfront" : `in Month ${a.setupMonth}`}, and in the downside NYC cash arrives a month later at half the rate (${fmtK(a.newReceipts / 2)}/mo from Month ${downStart}).`;
+  const next = verdict === "Not viable yet"
+    ? `Delay NYC or line up funding first. Revisit once receipts grow or costs fall.`
+    : `${planHolds ? "Keep" : "Cap"} setup at ${fmtK(chosen)} to hold the reserve through Month ${PROTECT_THROUGH}. Runway still falls from ${fmtMonthsShort(none.runway)} to ~${Math.floor(rec.downside.runway)} months, so line up a raise.`;
+
+  return {
+    reserve, netBurnToday, none, plan, rec, test, custom, cap, chosen, planHolds, breach, raiseBy, verdict,
+    headline, what, why, next, rangeNote,
+    downStart, downReceipts, costsWithNyc, burnBefore, burnAfter,
+    noneBreach: firstMonthBelow(none.cash, reserve),
+    run,
+  };
+}
+
+// ---------- goals on Home ----------
+const monthNumber = (label) => parseInt(String(label).replace(/\D/g, ""), 10) || 1;
+
+function goalMetrics(state, model) {
+  const g = state.goals;
+  const done = state.analysis.status === "done";
+  const out = [];
+  if (g.selected.reserve) {
+    const monthsToFloor = (COMPANY.openingCash - g.reserve) / model.netBurnToday;
+    out.push({
+      id: "reserve", label: "Cash reserve floor", value: `${fmtK(COMPANY.openingCash)} cash · floor ${fmtK(g.reserve)}`,
+      pct: 1, marker: g.reserve / COMPANY.openingCash,
+      status: done && model.breach ? "At risk later" : "On track",
+      tone: done && model.breach ? "warn" : "good",
+      note: done && model.breach
+        ? `Holds today. With the NYC plan, cash dips below the floor from Month ${model.breach}.`
+        : `Holds today · about ${monthsToFloor.toFixed(1)} months until the floor at today’s burn.`,
+    });
+  }
+  const savings = (id, label, target, saved, by, noteLead) => {
+    const left = Math.max(0, target - saved);
+    const pct = target > 0 ? Math.min(1, saved / target) : 0;
+    return {
+      id, label, value: `${fmtK(saved)} of ${fmtK(target)}`, pct,
+      status: pct >= 1 ? "Funded" : "On track", tone: "good",
+      note: pct >= 1 ? "Fully set aside." : `${noteLead || `${Math.round(pct * 100)}% set aside`} · ${fmtK(left / monthNumber(by))}/mo more funds it by ${by}.`,
+    };
+  };
+  if (g.selected.expand) {
+    const target = state.nycTargetUpdated ? model.chosen : g.nyc.target;
+    out.push(savings("nyc", "NYC team fund", target, g.nyc.saved, g.nyc.by,
+      state.nycTargetUpdated ? `Target lowered from ${fmtK(g.nyc.target)} after your NYC analysis` : null));
+  }
+  if (g.selected.hire) out.push(savings("hiring", "Hiring fund · 2 engineers", g.hiring.target, g.hiring.saved, g.hiring.by));
+  (g.custom || []).forEach((c) => out.push(savings(c.id, c.name || "New goal", c.target || 0, c.saved || 0, c.by)));
+  if (g.selected.runway) {
+    const today = model.none.runway;
+    const needBurn = COMPANY.openingCash / g.runwayTarget;
+    const cut = Math.max(0, model.netBurnToday - needBurn);
+    out.push({
+      id: "runway", label: "Runway target", value: `${fmtMonthsShort(today)} of ${g.runwayTarget} months`,
+      pct: Math.min(1, today / g.runwayTarget),
+      status: today >= g.runwayTarget ? "On track" : "Behind", tone: today >= g.runwayTarget ? "good" : "crit",
+      note: today >= g.runwayTarget ? "You already clear your runway target." : `Raise, or cut ~${fmtK(Math.round(cut / 100) * 100)}/mo of burn, to reach ${g.runwayTarget} months.`,
+    });
+  }
+  return out;
+}
+
+// ---------- recommendations ----------
+function buildRecommendations(state, model) {
+  const done = state.analysis.status === "done";
+  const r = [];
+  if (done) {
+    r.push({
+      id: "raise", category: "Prepare funding", impact: "High", title: `Start raise talks by Month ${model.raiseBy}`,
+      metric: `Runway ${fmtMonthsShort(model.none.runway)} → ~${Math.floor(model.rec.downside.runway)} months`,
+      why: `With the NYC plan, cash drops below your ${fmtK(model.reserve)} reserve from Month ${model.breach}. Raises usually take about ${RAISE_LEAD_MONTHS} months, so start before the floor is at risk.`,
+      basis: "NYC team analysis", provenance: "assumption", action: "Open NYC analysis", go: "recommendation",
+    });
+    if (!model.planHolds) {
+      r.push({
+        id: "cap", category: "Protect reserve", impact: "High", title: `Cap NYC setup at ${fmtK(model.cap)}, release the rest in stages`,
+        metric: `Keeps your ${fmtK(model.reserve)} floor through Month ${PROTECT_THROUGH}`,
+        why: `At ${fmtK(state.analysis.setup)} setup, the downside falls to ${fmtK(model.plan.downside.cash[PROTECT_THROUGH])} by Month ${PROTECT_THROUGH}. Release more only once NYC receipts reach ${fmtK(state.analysis.newReceipts)}/mo.`,
+        basis: "NYC team analysis · downside", provenance: "assumption", action: "See scenarios", go: "scenarios",
+      });
+    }
+  } else {
+    r.push({
+      id: "model", category: "Protect reserve", impact: "High", title: "Test the NYC plan before you commit",
+      metric: `Floor reached in Month ${model.noneBreach} at today’s burn`,
+      why: `You plan ${fmtK(state.goals.nyc.target)} for NYC plus ongoing team costs. Without NYC, cash already reaches your ${fmtK(model.reserve)} floor in Month ${model.noneBreach}. Model it to see how much sooner.`,
+      basis: "Bank balances + your goals", provenance: "actual", action: "Model this", go: "questions",
+    });
+    r.push({
+      id: "raise", category: "Prepare funding", impact: "Medium", title: `Plan raise talks by Month ${Math.max(1, model.noneBreach - RAISE_LEAD_MONTHS)}`,
+      metric: `Runway ${fmtMonthsShort(model.none.runway)} months today`,
+      why: `At a ${fmtK(model.netBurnToday)}/mo net burn you reach the reserve floor in Month ${model.noneBreach}. Raises usually take about ${RAISE_LEAD_MONTHS} months.`,
+      basis: "Bank transactions · last 6 months", provenance: "actual", action: "Model raise timing", go: "questions",
+    });
+  }
+  r.push({
+    id: "tools", category: "Save money", impact: "Medium", title: `Review ${COMPANY.overlappingTools.count} overlapping software tools`,
+    metric: `~${fmtK(COMPANY.overlappingTools.monthlySaving)} / month`,
+    why: `Software is ${fmtK(COMPANY.costDrivers[2].amount)}/mo. Three charges look like tools in the same category. We see charges, not usage — confirm before cancelling.`,
+    basis: "Bank transactions · last 6 months", provenance: "actual", action: "Review charges", go: null,
+  });
+  const inv = COMPANY.overdueInvoices;
+  r.push({
+    id: "invoices", category: "Working capital", impact: "Medium", title: `Chase ${inv.count} invoices unpaid for ${inv.days}+ days`,
+    metric: `${fmtK(inv.amount)} in sooner ≈ ${Math.round((inv.amount / model.netBurnToday) * 30 / 7)} weeks of burn`,
+    why: `Two customer invoices are past ${inv.days} days. Collecting them now eases the cash dip${done ? " while NYC ramps up" : ""}.`,
+    basis: "QuickBooks invoices", provenance: "actual", action: "See invoices", go: null,
+  });
+  return r.filter((x) => !state.hiddenRecs[x.id]);
+}
+
+// ---------- canned "Ask about this analysis" answers (templated from the model) ----------
+function askAnswers(state, model) {
+  const a = state.analysis;
+  const alt = buildModel({ ...state, analysis: { ...a, receiptsStart: 2 } });
+  return [
+    {
+      q: `Why does runway drop by ${(model.none.runway - model.rec.downside.runway).toFixed(1)} months?`,
+      a: `The ${fmtK(a.teamCost)}/mo NYC team cost is larger than new receipts (${fmtK(a.newReceipts / 2)}–${fmtK(a.newReceipts)}/mo), so net burn rises from ${fmtK(model.netBurnToday)} to ${fmtK(model.burnAfter)}/mo in the downside — on top of the ${fmtK(model.chosen)} one-time setup.`,
+    },
+    {
+      q: `Why ${fmtK(model.chosen)} and not ${fmtK(a.setup)}?`,
+      a: `With no setup cost, the downside would hold ${fmtK(model.plan.downside.cash[PROTECT_THROUGH] + a.setup)} at Month ${PROTECT_THROUGH}. Keeping ${fmtK(model.reserve)} leaves room for about ${fmtK(model.cap)} of setup, rounded down to the nearest $5k.`,
+    },
+    {
+      q: "What if NYC receipts start in Month 2?",
+      a: `Then the cap rises to ${fmtK(alt.cap)} and downside runway becomes ~${fmtMonthsShort(alt.rec.downside.runway)} months. Try it with “NYC receipts start” on the scenarios step.`,
+    },
+    {
+      q: "How is this calculated?",
+      a: `Month by month: cash = last month + ${fmtK(COMPANY.monthlyReceipts)} receipts + new NYC receipts − ${fmtK(COMPANY.monthlyOutflows)} costs − ${fmtK(a.teamCost)} NYC team. Setup comes off ${setupWhen(a.setupMonth)}. The downside halves NYC receipts and starts them a month later.`,
+      calc: true,
+    },
+  ];
+}
+
+function decisionBrief(state, model) {
+  const a = state.analysis;
+  return [
+    `Decision brief — ${NYC_QUESTION}`,
+    ``,
+    `Recommendation: ${model.headline}`,
+    `Status: ${model.verdict}`,
+    ``,
+    `What is happening: ${model.what}`,
+    `Why: ${model.why}`,
+    `Next: ${model.next}`,
+    ``,
+    `Scenario behind this answer: Downside · ${fmtK(model.chosen)} setup`,
+    `• Cash at Month ${PROTECT_THROUGH}: ${fmtK(model.rec.downside.cash[PROTECT_THROUGH])}`,
+    `• Below ${fmtK(model.reserve)} reserve from: Month ${model.breach ?? "—"}`,
+    `• Runway: ${fmtMonths(model.rec.downside.runway)} (base ${fmtMonthsShort(model.rec.base.runway)})`,
+    ``,
+    `Assumptions: setup paid ${setupWhen(a.setupMonth)} · NYC team ${fmtK(a.teamCost)}/mo from Month ${a.teamStart} · new receipts ${fmtK(a.newReceipts)}/mo from Month ${a.receiptsStart} (downside: half, one month later) · no new funding.`,
+    `Sources: Rho Checking ••4821 · Chase Savings ••9930 (Plaid) · QuickBooks. Version ${a.version}.`,
+  ].join("\n");
+}
+
+// ---------- Validate: findings for the uploaded model ----------
+// The sample workbook is the NYC base plan with four problems a reviewer should catch.
+function validationFindings(state, model) {
+  const a = state.analysis;
+  const base = model.plan.base;
+  const correctedM6 = base.cash[PROTECT_THROUGH];
+  const teamMonths = Math.max(0, PROTECT_THROUGH - a.teamStart + 1);
+  const omitted = a.teamCost * teamMonths;
+
+  const grown = project({ ...BASELINE(), setup: a.setup, setupMonth: a.setupMonth, extraCost: a.teamCost, extraStart: a.teamStart, newReceipts: a.newReceipts, newStart: a.receiptsStart, growth: 0.25 });
+  const m12Grown = a.newReceipts * Math.pow(1.25, HORIZON - a.receiptsStart);
+  const overstatement = grown.cash[HORIZON] - base.cash[HORIZON];
+
+  const loadMonthly = Math.round((a.teamCost * PAYROLL_LOAD) / 500) * 500 || 0;
+  const loaded = project({ ...BASELINE(), setup: a.setup, setupMonth: a.setupMonth, extraCost: a.teamCost + loadMonthly, extraStart: a.teamStart, newReceipts: a.newReceipts, newStart: a.receiptsStart });
+
+  return [
+    {
+      id: "formula", type: "Formula error", severity: "High",
+      title: "Operating costs are left out of the monthly outflow total",
+      short: "Operating costs left out of the total",
+      location: "Forecast!C24:H24",
+      found: `The total sums rows 19–23 and skips row 18, “Ongoing NYC team costs” (${fmtK(a.teamCost)} × ${teamMonths} months = ${fmtK(omitted)}).`,
+      diff: { before: "=SUM(C19:C23)", after: "=SUM(C18:C23)" },
+      why: `The model makes the NYC plan look ${fmtK(omitted)} cheaper than it is. Anyone reading the summary would see a buffer that doesn’t exist.`,
+      impact: [
+        { label: `Month-${PROTECT_THROUGH} ending cash`, before: fmtK(correctedM6 + omitted), after: fmtK(correctedM6) },
+        { label: `Buffer above ${fmtK(model.reserve)} reserve`, before: fmtK(correctedM6 + omitted - model.reserve), after: fmtK(correctedM6 - model.reserve) },
+      ],
+      approveLabel: "Approve change",
+      detail: "Checked by rebuilding the total from the rows it should include. Deterministic — not an AI judgment.",
+    },
+    {
+      id: "growth", type: "Unrealistic growth", severity: "Medium",
+      title: "NYC receipts grow 25% every month",
+      short: "NYC receipts grow 25% month over month",
+      location: "Assumptions!B9",
+      found: `From Month ${a.receiptsStart}, NYC receipts compound 25% a month, reaching ${fmtK(m12Grown)}/mo by Month ${HORIZON}. Your total receipts grew about ${Math.round(COMPANY.receiptsGrowth * 100)}% a month over the last 18 months.`,
+      why: "Growth this steep is possible but unproven for a new city. The downside should not depend on it.",
+      impact: [
+        { label: `NYC receipts in Month ${HORIZON}`, before: `${fmtK(m12Grown)}/mo`, after: `${fmtK(a.newReceipts)}/mo` },
+        { label: `Month-${HORIZON} cash overstated by`, before: fmtK(overstatement), after: "$0" },
+      ],
+      approveLabel: `Hold at ${fmtK(a.newReceipts)}/mo`,
+      detail: "Compared against 18 months of receipts from your connected bank accounts.",
+    },
+    {
+      id: "gap", type: "Cash-flow gap", severity: "Medium",
+      title: correctedM6 === model.reserve
+        ? `After the fix, Month ${PROTECT_THROUGH} sits exactly on your reserve`
+        : correctedM6 < model.reserve
+          ? `After the fix, Month ${PROTECT_THROUGH} falls ${fmtK(model.reserve - correctedM6)} below your reserve`
+          : `After the fix, Month ${PROTECT_THROUGH} keeps only ${fmtK(correctedM6 - model.reserve)} above your reserve`,
+      short: correctedM6 === model.reserve
+        ? `Month ${PROTECT_THROUGH} lands on the ${fmtK(model.reserve)} reserve`
+        : `Month ${PROTECT_THROUGH} has a ${fmtK(correctedM6 - model.reserve)} buffer, no downside`,
+      location: `Forecast!H30`,
+      found: `With costs included, the base case ends Month ${PROTECT_THROUGH} at ${fmtK(correctedM6)}. The model has no downside case, which falls to ${fmtK(model.plan.downside.cash[PROTECT_THROUGH])}.`,
+      why: model.plan.downside.cash[PROTECT_THROUGH] < model.reserve
+        ? "Without a downside case, the plan looks safe — but it breaks the reserve the first time receipts slip."
+        : "The plan holds in the downside too, but the model should show it.",
+      impact: [
+        { label: "Base case, Month 6", before: fmtK(correctedM6), after: fmtK(correctedM6) },
+        { label: "Downside case, Month 6", before: "Not modeled", after: fmtK(model.plan.downside.cash[PROTECT_THROUGH]) },
+      ],
+      approveLabel: "Add a downside sheet",
+      link: { label: "Compare in your NYC analysis", go: "scenarios" },
+      detail: "Uses the same calculation engine as Create, with this model’s inputs.",
+    },
+    {
+      id: "payroll", type: "Missing driver", severity: "Low",
+      title: "No payroll taxes or benefits on NYC hires",
+      short: "No payroll taxes or benefits on NYC hires",
+      location: "Assumptions!B12:B14",
+      found: `NYC team costs are ${fmtK(a.teamCost)}/mo with no employer taxes or benefits. These typically add 15–25% of salary — confirm with your payroll provider.`,
+      why: "Loaded cost, not salary, is what leaves the bank.",
+      impact: [
+        { label: "NYC team costs", before: `${fmtK(a.teamCost)}/mo`, after: `${fmtK(a.teamCost + loadMonthly)}/mo` },
+        { label: `Month-${PROTECT_THROUGH} ending cash`, before: fmtK(correctedM6), after: fmtK(loaded.cash[PROTECT_THROUGH]) },
+      ],
+      approveLabel: `Add ${Math.round(PAYROLL_LOAD * 100)}% load`,
+      detail: `The ${Math.round(PAYROLL_LOAD * 100)}% load is an assumption, shown separately so you can change it.`,
+    },
+  ];
+}
+
+
+// ---- ui.jsx ----
+// Shared UI primitives and the app store hook.
+const { useState, useEffect, useMemo, useRef, useCallback, useContext, createContext, useReducer } = React;
+
+const StoreContext = createContext(null);
+const useStore = () => useContext(StoreContext);
+
+function BrandMark({ className = "" }) {
+  return <span className={"brand-mark " + className} aria-hidden="true" />;
+}
+
+function TopBar({ setup = false }) {
+  const { state, go } = useStore();
+  const r = state.route;
+  const current = (names) => (names.includes(r) && !state.manage ? "page" : undefined);
+  return (
+    <header className="topbar">
+      <button className="brand" onClick={() => (setup ? null : go("home"))} aria-label="Finance Bro AI home">
+        <BrandMark /> Finance Bro AI
+      </button>
+      {setup ? (
+        <div className="row small muted">
+          <span className="hide-sm">Setup saves as you go</span>
+          <button className="btn btn-quiet" onClick={() => go("home")}>Finish later</button>
+        </div>
+      ) : (
+        <nav className="nav" aria-label="Main">
+          <button aria-current={current(["home", "recs"])} onClick={() => go("home")}>Home</button>
+          <button aria-current={current(["analyses", "questions", "scenarios", "recommendation", "validate", "findings"])} onClick={() => go("analyses")}>Analyses</button>
+          <button aria-current={state.manage && r === "connect" ? "page" : undefined} onClick={() => go("connect", { manage: true })}>Data</button>
+          {state.syncIssue === "failed" ? (
+            <button className="sync sync-bad hide-sm" style={{ marginLeft: 12 }} onClick={() => go("home")}>Rho sync failed</button>
+          ) : (
+            <span className="sync hide-sm" style={{ marginLeft: 12 }}>{state.syncIssue === "accepted" ? "Using data up to 9:02 AM" : "Synced 2 min ago"}</span>
+          )}
+          <span className="avatar" style={{ marginLeft: 10 }} aria-label="Signed in as Maya">MR</span>
+        </nav>
+      )}
+    </header>
+  );
+}
+
+function SetupBar({ step }) {
+  const steps = ["Connect your data", "Set your goals"];
+  return (
+    <div className="setupbar">
+      <div className="setup-steps">
+        <span className="eyebrow">Set up your workspace</span>
+        {steps.map((s, i) => (
+          <React.Fragment key={s}>
+            <span className={"step " + (i < step ? "done" : i === step ? "current" : "")}>
+              {i < step ? "✓" : i + 1}&nbsp; {s}
+            </span>
+            <span className="line" />
+          </React.Fragment>
+        ))}
+        <span className="step">→&nbsp; Home</span>
+      </div>
+      <span className="small muted">Step {step + 1} of 2 · {step === 0 ? "about 5 min" : "almost done"}</span>
+    </div>
+  );
+}
+
+const ANALYSIS_STEPS = ["Question", "Data", "Assumptions", "Scenarios", "Recommendation"];
+function Stepper({ current }) {
+  return (
+    <ol className="stepper" aria-label="Analysis progress" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+      {ANALYSIS_STEPS.map((s, i) => (
+        <React.Fragment key={s}>
+          <li className={"step " + (i < current ? "done" : i === current ? "current" : "")} aria-current={i === current ? "step" : undefined}>
+            {i < current ? "✓" : i + 1}&nbsp; {s}
+          </li>
+          {i < ANALYSIS_STEPS.length - 1 && <li className="step-line" aria-hidden="true" />}
+        </React.Fragment>
+      ))}
+    </ol>
+  );
+}
+
+function Prov({ kind }) {
+  if (kind === "actual") return <span className="tag tag-actual" title="From your connected accounts">Actual</span>;
+  if (kind === "goal") return <span className="tag tag-goal" title="Set in your goals">From your goals</span>;
+  return <span className="tag tag-assumption" title="Entered by you — a belief about the future">Assumption</span>;
+}
+
+function ProvenanceLegend() {
+  return (
+    <div className="provenance-legend">
+      <span className="row" style={{ gap: 6 }}><Prov kind="actual" /> from your accounts</span>
+      <span className="row" style={{ gap: 6 }}><Prov kind="assumption" /> your estimate</span>
+    </div>
+  );
+}
+
+function MoneyInput({ value, onChange, id, invalid, ariaLabel }) {
+  const [text, setText] = useState(value == null ? "" : Math.round(value).toLocaleString("en-US"));
+  useEffect(() => {
+    const parsed = Number(text.replace(/[^0-9.]/g, ""));
+    if (value !== (text === "" ? null : parsed)) setText(value == null ? "" : Math.round(value).toLocaleString("en-US"));
+    // eslint-disable-next-line
+  }, [value]);
+  return (
+    <div className="input-money">
+      <input
+        id={id}
+        aria-label={ariaLabel}
+        className={"input" + (invalid ? " input-error" : "")}
+        inputMode="numeric"
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+          const digits = e.target.value.replace(/[^0-9]/g, "");
+          onChange(digits === "" ? null : Number(digits));
+        }}
+        onBlur={() => setText(value == null ? "" : Math.round(value).toLocaleString("en-US"))}
+      />
+    </div>
+  );
+}
+
+function Seg({ options, value, onChange, label }) {
+  return (
+    <div className="seg" role="group" aria-label={label}>
+      {options.map((o) => (
+        <button key={String(o.value)} type="button" aria-pressed={value === o.value} onClick={() => onChange(o.value)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Modal({ title, onClose, children, wide }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return (
+    <div className="modal-back" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div className={"modal" + (wide ? " modal-wide" : "")} role="dialog" aria-modal="true" aria-label={title}>
+        <div className="row-between">
+          <h2 className="h2">{title}</h2>
+          <button className="btn btn-quiet" onClick={onClose} aria-label="Close">Close</button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function Toasts({ toasts, dismiss }) {
+  return (
+    <div className="toasts" role="status" aria-live="polite">
+      {toasts.map((t) => (
+        <div className="toast" key={t.id}>
+          <span>{t.text}</span>
+          {t.action && (
+            <button onClick={() => { t.action.run(); dismiss(t.id); }}>{t.action.label}</button>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function QuestionBanner({ sub }) {
+  const { go } = useStore();
+  return (
+    <div className="panel row-between wrap" style={{ padding: "18px 22px" }}>
+      <div className="stack" style={{ gap: 4 }}>
+        <span className="eyebrow">Your question</span>
+        <h1 className="h2" style={{ fontSize: 23 }}>{NYC_QUESTION}</h1>
+        {sub && <span className="small muted">{sub}</span>}
+      </div>
+      <div className="row">
+        <span className="tag">Horizon · 12 months</span>
+        <button className="btn btn-ghost btn-sm" onClick={() => go("questions")}>Edit</button>
+      </div>
+    </div>
+  );
+}
+
+
+// ---- charts.jsx ----
+// Charts: hand-built SVG so every mark, tick and label comes from one scale.
+
+const SERIES_STYLE = {
+  focus: { stroke: "var(--accent)", strokeWidth: 3, dash: null },
+  dash: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "9 6" },
+  dot: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "2 5" },
+  muted: { stroke: "var(--chart-muted)", strokeWidth: 2, dash: null },
+  alt: { stroke: "var(--warn)", strokeWidth: 2, dash: "14 5 3 5" },
+};
+
+// Points for a series, stopping where cash reaches zero (with the exact crossing).
+function seriesPoints(cash) {
+  const pts = [];
+  for (let m = 0; m < cash.length; m++) {
+    if (cash[m] >= 0) { pts.push([m, cash[m]]); continue; }
+    const prev = cash[m - 1];
+    if (m > 0 && prev > 0) pts.push([m - 1 + prev / (prev - cash[m]), 0]);
+    break;
+  }
+  return pts;
+}
+
+function LegendSwatch({ variant }) {
+  const s = SERIES_STYLE[variant];
+  return (
+    <svg width="26" height="8" aria-hidden="true">
+      <line x1="1" y1="4" x2="25" y2="4" style={{ stroke: s.stroke, strokeWidth: s.strokeWidth, strokeDasharray: s.dash || "none", strokeLinecap: "round" }} />
+    </svg>
+  );
+}
+
+function CashChart({ series, reserve, height = 300, width = 760, marker, showLegend = true, ariaLabel }) {
+  const W = width, H = height;
+  const pad = { l: 58, r: 16, t: 16, b: 30 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const maxVal = Math.max(reserve || 0, ...series.flatMap((s) => s.cash));
+  const yMax = Math.max(100000, Math.ceil(maxVal / 100000) * 100000);
+  const x = (m) => pad.l + (m / HORIZON) * plotW;
+  const y = (v) => pad.t + (1 - v / yMax) * plotH;
+  const ticks = [];
+  for (let v = 0; v <= yMax; v += yMax > 600000 ? 200000 : 100000) ticks.push(v);
+
+  const [hover, setHover] = useState(null);
+  const svgRef = useRef(null);
+  const onMove = (e) => {
+    const rect = svgRef.current.getBoundingClientRect();
+    const mx = ((e.clientX - rect.left) / rect.width) * W;
+    const m = Math.round(((mx - pad.l) / plotW) * HORIZON);
+    setHover(Math.max(0, Math.min(HORIZON, m)));
+  };
+
+  const focus = series.find((s) => s.variant === "focus");
+  const focusPts = focus ? seriesPoints(focus.cash) : [];
+  const focusEnd = focusPts[focusPts.length - 1];
+
+  return (
+    <div className="stack" style={{ gap: 12 }}>
+      <div className="chart-wrap">
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${W} ${H}`}
+          role="img"
+          aria-label={ariaLabel || "Month-end cash projection"}
+          onMouseMove={onMove}
+          onMouseLeave={() => setHover(null)}
+        >
+          {ticks.map((v) => (
+            <g key={v}>
+              <line x1={pad.l} x2={W - pad.r} y1={y(v)} y2={y(v)} style={{ stroke: "var(--chart-grid)", strokeWidth: 1 }} />
+              <text x={pad.l - 10} y={y(v) + 4} textAnchor="end" style={{ fill: "var(--muted)", fontSize: 12, fontFamily: "var(--font-mono)" }}>
+                {v === 0 ? "$0" : fmtK(v)}
+              </text>
+            </g>
+          ))}
+          {[0, 3, 6, 9, 12].map((m) => (
+            <text key={m} x={x(m)} y={H - 8} textAnchor="middle" style={{ fill: "var(--muted)", fontSize: 12, fontFamily: "var(--font-mono)" }}>
+              M{m}
+            </text>
+          ))}
+          {reserve != null && (
+            <g>
+              <line x1={pad.l} x2={W - pad.r} y1={y(reserve)} y2={y(reserve)} style={{ stroke: "var(--ink)", strokeWidth: 1.25, strokeDasharray: "4 4" }} />
+              <text x={W - pad.r} y={y(reserve) - 7} textAnchor="end" style={{ fill: "var(--ink)", fontSize: 12, fontWeight: 600 }}>
+                Reserve floor {fmtK(reserve)}
+              </text>
+            </g>
+          )}
+          {series.filter((s) => s.variant !== "focus").concat(focus ? [focus] : []).map((s) => {
+            const st = SERIES_STYLE[s.variant];
+            const d = seriesPoints(s.cash).map(([m, v], i) => `${i ? "L" : "M"}${x(m).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+            return (
+              <path key={s.id} d={d} fill="none" style={{ stroke: st.stroke, strokeWidth: st.strokeWidth, strokeDasharray: st.dash || "none", strokeLinecap: "round", strokeLinejoin: "round" }} />
+            );
+          })}
+          {focusEnd && (
+            <circle cx={x(focusEnd[0])} cy={y(focusEnd[1])} r="5" style={{ fill: "var(--accent)", stroke: "var(--surface)", strokeWidth: 2 }} />
+          )}
+          {marker && (
+            <g>
+              <circle cx={x(marker.month)} cy={y(marker.value)} r="6" style={{ fill: "var(--surface)", stroke: "var(--crit)", strokeWidth: 2.5 }} />
+              <text x={x(marker.month) - 12} y={y(marker.value) + 22} textAnchor="end" style={{ fill: "var(--crit)", fontSize: 12, fontWeight: 600 }}>
+                {marker.label}
+              </text>
+            </g>
+          )}
+          {hover != null && (
+            <g pointerEvents="none">
+              <line x1={x(hover)} x2={x(hover)} y1={pad.t} y2={H - pad.b} style={{ stroke: "var(--rule-strong)", strokeWidth: 1 }} />
+              {series.map((s) =>
+                s.cash[hover] != null && s.cash[hover] >= 0 ? (
+                  <circle key={s.id} cx={x(hover)} cy={y(s.cash[hover])} r="4.5" style={{ fill: SERIES_STYLE[s.variant].stroke, stroke: "var(--surface)", strokeWidth: 2 }} />
+                ) : null
+              )}
+            </g>
+          )}
+          <rect x={pad.l} y={pad.t} width={plotW} height={plotH} fill="transparent" />
+        </svg>
+        {hover != null && (
+          <div
+            className="chart-tip"
+            style={{
+              left: `calc(${(x(hover) / W) * 100}% ${hover > 7 ? "- 206px" : "+ 14px"})`,
+              top: 8,
+            }}
+          >
+            <div className="eyebrow" style={{ marginBottom: 6 }}>End of Month {hover}</div>
+            {series.map((s) => (
+              <div className="tip-row" key={s.id}>
+                <span className="row" style={{ gap: 6 }}><LegendSwatch variant={s.variant} /> {s.short || s.label}</span>
+                <span className="strong">{s.cash[hover] < 0 ? "Out of cash" : fmtK(s.cash[hover])}</span>
+              </div>
+            ))}
+            {reserve != null && (
+              <div className="tip-row muted" style={{ marginTop: 4 }}>
+                <span>Reserve floor</span><span>{fmtK(reserve)}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {showLegend && series.length > 1 && (
+        <div className="legend">
+          {series.map((s) => (
+            <span className="legend-item" key={s.id}><LegendSwatch variant={s.variant} /> {s.label}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// "See calculation" / "View lineage": the month-by-month math and where every input comes from.
+function CalculationModal({ onClose, initialTab = "months" }) {
+  const { state, model } = useStore();
+  const a = state.analysis;
+  const [tab, setTab] = useState(initialTab);
+  const options = [
+    { id: "rec-down", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, r: model.rec.downside },
+    { id: "rec-base", label: `Base · ${fmtK(model.chosen)} setup`, r: model.rec.base },
+    { id: "plan-down", label: `Downside · ${fmtK(a.setup)} setup (your plan)`, r: model.plan.downside },
+    { id: "plan-base", label: `Base · ${fmtK(a.setup)} setup (your plan)`, r: model.plan.base },
+    { id: "none", label: "No expansion", r: model.none },
+  ];
+  const [pick, setPick] = useState("rec-down");
+  const scenario = options.find((o) => o.id === pick);
+  const sum = (key) => scenario.r.rows.reduce((t, row) => t + row[key], 0);
+
+  const lineage = [
+    { input: "Opening cash", value: fmtMoney(COMPANY.openingCash), kind: "actual", source: "Rho Checking ••4821 + Chase Savings ••9930 (via Plaid) · balances at last sync, 2 min ago" },
+    { input: "Monthly receipts", value: fmtMoney(COMPANY.monthlyReceipts), kind: "actual", source: `Average of 6 months of deposits, excluding ${COMPANY.uncategorizedDeposits} transfers and loans · QuickBooks categories` },
+    { input: "Monthly outflows", value: fmtMoney(COMPANY.monthlyOutflows), kind: "actual", source: "Average of 6 months of payments across all connected accounts" },
+    { input: "NYC setup", value: `${fmtMoney(a.setup)} ${setupWhen(a.setupMonth)}`, kind: "assumption", source: a.setupRange ? `Entered as a range ${fmtK(a.setupRange.low)}–${fmtK(a.setupRange.high)}; plan uses the high end` : "Entered on Guided questions" },
+    { input: "NYC team costs", value: `${fmtMoney(a.teamCost)}/mo from Month ${a.teamStart}`, kind: "assumption", source: "Entered on Guided questions" },
+    { input: "New NYC receipts", value: `${fmtMoney(a.newReceipts)}/mo from Month ${a.receiptsStart}`, kind: "assumption", source: "Entered on Guided questions · downside halves it and starts a month later" },
+    { input: "Cash reserve", value: fmtMoney(model.reserve), kind: a.reserve == null ? "goal" : "assumption", source: a.reserve == null ? "Your goals (set during setup)" : "Changed for this analysis only" },
+    { input: "Reserve protected through", value: `Month ${PROTECT_THROUGH}`, kind: "assumption", source: `Policy: keep the floor while a raise (~${RAISE_LEAD_MONTHS} months) comes together` },
+  ];
+
+  return (
+    <Modal title="How this is calculated" onClose={onClose} wide>
+      <div className="tabs" role="tablist">
+        <button role="tab" aria-selected={tab === "months"} onClick={() => setTab("months")}>Month by month</button>
+        <button role="tab" aria-selected={tab === "lineage"} onClick={() => setTab("lineage")}>Where each number comes from</button>
+      </div>
+      {tab === "months" ? (
+        <>
+          <div className="row wrap">
+            <label className="small muted" htmlFor="calc-scenario">Scenario</label>
+            <select id="calc-scenario" className="select" style={{ maxWidth: 380 }} value={pick} onChange={(e) => setPick(e.target.value)}>
+              {options.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+          </div>
+          <div className="panel small" style={{ fontFamily: "var(--font-mono)" }}>
+            Ending cash = starting cash + receipts + NYC receipts − costs − NYC team − setup
+          </div>
+          <div className="table-wrap">
+            <table className="data calc">
+              <thead>
+                <tr>
+                  <th>Month</th><th>Starting cash</th><th>Receipts</th><th>NYC receipts</th><th>Costs</th><th>NYC team</th><th>Setup</th><th>Ending cash</th>
+                </tr>
+              </thead>
+              <tbody>
+                {scenario.r.rows.map((row) => (
+                  <tr key={row.m} className={row.m > 0 && row.end < model.reserve ? "below" : ""}>
+                    <td className="first">M{row.m}</td>
+                    <td>{fmtK(row.start)}</td>
+                    <td>{row.m ? "+" + fmtK(row.receipts) : "—"}</td>
+                    <td>{row.newRec ? "+" + fmtK(row.newRec) : "—"}</td>
+                    <td>{row.m ? "−" + fmtK(row.outflows) : "—"}</td>
+                    <td>{row.extra ? "−" + fmtK(row.extra) : "—"}</td>
+                    <td>{row.setup ? "−" + fmtK(row.setup) : "—"}</td>
+                    <td className="strong">{fmtK(row.end)}{row.m > 0 && row.end < model.reserve ? " ▼" : ""}</td>
+                  </tr>
+                ))}
+                <tr className="total">
+                  <td>12-month total</td><td></td>
+                  <td>+{fmtK(sum("receipts"))}</td><td>+{fmtK(sum("newRec"))}</td><td>−{fmtK(sum("outflows"))}</td><td>−{fmtK(sum("extra"))}</td><td>−{fmtK(sum("setup"))}</td>
+                  <td>{fmtK(scenario.r.cash[HORIZON])}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="row-between wrap small muted">
+            <span>▼ below your {fmtK(model.reserve)} reserve · Runway (cash to $0): {fmtMonths(scenario.r.runway)}</span>
+            <span className="row" style={{ gap: 6 }}><Prov kind="actual" /> receipts, costs · <Prov kind="assumption" /> NYC columns</span>
+          </div>
+        </>
+      ) : (
+        <div className="table-wrap">
+          <table className="data">
+            <thead><tr><th>Input</th><th>Value</th><th>Type</th><th>Source</th></tr></thead>
+            <tbody>
+              {lineage.map((l) => (
+                <tr key={l.input}>
+                  <td className="first">{l.input}</td>
+                  <td style={{ whiteSpace: "nowrap" }}>{l.value}</td>
+                  <td><Prov kind={l.kind} /></td>
+                  <td className="small muted" style={{ minWidth: 280 }}>{l.source}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <p className="small muted" style={{ margin: 0 }}>
+        The calculation engine computes every number. AI only writes the explanations, and they’re filled from these results. Version {a.version}.
+      </p>
+    </Modal>
+  );
+}
+
+function SpendBars({ drivers }) {
+  const max = Math.max(...drivers.map((d) => d.amount));
+  const total = drivers.reduce((a, d) => a + d.amount, 0);
+  return (
+    <div className="bars" role="list">
+      {drivers.map((d) => (
+        <div className="bar-row" role="listitem" key={d.label}>
+          <span>{d.label}</span>
+          <div className="bar-track" aria-hidden="true"><div className="bar-fill" style={{ width: `${(d.amount / max) * 100}%` }} /></div>
+          <span className="val">{fmtK(d.amount)} <span className="muted small" style={{ fontWeight: 400 }}>{Math.round((d.amount / total) * 100)}%</span></span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Progress({ pct, tone, marker }) {
+  return (
+    <div className={"progress " + (tone || "")} role="progressbar" aria-valuenow={Math.round(pct * 100)} aria-valuemin="0" aria-valuemax="100">
+      <span style={{ width: `${pct * 100}%` }} />
+      {marker != null && <span className="marker" style={{ left: `calc(${marker * 100}% - 2px)` }} title="Reserve floor" />}
+    </div>
+  );
+}
+
+
+// ---- screens/setup.jsx ----
+// Setup: 00 Loading → 01 Connect your data → 01b Set your goals
+
+function LoadingScreen() {
+  const { go } = useStore();
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const started = performance.now();
+    let raf;
+    const tick = (t) => {
+      const p = Math.min(1, (t - started) / 2400);
+      setProgress(p);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  const items = [
+    { label: "Secure workspace created", at: 0.15 },
+    { label: "Loading available integrations", at: 0.6 },
+    { label: "Preparing your setup", at: 0.98 },
+  ];
+  const ready = progress >= 1;
+  return (
+    <main className="loading-screen">
+      <div className="loading-col">
+        <BrandMark className="loading-mark" />
+        <div className="stack" style={{ gap: 6, alignItems: "center" }}>
+          <h1 className="h1">Finance Bro AI</h1>
+          <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready." : "Getting your workspace ready…"}</p>
+        </div>
+        <div style={{ width: "100%" }} className="stack">
+          <div className="progress good" aria-label="Loading progress"><span style={{ width: `${progress * 100}%` }} /></div>
+          <div className="check-list">
+            {items.map((it) => {
+              const done = progress >= it.at;
+              return (
+                <span key={it.label} className={done ? "" : "pending"}>
+                  {done ? "✓" : "○"} {it.label}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+        <section className="panel stack" style={{ width: "100%", padding: 24, textAlign: "left", gap: 16 }} aria-label="What setup looks like">
+          <div className="row-between">
+            <h2 className="h3">Next: set up your workspace</h2>
+            <span className="small muted">About 5 minutes</span>
+          </div>
+          <div className="grid-3">
+            {[
+              ["1", "Connect your data", "Banks, cards, accounting, payroll. Read-only."],
+              ["2", "Set your goals", "What you’re working toward and saving for."],
+              ["✓", "Your Home", "Runway, goals and recommendations."],
+            ].map(([n, t, d]) => (
+              <div key={t} className="card pad-sm stack" style={{ gap: 6 }}>
+                <span className="tag tag-dark" style={{ alignSelf: "flex-start" }}>{n}</span>
+                <span className="strong">{t}</span>
+                <span className="small muted">{d}</span>
+              </div>
+            ))}
+          </div>
+          <p className="small muted" style={{ margin: 0 }}>We connect your data first so we can suggest realistic goal amounts from your real cash and burn.</p>
+        </section>
+        <button className="btn btn-primary btn-lg" disabled={!ready} onClick={() => go("connect")}>
+          {ready ? "Start setup →" : "Loading…"}
+        </button>
+      </div>
+    </main>
+  );
+}
+
+function ConnectScreen() {
+  const { state, set, go, toast } = useStore();
+  const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const [managing, setManaging] = useState(null);
+  const [reviewDeposits, setReviewDeposits] = useState(false);
+  const manage = state.manage;
+  const connected = (id) => state.sources[id] === "connected";
+  const connectedList = INTEGRATIONS.filter((i) => connected(i.id));
+  const hasCash = connectedList.some((i) => i.kind === "bank" || i.kind === "file");
+  const hasBooks = connectedList.some((i) => i.kind === "accounting");
+
+  const connect = (item) => {
+    const st = state.sources[item.id];
+    if (item.planned || (st && st !== "failed")) return;
+    const willFail = item.failsFirst && !(state.failedOnce && state.failedOnce[item.id]);
+    set((s) => { s.sources[item.id] = "connecting"; });
+    setTimeout(() => {
+      if (willFail) {
+        set((s) => { s.sources[item.id] = "failed"; s.failedOnce = { ...(s.failedOnce || {}), [item.id]: true }; });
+        return;
+      }
+      set((s) => { s.sources[item.id] = "connected"; });
+      toast(`${item.name} connected · ${item.account}`);
+    }, 1100);
+  };
+  const disconnect = (item) => {
+    set((s) => { delete s.sources[item.id]; });
+    toast(`${item.name} disconnected`, { label: "Undo", run: () => set((s) => { s.sources[item.id] = "connected"; }) });
+  };
+  const useDemo = () => {
+    set((s) => { ["rho", "plaid", "quickbooks"].forEach((id) => (s.sources[id] = "connected")); });
+    toast("Demo company connected: Rho, Plaid and QuickBooks");
+  };
+
+  const visible = INTEGRATIONS.filter(
+    (i) => (filter === "all" || i.category === filter) && i.name.toLowerCase().includes(query.trim().toLowerCase())
+  );
+
+  return (
+    <>
+      {manage ? <TopBar /> : <><TopBar setup /><SetupBar step={0} /></>}
+      <main className="page">
+        <div className="page-head">
+          <div>
+            <h1 className="h1">{manage ? "Your connected data" : "Connect your financial tools"}</h1>
+            <p className="lede">
+              Connect everything you use — banks, cards, accounting, payroll, revenue — so we can see where your business stands today.
+              Read-only: we can never move money.{manage ? "" : " Next, you’ll set your goals."}
+            </p>
+          </div>
+          <input className="input" style={{ maxWidth: 340 }} type="search" placeholder="Search integrations (Mercury, Xero, Stripe…)" aria-label="Search integrations" value={query} onChange={(e) => setQuery(e.target.value)} />
+        </div>
+
+        <div className="grid-main">
+          <div className="stack">
+            <div className="row wrap" role="group" aria-label="Filter by category">
+              <button className="chip" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All</button>
+              {CATEGORIES.map((c) => (
+                <button key={c.id} className="chip" aria-pressed={filter === c.id} onClick={() => setFilter(c.id)}>{c.label}</button>
+              ))}
+            </div>
+            {CATEGORIES.map((cat) => {
+              const items = visible.filter((i) => i.category === cat.id);
+              if (!items.length) return null;
+              const n = items.filter((i) => connected(i.id)).length;
+              return (
+                <section key={cat.id} className="card pad stack" style={{ gap: 12 }} aria-label={cat.label}>
+                  <div className="row-between">
+                    <span className="eyebrow" style={{ color: "var(--ink)" }}>{cat.label}</span>
+                    <span className="small muted">{n ? `${n} connected · ` : ""}{cat.note}</span>
+                  </div>
+                  <div className="grid-3">
+                    {items.map((item) => {
+                      const st = state.sources[item.id];
+                      return (
+                        <div key={item.id} className={"integration" + (st === "connected" ? " connected" : "") + (item.planned ? " planned" : "")}>
+                          <div className="row" style={{ gap: 10 }}>
+                            <span className="logo" aria-hidden="true">{item.name[0]}</span>
+                            <span className="strong" style={{ flex: 1 }}>{item.name}</span>
+                            {item.planned && <span className="tag">Planned</span>}
+                            {item.suggested && !st && <span className="tag tag-goal">Suggested</span>}
+                          </div>
+                          <span className="small muted" style={{ flex: 1 }}>{item.desc}</span>
+                          {st === "connected" ? (
+                            <div className="stack small" style={{ gap: 2, alignItems: "flex-start" }}>
+                              <span className="strong">✓ {item.account}</span>
+                              <button className="btn btn-quiet btn-sm" style={{ padding: 0 }} onClick={() => disconnect(item)}>Disconnect</button>
+                            </div>
+                          ) : st === "connecting" ? (
+                            <span className="row small muted"><span className="spinner" /> Connecting — sign in with {item.name}…</span>
+                          ) : st === "failed" ? (
+                            <div className="stack" style={{ gap: 8 }}>
+                              <span className="small" style={{ color: "var(--crit)" }}>{item.name} didn’t finish connecting — the sign-in window closed before access was granted.</span>
+                              <div className="row wrap" style={{ gap: 6 }}>
+                                <button className="btn btn-secondary btn-sm" onClick={() => connect(item)}>Retry</button>
+                                <button className="btn btn-quiet btn-sm" onClick={() => { set((s) => { delete s.sources[item.id]; }); connect(INTEGRATIONS.find((i) => i.id === "csv")); }}>Upload CSV instead</button>
+                              </div>
+                            </div>
+                          ) : item.planned ? (
+                            <span className="small muted">Coming soon</span>
+                          ) : (
+                            <button className="btn btn-secondary btn-sm" style={{ alignSelf: "flex-start" }} onClick={() => connect(item)}>
+                              {item.kind === "file" ? "Upload file" : "Connect"}
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })}
+            {!visible.length && (
+              <div className="card pad muted">No integrations match “{query}”. Upload a CSV instead, or request one.</div>
+            )}
+          </div>
+
+          <aside className="stack" aria-label="Your baseline">
+            <section className={"card pad stack" + (hasCash ? " card-emph" : "")} style={{ gap: 12 }}>
+              <div className="row-between">
+                <h2 className="h2">Your baseline</h2>
+                <span className="tag">{connectedList.length} source{connectedList.length === 1 ? "" : "s"}</span>
+              </div>
+              {!hasCash ? (
+                <div className="panel stack" style={{ gap: 10 }}>
+                  <span className="small">Connect a bank, card, or upload a CSV to see your cash, burn and runway.</span>
+                  <button className="btn btn-secondary btn-sm" style={{ alignSelf: "flex-start" }} onClick={useDemo}>Use demo company</button>
+                </div>
+              ) : (
+                <>
+                  <div className="divider-list">
+                    {connectedList.map((i) => (
+                      <div key={i.id} style={{ padding: "9px 0" }} className="stack">
+                        <div className="row">
+                          <span className="logo" aria-hidden="true">{i.name[0]}</span>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div className="strong small">{i.name}</div>
+                            <div className="small muted">
+                              {i.account} · {i.id === "rho" && state.syncIssue === "failed" ? <span style={{ color: "var(--crit)" }}>sync failed 3 hours ago</span> : "synced just now"}
+                            </div>
+                          </div>
+                          <button className="btn btn-quiet btn-sm" aria-expanded={managing === i.id} onClick={() => setManaging(managing === i.id ? null : i.id)}>Manage</button>
+                        </div>
+                        {managing === i.id && (
+                          <div className="row wrap" style={{ gap: 6, paddingLeft: 42 }}>
+                            <button className="btn btn-secondary btn-sm" onClick={() => { set((s) => { if (i.id === "rho") s.syncIssue = null; }); toast(`${i.name} synced just now`); setManaging(null); }}>Sync now</button>
+                            <button className="btn btn-quiet btn-sm" onClick={() => { disconnect(i); setManaging(null); }}>Disconnect</button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  {connected("rho") && connected("plaid") && (
+                    <div className="panel small" style={{ padding: 12, border: "1px dashed var(--rule-strong)", background: "transparent" }}>
+                      Your Rho account also showed up through Plaid. We merged them, so nothing is counted twice.
+                    </div>
+                  )}
+                  <div className="divider-list">
+                    <div className="kv"><span className="k">Cash on hand</span><span className="v">{fmtMoney(COMPANY.openingCash)} <Prov kind="actual" /></span></div>
+                    <div className="kv"><span className="k">Avg. monthly receipts</span><span className="v">{fmtMoney(COMPANY.monthlyReceipts)} <Prov kind="actual" /></span></div>
+                    <div className="kv"><span className="k">Avg. monthly outflows</span><span className="v">{fmtMoney(COMPANY.monthlyOutflows)} <Prov kind="actual" /></span></div>
+                    <div className="kv"><span className="k">Runway today</span><span className="v">{fmtMonths(COMPANY.openingCash / (COMPANY.monthlyOutflows - COMPANY.monthlyReceipts))}</span></div>
+                  </div>
+                  {hasBooks ? (
+                    <>
+                      <span className="eyebrow">Cost drivers · categories from QuickBooks</span>
+                      <div className="row wrap" style={{ gap: 6 }}>
+                        {COMPANY.costDrivers.map((d) => <span className="chip" key={d.label}>{d.label} {fmtK(d.amount)}</span>)}
+                      </div>
+                      {state.depositsReviewed ? (
+                        <div className="panel row-between small" style={{ padding: 12 }}>
+                          <span>✓ {COMPANY.uncategorizedDeposits} deposits categorized — not counted as revenue</span>
+                          <button className="btn btn-ghost btn-sm" onClick={() => setReviewDeposits(true)}>Edit</button>
+                        </div>
+                      ) : (
+                        <div className="panel row-between small" style={{ padding: 12, background: "var(--warn-soft)" }}>
+                          <span>⚠ {COMPANY.uncategorizedDeposits} deposits aren’t categorized — loans or transfers, not revenue?</span>
+                          <button className="btn btn-ghost btn-sm" onClick={() => setReviewDeposits(true)}>Review</button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="panel small">Connect accounting (QuickBooks, Xero…) to split costs into categories.</div>
+                  )}
+                </>
+              )}
+            </section>
+            <section className="card pad-sm stack" style={{ gap: 8 }}>
+              <h2 className="h3">How we protect your data</h2>
+              <ul className="small muted" style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 4 }}>
+                <li>Read-only, least-privilege access. We can’t move money or change your books.</li>
+                <li>You sign in with each provider — we never see those passwords.</li>
+                <li>Every number keeps its source, so you can trace it back.</li>
+                <li>Disconnect a source or delete your data anytime.</li>
+                <li>Your data is never used to benchmark other companies without opt-in.</li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+
+        <div className="footer-bar">
+          <span className="small muted">{manage ? "Changes apply to every analysis." : "Minimum to continue: 1 bank or card source, or a CSV."}</span>
+          <div className="row">
+            {!manage && !hasCash && <button className="btn btn-quiet" onClick={useDemo}>Use demo company</button>}
+            {manage ? (
+              <button className="btn btn-primary" onClick={() => go("home")}>Done</button>
+            ) : (
+              <button className="btn btn-primary btn-lg" disabled={!hasCash} onClick={() => go("goals")}>Continue to goals →</button>
+            )}
+          </div>
+        </div>
+      </main>
+      {reviewDeposits && <DepositReview onClose={() => setReviewDeposits(false)} />}
+    </>
+  );
+}
+
+function DepositReview({ onClose }) {
+  const { set, toast } = useStore();
+  const [types, setTypes] = useState(() => Object.fromEntries(FLAGGED_DEPOSITS.map((d) => [d.id, d.suggested])));
+  const revenue = FLAGGED_DEPOSITS.filter((d) => types[d.id] === "revenue").reduce((t, d) => t + d.amount, 0);
+  return (
+    <Modal title="Review 3 uncategorized deposits" onClose={onClose} wide>
+      <p className="small muted" style={{ margin: 0 }}>
+        Only revenue counts toward receipts. We’ve suggested a type from the sender and amount — change anything that’s wrong.
+      </p>
+      <div className="table-wrap">
+        <table className="data">
+          <thead><tr><th>Date</th><th>From</th><th style={{ textAlign: "right" }}>Amount</th><th>Type</th></tr></thead>
+          <tbody>
+            {FLAGGED_DEPOSITS.map((d) => (
+              <tr key={d.id}>
+                <td style={{ whiteSpace: "nowrap" }}>{d.date}</td>
+                <td className="first">{d.from}</td>
+                <td style={{ textAlign: "right" }}>{fmtMoney(d.amount)}</td>
+                <td>
+                  <select className="select" style={{ minWidth: 230 }} aria-label={`Type for ${d.from}`} value={types[d.id]} onChange={(e) => setTypes((t) => ({ ...t, [d.id]: e.target.value }))}>
+                    {DEPOSIT_TYPES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="panel small">
+        {revenue > 0
+          ? `${fmtMoney(revenue)} marked as revenue. In the full product this would raise average receipts; this demo keeps the sample company’s numbers fixed.`
+          : "None of these count as revenue, so average receipts stay at " + fmtMoney(COMPANY.monthlyReceipts) + "/mo."}
+      </div>
+      <div className="row" style={{ justifyContent: "flex-end" }}>
+        <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
+        <button className="btn btn-primary" onClick={() => { set((s) => { s.depositsReviewed = true; }); toast("3 deposits categorized"); onClose(); }}>Save categories</button>
+      </div>
+    </Modal>
+  );
+}
+
+const TARGET_MONTHS =["Month 1", "Month 2", "Month 3", "Month 4", "Month 6", "Month 9", "Month 12"];
+const TARGET_COLUMNS = "minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)";
+
+function TargetRow({ goalLabel, name, onName, onRemove, value, onValue, by, onBy, saved, onSaved, help, suggested }) {
+  return (
+    <div className="stack" style={{ gap: 6, padding: "12px 0" }}>
+      <div className="grid-4" style={{ gridTemplateColumns: TARGET_COLUMNS, alignItems: "center" }}>
+        {onName ? (
+          <input className="input" value={name} placeholder="What are you saving for?" aria-label="Goal name" onChange={(e) => onName(e.target.value)} />
+        ) : (
+          <span className="strong">{name}</span>
+        )}
+        <MoneyInput value={value} onChange={onValue} ariaLabel={`${name} target`} />
+        {onBy ? (
+          <select className="select" value={by} onChange={(e) => onBy(e.target.value)} aria-label={`${name} by when`}>
+            {TARGET_MONTHS.map((m) => <option key={m}>{m}</option>)}
+          </select>
+        ) : (
+          <span className="small muted">Always</span>
+        )}
+        {onSaved ? (
+          <MoneyInput value={saved} onChange={onSaved} ariaLabel={`${name} already set aside`} />
+        ) : suggested ? (
+          <span className="tag tag-goal" style={{ justifySelf: "start" }}>Suggested</span>
+        ) : (
+          <span />
+        )}
+      </div>
+      <div className="row-between">
+        <span className="help">{goalLabel ? `For “${goalLabel}.” ` : ""}{help}</span>
+        {onRemove && <button className="btn btn-quiet btn-sm" onClick={onRemove}>Remove</button>}
+      </div>
+    </div>
+  );
+}
+
+function GoalsScreen() {
+  const { state, set, go, toast } = useStore();
+  const g = state.goals;
+  const manage = state.manage;
+  const burn = COMPANY.monthlyOutflows - COMPANY.monthlyReceipts;
+  const pickedCount = Object.values(g.selected).filter(Boolean).length;
+
+  const finish = () => {
+    go("home");
+    toast(manage ? "Goals saved" : "Setup complete — here’s your Home");
+  };
+
+  return (
+    <>
+      {manage ? <TopBar /> : <><TopBar setup /><SetupBar step={1} /></>}
+      <main className="page page-narrow">
+        <div>
+          <h1 className="h1">What is your business working toward?</h1>
+          <p className="lede">
+            {manage
+              ? "Change your goals anytime. We track them on Home and rank recommendations around them."
+              : "Now that we can see your cash, tell us what you’re working toward. We’ve suggested amounts from your real numbers — edit anything."}
+          </p>
+        </div>
+
+        <section className="card pad stack" style={{ gap: 14 }} aria-label="Company">
+          <div className="field">
+            <span className="field-label">Company stage</span>
+            <div className="row wrap" style={{ gap: 6 }}>
+              {["Pre-seed", "Seed", "Series A", "Series B+", "Bootstrapped"].map((s) => (
+                <button key={s} className="chip" aria-pressed={g.stage === s} onClick={() => set((st) => { st.goals.stage = s; })}>{s}</button>
+              ))}
+            </div>
+          </div>
+          <div className="field">
+            <span className="field-label">Team size</span>
+            <div className="row wrap" style={{ gap: 6 }}>
+              {["1–10", "11–50", "51–100", "100+"].map((s) => (
+                <button key={s} className="chip" aria-pressed={g.team === s} onClick={() => set((st) => { st.goals.team = s; })}>{s}</button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="card pad stack" style={{ gap: 14 }} aria-label="Goals">
+          <div className="row-between">
+            <h2 className="h2">Your goals for the next 12 months</h2>
+            <span className="small muted">Pick all that apply · {pickedCount} selected</span>
+          </div>
+          <div className="grid-2" style={{ gap: 10 }}>
+            {GOAL_OPTIONS.map((o) => (
+              <button key={o.id} className="check" aria-pressed={!!g.selected[o.id]} onClick={() => set((st) => { st.goals.selected[o.id] = !st.goals.selected[o.id]; })}>
+                <span className="check-box" aria-hidden="true">{g.selected[o.id] ? "✓" : ""}</span>
+                <span className="stack" style={{ gap: 2 }}>
+                  <span className="strong">{o.label}</span>
+                  <span className="small muted">{o.desc}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="card pad stack" style={{ gap: 4 }} aria-label="Money set aside">
+          <h2 className="h2">What are you setting money aside for?</h2>
+          <p className="small muted" style={{ margin: "2px 0 8px" }}>One target for each goal you picked above. We track them on Home. Amounts are earmarked from your cash — nothing moves.</p>
+          <div className="grid-4 eyebrow" style={{ gridTemplateColumns: "minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)", paddingBottom: 6, borderBottom: "1px solid var(--rule)" }}>
+            <span>Goal</span><span>Target</span><span>By when</span><span>Already set aside</span>
+          </div>
+          <div className="divider-list">
+            {g.selected.reserve && (
+              <TargetRow goalLabel="Build a cash reserve" name="Cash reserve floor" value={g.reserve}
+                onValue={(v) => set((st) => { st.goals.reserve = v ?? 0; })} suggested
+                help={`We suggest ${fmtK(burn * 3)}–${fmtK(burn * 4)}: 3–4 months of your ${fmtK(burn)}/mo net burn.`} />
+            )}
+            {g.selected.expand && (
+              <TargetRow goalLabel="Expand to a new market" name="NYC team activities + equipment" value={g.nyc.target}
+                onValue={(v) => set((st) => { st.goals.nyc.target = v ?? 0; })}
+                by={g.nyc.by} onBy={(v) => set((st) => { st.goals.nyc.by = v; })}
+                saved={g.nyc.saved} onSaved={(v) => set((st) => { st.goals.nyc.saved = v ?? 0; })}
+                help="Your current plan — we’ll test it when you model NYC." />
+            )}
+            {g.selected.hire && (
+              <TargetRow goalLabel="Hire key roles" name="Hiring fund · 2 engineers" value={g.hiring.target}
+                onValue={(v) => set((st) => { st.goals.hiring.target = v ?? 0; })}
+                by={g.hiring.by} onBy={(v) => set((st) => { st.goals.hiring.by = v; })}
+                saved={g.hiring.saved} onSaved={(v) => set((st) => { st.goals.hiring.saved = v ?? 0; })}
+                help="About 3 months of loaded salary for 2 engineers." />
+            )}
+            {(g.custom || []).map((c, idx) => (
+              <TargetRow key={c.id} name={c.name}
+                onName={(v) => set((st) => { st.goals.custom[idx].name = v; })}
+                onRemove={() => set((st) => { st.goals.custom.splice(idx, 1); })}
+                value={c.target} onValue={(v) => set((st) => { st.goals.custom[idx].target = v ?? 0; })}
+                by={c.by} onBy={(v) => set((st) => { st.goals.custom[idx].by = v; })}
+                saved={c.saved} onSaved={(v) => set((st) => { st.goals.custom[idx].saved = v ?? 0; })}
+                help="Your own goal. We track it on Home like the others." />
+            ))}
+            {!g.selected.reserve && !g.selected.expand && !g.selected.hire && !(g.custom || []).length && (
+              <p className="small muted" style={{ padding: "12px 0", margin: 0 }}>Pick “Build a cash reserve”, “Expand to a new market” or “Hire key roles” to add a savings target, or add your own below.</p>
+            )}
+          </div>
+          <button
+            className="btn btn-secondary"
+            style={{ borderStyle: "dashed", marginTop: 8 }}
+            onClick={() => set((st) => { st.goals.custom = [...(st.goals.custom || []), { id: "g" + Date.now(), name: "", target: 20000, by: "Month 6", saved: 0 }]; })}
+          >
+            + Add a goal <span className="muted" style={{ fontWeight: 400 }}>— taxes, equipment, a buffer for a slow quarter…</span>
+          </button>
+        </section>
+
+        {g.selected.runway && (
+          <section className="panel row-between wrap" aria-label="Runway target">
+            <div className="stack" style={{ gap: 2 }}>
+              <span className="strong">Runway target before your next raise</span>
+              <span className="small muted">For “Extend runway.” You have {fmtMonths(COMPANY.openingCash / burn)} today. Common guidance is 18–24 months when you start raising.</span>
+            </div>
+            <select className="select" style={{ width: 150 }} value={g.runwayTarget} onChange={(e) => set((st) => { st.goals.runwayTarget = Number(e.target.value); })} aria-label="Runway target">
+              {[12, 15, 18, 24].map((m) => <option key={m} value={m}>{m} months</option>)}
+            </select>
+          </section>
+        )}
+
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("connect", { manage })}>{manage ? "← Manage data" : "← Back to connect data"}</button>
+          <div className="row">
+            {!manage && <button className="btn btn-quiet" onClick={finish}>Skip for now</button>}
+            <button className="btn btn-primary btn-lg" onClick={finish}>{manage ? "Save goals" : "Finish setup → Go to Home"}</button>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
+
+
+// ---- screens/home.jsx ----
+// 02 Home and 02b Recommendations
+
+const TOOL_CHARGES = [
+  { name: "Notion", category: "Docs & wiki", amount: 420 },
+  { name: "Coda", category: "Docs & wiki", amount: 380 },
+  { name: "Confluence", category: "Docs & wiki", amount: 300 },
+];
+const OVERDUE = [
+  { name: "Acme Health", amount: 11000, days: 52 },
+  { name: "Birch & Co", amount: 7000, days: 47 },
+];
+
+function isNycQuestion(text) {
+  return /nyc|new york|expan|city|team activit|afford/i.test(text);
+}
+
+function SyncBanner() {
+  const { state, set, go, toast } = useStore();
+  const [retrying, setRetrying] = useState(false);
+  if (state.syncIssue !== "failed") return null;
+  const retry = () => {
+    setRetrying(true);
+    setTimeout(() => {
+      setRetrying(false);
+      set((s) => { s.syncIssue = null; });
+      toast("Rho synced — numbers are up to date");
+    }, 1300);
+  };
+  return (
+    <div className="banner banner-crit" role="alert">
+      <div className="stack" style={{ gap: 2 }}>
+        <span className="strong">Rho hasn’t synced for 3 hours</span>
+        <span className="small">Numbers below use Rho data up to 9:02 AM. They’re labeled stale until the next sync.</span>
+      </div>
+      <div className="row wrap">
+        <button className="btn btn-primary btn-sm" onClick={retry} disabled={retrying}>{retrying ? "Syncing…" : "Retry sync"}</button>
+        <button className="btn btn-secondary btn-sm" onClick={() => go("connect", { manage: true })}>Reconnect Rho</button>
+        <button className="btn btn-quiet btn-sm" onClick={() => set((s) => { s.syncIssue = "accepted"; })}>Continue with last sync</button>
+      </div>
+    </div>
+  );
+}
+
+function reviewRow(state) {
+  const v = state.validation;
+  if (v.stage !== "ready") return null;
+  const decided = Object.keys(v.decisions).length;
+  if (v.savedVersion) return { tag: `Reviewed · ${v.savedVersion.approved} approved, ${v.savedVersion.rejected} rejected`, tone: "tag-good", when: "Today" };
+  return { tag: `In review · 4 findings, ${decided} resolved`, tone: "tag-warn", when: "Today" };
+}
+
+function HomeScreen() {
+  const { state, set, go, toast, model } = useStore();
+  const [ask, setAsk] = useState("");
+  const recs = buildRecommendations(state, model);
+  const goals = goalMetrics(state, model);
+  const done = state.analysis.status === "done";
+
+  const startNyc = () => {
+    set((s) => { if (s.analysis.status === "none") s.analysis.status = "draft"; });
+    go("questions");
+  };
+  const submit = (text) => {
+    const q = (text ?? ask).trim();
+    if (!q) return;
+    if (isNycQuestion(q)) return startNyc();
+    toast("This demo models the NYC team decision. Other questions are coming soon.", { label: "Try NYC", run: startNyc });
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <SyncBanner />
+        <section className="panel stack" style={{ padding: 26, gap: 16 }} aria-label="Ask">
+          <h1 className="h1">What do you want to decide today?</h1>
+          <form className="big-ask" onSubmit={(e) => { e.preventDefault(); submit(); }}>
+            <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="e.g. How much can we afford for NYC team activities and equipment?" aria-label="Ask a business question" />
+            <button className="btn btn-dark" type="submit">Ask →</button>
+          </form>
+          <div className="stack" style={{ gap: 8 }}>
+            <span className="eyebrow">Start from a decision area</span>
+            <div className="row wrap" style={{ gap: 8 }}>
+              {DECISION_AREAS.map((d) => (
+                <button key={d.id} className={"area-tile" + (d.live ? " live" : "")} onClick={() => { setAsk(d.prompt); submit(d.prompt); }}>
+                  <span className="t">{d.label}</span>
+                  <span className="p">{d.prompt}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="card row-between wrap" style={{ padding: "12px 16px" }}>
+            <span className="small"><span className="strong">Already have a model?</span> <span className="muted">Upload it for a finance-health review — we check a copy, never the original.</span></span>
+            <button className="btn btn-secondary btn-sm" onClick={() => go("validate")}>Upload a model →</button>
+          </div>
+        </section>
+
+        <section className="card pad stack" style={{ gap: 14 }} aria-label="Recommendations">
+          <div className="row-between wrap">
+            <div className="stack" style={{ gap: 2 }}>
+              <span className="eyebrow">Recommendations for your business</span>
+              <h2 className="h2">{recs.length} suggestions from your accounts{done ? " and active plans" : ""} · {recs.filter((r) => r.impact === "High").length} high impact</h2>
+            </div>
+            <button className="btn btn-secondary" onClick={() => go("recs")}>View all recommendations →</button>
+          </div>
+          <div className="grid-3">
+            {recs.slice(0, 3).map((r) => (
+              <button key={r.id} className="panel stack" style={{ gap: 6, textAlign: "left", border: 0 }} onClick={() => go("recs")}>
+                <span className="row-between"><span className="eyebrow">{r.category}</span><span className={"tag " + (r.impact === "High" ? "tag-dark" : "")}>{r.impact}</span></span>
+                <span className="h3">{r.title}</span>
+                <span className="small muted">{r.metric}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <div className="stack" style={{ gap: 10 }}>
+          <span className="eyebrow">Your business right now</span>
+          <div className="grid-2" style={{ alignItems: "start" }}>
+            <section className="card pad stack" style={{ gap: 10 }} aria-label="Cash outlook">
+              <div className="row-between">
+                <h2 className="h3">Cash outlook</h2>
+                {state.syncIssue ? <span className="tag tag-warn">Stale · data to 9:02 AM</span> : <Prov kind="actual" />}
+              </div>
+              <div className="row" style={{ alignItems: "baseline", gap: 10 }}>
+                <span className="big-number">{fmtMonths(model.none.runway)}</span>
+                <span className="small muted">of runway today</span>
+              </div>
+              <span className="small muted">{fmtK(COMPANY.openingCash)} cash ÷ {fmtK(model.netBurnToday)} monthly net burn · before new plans</span>
+              <CashChart
+                height={240}
+                width={520}
+                reserve={state.goals.selected.reserve ? state.goals.reserve : null}
+                series={[{ id: "today", label: "Cash at today’s burn", short: "Today’s burn", cash: model.none.cash, variant: "focus" }]}
+                ariaLabel="Cash at today’s burn over the next 12 months"
+              />
+            </section>
+            <section className="card pad stack" style={{ gap: 12 }} aria-label="Where your money goes">
+              <div className="row-between">
+                <h2 className="h3">Where your money goes</h2>
+                <span className="small muted num">{fmtK(COMPANY.monthlyOutflows)} / month</span>
+              </div>
+              <SpendBars drivers={COMPANY.costDrivers} />
+              <span className="small muted">Source: QuickBooks categories · last 6 months</span>
+            </section>
+          </div>
+        </div>
+
+        {goals.length > 0 && (
+          <div className="stack" style={{ gap: 10 }}>
+            <div className="row-between">
+              <span className="eyebrow">Your goals · what you’re setting money aside for</span>
+              <button className="btn btn-ghost btn-sm" onClick={() => go("goals", { manage: true })}>Edit goals →</button>
+            </div>
+            <div className="grid-4">
+              {goals.map((m) => (
+                <section key={m.id} className="card pad-sm stack" style={{ gap: 10 }} aria-label={m.label}>
+                  <div className="row-between">
+                    <span className="eyebrow">{m.label}</span>
+                    <span className={"tag tag-dot tag-" + m.tone}>{m.status}</span>
+                  </div>
+                  <span className="h3 num">{m.value}</span>
+                  <Progress pct={m.pct} tone={m.tone} marker={m.marker} />
+                  <span className="small muted">{m.note}</span>
+                </section>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <section className="stack" style={{ gap: 10 }} aria-label="Recent analyses" id="recent">
+          <span className="eyebrow">Recent analyses</span>
+          <div className="card divider-list" style={{ padding: "0 18px" }}>
+            {state.analysis.status !== "none" && (
+              <button className="row-between" style={{ width: "100%", background: "none", border: 0, padding: "14px 0", textAlign: "left" }} onClick={() => go(done ? "recommendation" : "questions")}>
+                <span className="row wrap"><span className="strong">NYC team activities + equipment</span>
+                  <span className={"tag " + (done ? "tag-good" : "")}>{done ? `Created · ${model.verdict}` : "Draft · in progress"}</span></span>
+                <span className="small muted">Today →</span>
+              </button>
+            )}
+            {reviewRow(state) && (
+              <button className="row-between" style={{ width: "100%", background: "none", border: 0, padding: "14px 0", textAlign: "left" }} onClick={() => go("findings")}>
+                <span className="row wrap"><span className="strong">{SAMPLE_MODEL.fileName}</span><span className={"tag " + reviewRow(state).tone}>{reviewRow(state).tag}</span></span>
+                <span className="small muted">{reviewRow(state).when} →</span>
+              </button>
+            )}
+            <button className="row-between" style={{ width: "100%", background: "none", border: 0, padding: "14px 0", textAlign: "left" }} onClick={() => toast("The hiring analysis is coming soon in this demo.")}>
+              <span className="row wrap"><span className="strong">Hire two engineers</span><span className="tag">Draft · 2 questions unanswered</span></span>
+              <span className="small muted">3 days ago →</span>
+            </button>
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}
+
+function AnalysesScreen() {
+  const { state, set, go, toast, model } = useStore();
+  const a = state.analysis;
+  const review = reviewRow(state);
+  const startNyc = () => { set((s) => { if (s.analysis.status === "none") s.analysis.status = "draft"; }); go(a.status === "done" ? "recommendation" : "questions"); };
+  const items = [
+    a.status !== "none" && {
+      title: "NYC team activities + equipment", kind: "Create", tag: a.status === "done" ? model.verdict : "Draft · in progress",
+      tone: a.status === "done" ? (isStale(state) ? "tag-warn" : "tag-good") : "", note: a.status === "done" ? (isStale(state) ? "Inputs changed since the last answer" : model.headline) : "Guided questions answered — build scenarios next",
+      when: "Today", open: startNyc,
+    },
+    review && { title: SAMPLE_MODEL.fileName, kind: "Validate", tag: review.tag, tone: review.tone, note: SAMPLE_MODEL.question, when: review.when, open: () => go("findings") },
+    { title: "Hire two engineers", kind: "Create", tag: "Draft · 2 questions unanswered", tone: "", note: "Can we afford two engineers by Month 6?", when: "3 days ago", open: () => toast("The hiring analysis is coming soon in this demo.") },
+  ].filter(Boolean);
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <div className="page-head">
+          <div>
+            <h1 className="h1">Analyses</h1>
+            <p className="lede">Decisions you’re modeling and models you’re checking. Every answer keeps its versions.</p>
+          </div>
+          <div className="row">
+            <button className="btn btn-secondary" onClick={() => go("validate")}>Upload a model</button>
+            <button className="btn btn-primary" onClick={() => go("home")}>New analysis</button>
+          </div>
+        </div>
+        <section className="card divider-list" style={{ padding: "0 20px" }} aria-label="All analyses">
+          {items.map((it) => (
+            <button key={it.title} onClick={it.open} className="row-between wrap" style={{ width: "100%", background: "none", border: 0, padding: "16px 0", textAlign: "left" }}>
+              <span className="stack" style={{ gap: 4, minWidth: 0 }}>
+                <span className="row wrap"><span className="tag">{it.kind}</span><span className="h3">{it.title}</span><span className={"tag " + it.tone}>{it.tag}</span></span>
+                <span className="small muted">{it.note}</span>
+              </span>
+              <span className="small muted">{it.when} →</span>
+            </button>
+          ))}
+        </section>
+      </main>
+    </>
+  );
+}
+
+function RecommendationsScreen() {
+  const { state, set, go, toast, model } = useStore();
+  const [openWhy, setOpenWhy] = useState({});
+  const [detail, setDetail] = useState(null);
+  const recs = buildRecommendations(state, model);
+  const done = state.analysis.status === "done";
+
+  const hide = (r, verb) => {
+    set((s) => { s.hiddenRecs[r.id] = true; });
+    toast(`${verb}: ${r.title}`, { label: "Undo", run: () => set((s) => { delete s.hiddenRecs[r.id]; }) });
+  };
+  const act = (r) => {
+    if (r.go === "questions") { set((s) => { if (s.analysis.status === "none") s.analysis.status = "draft"; }); go("questions"); }
+    else if (r.go) go(r.go);
+    else setDetail(r.id);
+  };
+
+  const summary = done
+    ? [
+        `Cash covers ${fmtMonths(model.none.runway)} today. With the NYC plan, that falls to about ${Math.floor(model.rec.downside.runway)} months.`,
+        `NYC adds a one-time setup cost and ${fmtK(state.analysis.teamCost)}/mo in team costs before new receipts catch up.`,
+        "Work through these in order. The top two protect runway; the others free up cash.",
+      ]
+    : [
+        `Cash covers ${fmtMonths(model.none.runway)} today at a ${fmtK(model.netBurnToday)}/mo net burn.`,
+        "Your plans — NYC and two engineers — aren’t modeled yet, so we can’t say how much they shorten that.",
+        "Start with the NYC plan. The cash-saving items help either way.",
+      ];
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <div className="crumbs"><span><button onClick={() => go("home")}>Home</button> / Recommendations</span></div>
+        <div className="page-head">
+          <div>
+            <h1 className="h1">Recommendations for your business</h1>
+            <p className="lede">Generated from your connected accounts{done ? " and saved analyses" : ""}. Updated after every sync.</p>
+          </div>
+          <span className="small muted">Sorted by impact on runway</span>
+        </div>
+        <div className="grid-3">
+          {["What is happening", "Why it is happening", "What to do next"].map((k, i) => (
+            <div key={k} className="panel stack" style={{ gap: 6 }}>
+              <span className="eyebrow">{k}</span>
+              <span>{summary[i]}</span>
+            </div>
+          ))}
+        </div>
+        {recs.length === 0 && <div className="card pad muted">You’ve cleared every recommendation. New ones appear after the next sync.</div>}
+        <div className="grid-2">
+          {recs.map((r) => (
+            <section key={r.id} className="card pad rec-card" aria-label={r.title}>
+              <div className="row-between">
+                <span className="eyebrow">{r.category}</span>
+                <span className={"tag " + (r.impact === "High" ? "tag-dark" : "")}>{r.impact} impact</span>
+              </div>
+              <h2 className="h2">{r.title}</h2>
+              <span className="strong num">{r.metric}</span>
+              <div className="why stack" style={{ gap: 4 }}>
+                <span className="eyebrow">Why we suggest this</span>
+                <span className="small">{r.why}</span>
+                {openWhy[r.id] && (
+                  <span className="small muted">
+                    {r.provenance === "actual"
+                      ? "Calculated from your connected accounts. No assumptions involved."
+                      : `Uses your NYC assumptions (team ${fmtK(state.analysis.teamCost)}/mo, receipts ${fmtK(state.analysis.newReceipts)}/mo from Month ${state.analysis.receiptsStart}). Change them and this updates.`}
+                  </span>
+                )}
+              </div>
+              <span className="row small muted">Based on: {r.basis} <Prov kind={r.provenance} /></span>
+              <div className="row-between wrap">
+                <div className="row">
+                  <button className="btn btn-primary" onClick={() => act(r)}>{r.action} →</button>
+                  <button className="btn btn-secondary" aria-expanded={!!openWhy[r.id]} onClick={() => setOpenWhy((o) => ({ ...o, [r.id]: !o[r.id] }))}>{openWhy[r.id] ? "Hide detail" : "Ask why"}</button>
+                </div>
+                <div className="row" style={{ gap: 2 }}>
+                  <button className="btn btn-quiet btn-sm" onClick={() => hide(r, "Snoozed for 2 weeks")}>Snooze</button>
+                  <button className="btn btn-quiet btn-sm" onClick={() => hide(r, "Dismissed")}>Dismiss</button>
+                </div>
+              </div>
+            </section>
+          ))}
+        </div>
+        <div className="panel row-between wrap small">
+          <span>Recommendations never act on their own. You approve, snooze or dismiss each one.</span>
+          <span className="muted">Last updated: today, after sync</span>
+        </div>
+        <div><button className="btn btn-ghost" onClick={() => go("home")}>← Back to Home</button></div>
+      </main>
+
+      {detail === "tools" && (
+        <Modal title="3 overlapping software tools" onClose={() => setDetail(null)}>
+          <p className="small muted" style={{ margin: 0 }}>Recurring charges from your bank transactions that look like the same kind of tool. We can’t see usage — check with your team before cancelling.</p>
+          <div className="table-wrap">
+            <table className="data">
+              <thead><tr><th>Tool</th><th>Category</th><th style={{ textAlign: "right" }}>Monthly charge</th></tr></thead>
+              <tbody>
+                {TOOL_CHARGES.map((t) => <tr key={t.name}><td className="first">{t.name}</td><td>{t.category}</td><td style={{ textAlign: "right" }}>{fmtMoney(t.amount)}</td></tr>)}
+                <tr className="total"><td>Total</td><td></td><td style={{ textAlign: "right" }}>{fmtMoney(TOOL_CHARGES.reduce((a, t) => a + t.amount, 0))}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="row" style={{ justifyContent: "flex-end" }}>
+            <button className="btn btn-secondary" onClick={() => setDetail(null)}>Close</button>
+            <button className="btn btn-primary" onClick={() => { setDetail(null); toast("Reminder set: review tools with the team on Friday"); }}>Remind me Friday</button>
+          </div>
+        </Modal>
+      )}
+      {detail === "invoices" && (
+        <Modal title="2 invoices unpaid for 45+ days" onClose={() => setDetail(null)}>
+          <p className="small muted" style={{ margin: 0 }}>From QuickBooks. Collecting both brings {fmtK(OVERDUE.reduce((a, i) => a + i.amount, 0))} in sooner.</p>
+          <div className="table-wrap">
+            <table className="data">
+              <thead><tr><th>Customer</th><th>Days overdue</th><th style={{ textAlign: "right" }}>Amount</th></tr></thead>
+              <tbody>
+                {OVERDUE.map((i) => <tr key={i.name}><td className="first">{i.name}</td><td>{i.days} days</td><td style={{ textAlign: "right" }}>{fmtMoney(i.amount)}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+          <div className="row" style={{ justifyContent: "flex-end" }}>
+            <button className="btn btn-secondary" onClick={() => setDetail(null)}>Close</button>
+            <button className="btn btn-primary" onClick={() => { setDetail(null); toast("Reminder drafts ready in QuickBooks — nothing sent"); }}>Draft reminders</button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+
+// ---- screens/analysis.jsx ----
+// 03 Guided questions → 04a Scenarios → 04b Recommendation
+
+function Crumbs({ right }) {
+  const { go } = useStore();
+  return (
+    <div className="crumbs">
+      <span><button onClick={() => go("home")}>Home</button> / Analyses / NYC team activities + equipment</span>
+      {right && <span>{right}</span>}
+    </div>
+  );
+}
+
+function QuestionsScreen() {
+  const { state, set, go } = useStore();
+  const a = state.analysis;
+  const [tried, setTried] = useState(false);
+  const burn = COMPANY.monthlyOutflows - COMPANY.monthlyReceipts;
+  const reserve = a.reserve ?? state.goals.reserve;
+  const rangeBad = a.setupRange && (a.setupRange.low == null || a.setupRange.high == null || a.setupRange.low > a.setupRange.high);
+  const required = [rangeBad ? null : a.setup, a.teamCost, a.newReceipts, reserve];
+  const answered = required.filter((v) => v != null).length;
+  const complete = answered === required.length;
+  const upd = (fn) => set((s) => fn(s.analysis));
+
+  const build = () => {
+    setTried(true);
+    if (!complete) return;
+    set((s) => { s.analysis.testSetup = s.analysis.setup; if (s.analysis.status === "none") s.analysis.status = "draft"; });
+    go("scenarios");
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <Crumbs />
+        <Stepper current={2} />
+        <QuestionBanner />
+        <div className="grid-main rail-left">
+          <section className="card pad stack" style={{ gap: 6 }} aria-label="From your accounts">
+            <div className="row-between"><h2 className="h2">From your accounts</h2><Prov kind="actual" /></div>
+            <span className="small muted">We already know these. You don’t need to type them.</span>
+            <div className="divider-list" style={{ marginTop: 6 }}>
+              <div className="kv"><span className="k">Opening cash</span><span className="v">{fmtMoney(COMPANY.openingCash)}</span></div>
+              <div className="kv"><span className="k">Monthly receipts (avg.)</span><span className="v">{fmtMoney(COMPANY.monthlyReceipts)}</span></div>
+              <div className="kv"><span className="k">Monthly outflows (avg.)</span><span className="v">{fmtMoney(COMPANY.monthlyOutflows)}</span></div>
+              <div className="kv"><span className="k">Net burn</span><span className="v">{fmtMoney(burn)} / mo</span></div>
+              <div className="kv"><span className="k">Runway today</span><span className="v">{fmtMonths(COMPANY.openingCash / burn)}</span></div>
+            </div>
+            <div className="panel small muted" style={{ marginTop: 8 }}>
+              Sources: Rho Checking ••4821 · Chase Savings ••9930 (Plaid) · QuickBooks · last 6 months · synced 2 min ago
+            </div>
+          </section>
+
+          <section className="card pad stack" style={{ gap: 18 }} aria-label="What we need from you">
+            <div className="row-between">
+              <h2 className="h2">What we need from you</h2>
+              <span className={"small " + (complete ? "muted" : "")} style={{ color: complete ? undefined : "var(--crit)" }}>
+                {complete ? "All 4 required answered" : `${answered} of 4 required answered`}
+              </span>
+            </div>
+            <span className="small muted" style={{ marginTop: -10 }}>Only the inputs this question needs. Your bank data can’t see the future.</span>
+
+            <div className="field">
+              <div className="row-between"><label className="field-label" htmlFor="q-setup">One-time NYC setup (activities + equipment)</label><Prov kind="assumption" /></div>
+              <Seg label="Setup amount type" value={a.setupRange ? "range" : "one"}
+                onChange={(v) => upd((x) => {
+                  if (v === "range" && !x.setupRange) x.setupRange = { low: Math.min(35000, x.setup ?? 35000), high: x.setup ?? 60000 };
+                  if (v === "one") x.setupRange = null;
+                  if (x.setupRange) x.setup = x.setupRange.high;
+                })}
+                options={[{ value: "one", label: "One amount" }, { value: "range", label: "Not sure — a range" }]} />
+              <div className="row wrap">
+                {a.setupRange ? (
+                  <>
+                    <div style={{ flex: 1, minWidth: 140 }}><MoneyInput id="q-setup" ariaLabel="Lowest likely setup" value={a.setupRange.low} invalid={tried && rangeBad} onChange={(v) => upd((x) => { x.setupRange.low = v; })} /></div>
+                    <span className="muted">to</span>
+                    <div style={{ flex: 1, minWidth: 140 }}><MoneyInput ariaLabel="Highest likely setup" value={a.setupRange.high} invalid={tried && rangeBad} onChange={(v) => upd((x) => { x.setupRange.high = v; x.setup = v; })} /></div>
+                  </>
+                ) : (
+                  <div style={{ flex: 1, minWidth: 180 }}><MoneyInput id="q-setup" value={a.setup} invalid={tried && a.setup == null} onChange={(v) => upd((x) => { x.setup = v; })} /></div>
+                )}
+                <select className="select" style={{ width: 170 }} aria-label="When setup is paid" value={a.setupMonth} onChange={(e) => upd((x) => { x.setupMonth = Number(e.target.value); })}>
+                  {SETUP_TIMING.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+              <span className="help" style={tried && (a.setup == null || rangeBad) ? { color: "var(--crit)" } : undefined}>
+                {tried && rangeBad
+                  ? "Enter both ends of the range, low first."
+                  : tried && a.setup == null
+                    ? "Enter your planned setup cost — we won’t guess it."
+                    : a.setupRange
+                      ? "We test the high end and tell you how much of the range is safe."
+                      : "Not sure? Switch to a range."}
+              </span>
+            </div>
+
+            <div className="field">
+              <div className="row-between"><label className="field-label" htmlFor="q-team">Ongoing NYC team costs, per month</label><Prov kind="assumption" /></div>
+              <div className="row wrap">
+                <div style={{ flex: 1, minWidth: 180 }}><MoneyInput id="q-team" value={a.teamCost} invalid={tried && a.teamCost == null} onChange={(v) => upd((x) => { x.teamCost = v; })} /></div>
+                <select className="select" style={{ width: 170 }} aria-label="When team costs start" value={a.teamStart} onChange={(e) => upd((x) => { x.teamStart = Number(e.target.value); })}>
+                  {TEAM_TIMING.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </select>
+              </div>
+              <span className="help">Team activities, workspace, travel.</span>
+            </div>
+
+            <div className="field">
+              <div className="row-between"><label className="field-label" htmlFor="q-rec">New monthly receipts from NYC</label><Prov kind="assumption" /></div>
+              <div className="row wrap">
+                <div style={{ flex: 1, minWidth: 180 }}><MoneyInput id="q-rec" value={a.newReceipts} invalid={tried && a.newReceipts == null} onChange={(v) => upd((x) => { x.newReceipts = v; })} /></div>
+                <label className="small muted" htmlFor="q-start">Cash arrives from</label>
+                <select id="q-start" className="select" style={{ width: 130 }} value={a.receiptsStart} onChange={(e) => upd((x) => { x.receiptsStart = Number(e.target.value); })}>
+                  {[1, 2, 3, 4, 5, 6].map((m) => <option key={m} value={m}>Month {m}</option>)}
+                </select>
+              </div>
+              <span className="help">When does cash actually land in the bank — not when deals close? The downside assumes half, a month later.</span>
+            </div>
+
+            <div className="field">
+              <div className="row-between"><label className="field-label" htmlFor="q-reserve">Minimum cash reserve</label><Prov kind="goal" /></div>
+              <MoneyInput id="q-reserve" value={reserve} onChange={(v) => upd((x) => { x.reserve = v; })} />
+              <span className="help">Set during setup. Change it here for this analysis only.</span>
+            </div>
+
+            <div className="panel stack" style={{ gap: 10, border: "1px dashed var(--rule-strong)", background: "transparent" }}>
+              <div className="row-between"><span className="field-label">Any new funding in the next 12 months?</span><span className="tag">Optional</span></div>
+              <Seg label="New funding" value={a.funding} onChange={(v) => upd((x) => { x.funding = x.funding === v ? null : v; })}
+                options={[{ value: "no", label: "No" }, { value: "yes", label: "Yes — add a raise" }, { value: "unsure", label: "Not sure" }]} />
+              {a.funding === "yes" && <span className="help">Raise modeling is coming soon. For now scenarios assume no new funding and tell you when to start raising.</span>}
+            </div>
+          </section>
+        </div>
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("home")}>← Back to Home</button>
+          <div className="row">
+            {tried && !complete && <span className="small" style={{ color: "var(--crit)" }}>Fill the highlighted fields to build scenarios.</span>}
+            <button className="btn btn-primary btn-lg" onClick={build}>Build scenarios →</button>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
+
+
+
+// ---- screens/scenarios.jsx ----
+// 04a Scenarios and 04b Recommendation
+
+const INPUT_LABELS = {
+  setup: "NYC setup", setupMonth: "setup timing", teamCost: "NYC team costs", teamStart: "team start month",
+  newReceipts: "NYC receipts", receiptsStart: "receipts start month", reserve: "cash reserve",
+};
+
+function CustomScenarioForm({ onClose }) {
+  const { state, set } = useStore();
+  const a = state.analysis;
+  const [name, setName] = useState("Slower NYC ramp");
+  const [setup, setSetup] = useState(45000);
+  const [rec, setRec] = useState(Math.round(a.newReceipts * 0.7));
+  const [start, setStart] = useState(a.receiptsStart + 2);
+  const valid = name.trim() && setup != null && rec != null;
+  return (
+    <div className="panel stack" style={{ gap: 10 }}>
+      <span className="eyebrow">Add a scenario</span>
+      <div className="inline-form">
+        <label className="field"><span className="small strong">Name</span><input className="input" value={name} onChange={(e) => setName(e.target.value)} /></label>
+        <label className="field"><span className="small strong">Setup cost</span><MoneyInput value={setup} onChange={setSetup} ariaLabel="Scenario setup cost" /></label>
+        <label className="field"><span className="small strong">NYC receipts / mo</span><MoneyInput value={rec} onChange={setRec} ariaLabel="Scenario NYC receipts" /></label>
+        <label className="field"><span className="small strong">Receipts from</span>
+          <select className="select" value={start} onChange={(e) => setStart(Number(e.target.value))}>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((m) => <option key={m} value={m}>Month {m}</option>)}
+          </select>
+        </label>
+        <div className="row">
+          <button className="btn btn-quiet" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" disabled={!valid} onClick={() => { set((s) => { s.analysis.custom = { name: name.trim(), setup, newReceipts: rec, receiptsStart: start }; }); onClose(); }}>Add</button>
+        </div>
+      </div>
+      <span className="help">Uses your NYC team costs ({fmtK(a.teamCost)}/mo) and the same calculation. One extra scenario at a time.</span>
+    </div>
+  );
+}
+
+function ScenariosScreen() {
+  const { state, set, go, model } = useStore();
+  const a = state.analysis;
+  const t = a.testSetup;
+  const holds = t <= model.cap;
+  const [calc, setCalc] = useState(null);
+  const [adding, setAdding] = useState(false);
+
+  const rows = [
+    { label: "No expansion", r: model.none },
+    { label: `Base · ${fmtK(t)} setup`, r: model.test.base },
+    { label: `Downside · ${fmtK(t)} setup`, r: model.test.downside },
+  ];
+  if (t !== model.chosen) rows.push({ label: `Base · ${fmtK(model.chosen)} setup`, r: model.rec.base });
+  rows.push({ label: `Downside · ${fmtK(model.chosen)} setup`, r: model.rec.downside, emph: true });
+  if (model.custom) rows.push({ label: `${a.custom.name} · ${fmtK(a.custom.setup)} setup`, r: model.custom, custom: true });
+
+  const series = [
+    { id: "none", label: "No expansion", short: "No expansion", cash: model.none.cash, variant: "muted" },
+    { id: "base", label: `Base · ${fmtK(t)} setup`, short: "Base", cash: model.test.base.cash, variant: "dot" },
+    t === model.chosen
+      ? { id: "down", label: `Downside · ${fmtK(t)} setup (recommended)`, short: "Downside", cash: model.test.downside.cash, variant: "focus" }
+      : { id: "down", label: `Downside · ${fmtK(t)} setup`, short: "Downside", cash: model.test.downside.cash, variant: "dash" },
+    ...(t !== model.chosen ? [{ id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" }] : []),
+    ...(model.custom ? [{ id: "custom", label: a.custom.name, short: a.custom.name, cash: model.custom.cash, variant: "alt" }] : []),
+  ];
+  const downM6 = model.test.downside.cash[PROTECT_THROUGH];
+
+  const seeRecommendation = () => {
+    set((s) => { s.analysis.status = "done"; s.analysis.computedWith = answerInputs(s); });
+    go("recommendation");
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <Crumbs right={`Version ${a.version} · auto-saved`} />
+        <Stepper current={3} />
+        <QuestionBanner sub={`Compare how cash moves in each scenario. Drag the setup cost to see where your ${fmtK(model.reserve)} reserve breaks.`} />
+        <div className="grid-main">
+          <div className="stack">
+            <section className="card pad stack" style={{ gap: 14 }} aria-label="Month-end cash">
+              <div className="row-between">
+                <h2 className="h2">Month-end cash · next 12 months</h2>
+                <button className="btn btn-ghost btn-sm" onClick={() => setCalc("months")}>See calculation →</button>
+              </div>
+              <CashChart
+                reserve={model.reserve}
+                series={series}
+                marker={downM6 < model.reserve ? { month: PROTECT_THROUGH, value: downM6, label: `M${PROTECT_THROUGH}: ${fmtK(downM6)} (${fmtK(downM6 - model.reserve)})` } : null}
+              />
+              <div className="lineage">
+                <span>Numbers computed by the calculation engine from 3 sources + your assumptions. AI only writes the explanation.</span>
+                <button className="btn btn-ghost btn-sm" onClick={() => setCalc("lineage")}>View lineage →</button>
+              </div>
+            </section>
+
+            <section className="card pad stack" style={{ gap: 8 }} aria-label="Compare scenarios">
+              <div className="row-between">
+                <h2 className="h2">Compare scenarios</h2>
+                {!adding && !model.custom && <button className="btn btn-ghost btn-sm" onClick={() => setAdding(true)}>+ Add scenario</button>}
+              </div>
+              {adding && <CustomScenarioForm onClose={() => setAdding(false)} />}
+              <div className="table-wrap">
+                <table className="data">
+                  <thead><tr><th>Scenario</th><th>Cash at M{PROTECT_THROUGH}</th><th>Below {fmtK(model.reserve)} reserve</th><th>Runway</th></tr></thead>
+                  <tbody>
+                    {rows.map((row) => {
+                      const breach = firstMonthBelow(row.r.cash, model.reserve);
+                      const early = breach != null && breach <= PROTECT_THROUGH;
+                      return (
+                        <tr key={row.label} className={row.emph ? "emph" : ""}>
+                          <td className="first">
+                            {row.label}{row.emph ? " ★" : ""}
+                            {row.custom && <button className="btn btn-quiet btn-sm" style={{ marginLeft: 8, padding: 0 }} onClick={() => set((s) => { s.analysis.custom = null; })}>Remove</button>}
+                          </td>
+                          <td>{fmtK(row.r.cash[PROTECT_THROUGH])}</td>
+                          <td>{breach ? <span className="row" style={{ gap: 6 }}>From Month {breach}{early && <span className="tag tag-crit">Too early</span>}</span> : "Holds all year"}</td>
+                          <td>{fmtMonths(row.r.runway)}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <span className="small muted">★ Recommended: the most setup that keeps the reserve through Month {PROTECT_THROUGH} in the downside. No new funding assumed.</span>
+            </section>
+          </div>
+
+          <aside className="stack">
+            <section className="card pad stack" style={{ gap: 14 }} aria-label="Change a driver">
+              <div className="row-between"><h2 className="h2">Change a driver</h2><span className="tag tag-good">Live</span></div>
+              <div className="field">
+                <div className="row-between">
+                  <label className="field-label" htmlFor="drv-setup">NYC setup cost</label>
+                  <span className="big-number" style={{ fontSize: 22 }}>{fmtMoney(t)}</span>
+                </div>
+                <input id="drv-setup" type="range" className="slider" min="0" max="100000" step="5000" value={t}
+                  onChange={(e) => set((s) => { s.analysis.testSetup = Number(e.target.value); })} />
+                <div className="row-between small muted"><span>$0</span><span>$100k</span></div>
+                <span className={"tag tag-dot " + (holds ? "tag-good" : "tag-crit")} style={{ alignSelf: "flex-start" }}>
+                  {holds ? `Reserve holds through Month ${PROTECT_THROUGH}` : `Downside breaks the reserve in Month ${firstMonthBelow(model.test.downside.cash, model.reserve)}`}
+                </span>
+                <span className="help">The reserve holds up to {fmtK(model.cap)}. {model.rangeNote || `Your plan is ${fmtK(a.setup)}.`}</span>
+              </div>
+              <div className="field">
+                <span className="field-label">NYC receipts start</span>
+                <Seg label="NYC receipts start" value={a.receiptsStart} onChange={(v) => set((s) => { s.analysis.receiptsStart = v; })}
+                  options={[2, 3, 4].map((m) => ({ value: m, label: `Month ${m}` }))} />
+              </div>
+            </section>
+
+            <section className="card pad stack" style={{ gap: 4 }} aria-label="What this answer assumes">
+              <div className="row-between"><h2 className="h3">What this answer assumes</h2><button className="btn btn-ghost btn-sm" onClick={() => go("questions")}>Edit</button></div>
+              <div className="divider-list">
+                <div className="kv small"><span className="k">Opening cash</span><span className="v">{fmtK(COMPANY.openingCash)} <Prov kind="actual" /></span></div>
+                <div className="kv small"><span className="k">Net burn today</span><span className="v">{fmtK(model.netBurnToday)}/mo <Prov kind="actual" /></span></div>
+                <div className="kv small"><span className="k">Setup timing</span><span className="v">{SETUP_TIMING.find((o) => o.value === a.setupMonth).label} <Prov kind="assumption" /></span></div>
+                <div className="kv small"><span className="k">NYC team costs</span><span className="v">{fmtK(a.teamCost)}/mo · M{a.teamStart} <Prov kind="assumption" /></span></div>
+                <div className="kv small"><span className="k">NYC receipts</span><span className="v">{fmtK(a.newReceipts)}/mo · M{a.receiptsStart} <Prov kind="assumption" /></span></div>
+                <div className="kv small"><span className="k">Downside receipts</span><span className="v">{fmtK(a.newReceipts / 2)}/mo · M{a.receiptsStart + 1} <Prov kind="assumption" /></span></div>
+                <div className="kv small"><span className="k">Cash reserve</span><span className="v">{fmtK(model.reserve)} <Prov kind={a.reserve == null ? "goal" : "assumption"} /></span></div>
+              </div>
+            </section>
+          </aside>
+        </div>
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("questions")}>← Edit assumptions</button>
+          <button className="btn btn-primary btn-lg" onClick={seeRecommendation}>See recommendation →</button>
+        </div>
+      </main>
+      {calc && <CalculationModal initialTab={calc} onClose={() => setCalc(null)} />}
+    </>
+  );
+}
+
+function RecommendationScreen() {
+  const store = useStore();
+  const { state, set, go, toast } = store;
+  const a = state.analysis;
+  const [view, setView] = useState("cash");
+  const [asked, setAsked] = useState([]);
+  const [draft, setDraft] = useState("");
+  const [brief, setBrief] = useState(false);
+  const [calc, setCalc] = useState(null);
+
+  // Reaching the recommendation (by button, link or the demo menu) completes the analysis.
+  useEffect(() => {
+    if (a.status !== "done" || !a.computedWith) set((s) => { s.analysis.status = "done"; s.analysis.computedWith = s.analysis.computedWith || answerInputs(s); });
+  }, [a.status, a.computedWith, set]);
+
+  const stale = isStale(state);
+  const shownState = stale ? withInputs(state, a.computedWith) : state;
+  const model = stale ? buildModel(shownState) : store.model;
+  const changed = stale ? ANSWER_INPUTS.filter((k) => answerInputs(state)[k] !== a.computedWith[k]) : [];
+  const answers = askAnswers(shownState, model);
+  const d = model.rec.downside;
+  const toneTag = model.verdict === "Viable as planned" ? "tag-good" : model.verdict === "Not viable yet" ? "tag-crit" : "tag-warn";
+  const sa = shownState.analysis;
+
+  const cashRows = [
+    ["Receipts", fmtK(COMPANY.monthlyReceipts), `${fmtK(model.downReceipts)} from Month ${model.downStart}`, `+${fmtK(sa.newReceipts / 2)}`],
+    ["Operating costs", fmtK(COMPANY.monthlyOutflows), `${fmtK(model.costsWithNyc)} from Month ${sa.teamStart}`, `+${fmtK(sa.teamCost)}`],
+    ["   New budget line: NYC team", "—", fmtK(sa.teamCost), "Not in current budget"],
+    ["One-time: NYC setup", "—", `${fmtK(model.chosen)} ${setupWhen(sa.setupMonth)}`, `+${fmtK(model.chosen)}`],
+  ];
+  const plRows = [
+    ["Revenue (accrual)", fmtK(COMPANY.monthlyReceipts), `${fmtK(model.downReceipts)} from Month ${model.downStart}`, `+${fmtK(sa.newReceipts / 2)}`],
+    ["Operating expenses", fmtK(COMPANY.monthlyOutflows), fmtK(model.costsWithNyc), `+${fmtK(sa.teamCost)}`],
+    ["Team activities (expensed)", "—", `${fmtK(Math.round(model.chosen * 0.4))} when paid`, "One-off"],
+    ["Equipment (capitalized, 3 yrs)", "—", `${fmtK(Math.round((model.chosen * 0.6) / 36))}/mo depreciation`, `${fmtK(Math.round(model.chosen * 0.6))} asset`],
+  ];
+  const budgetRows = [
+    ["NYC team (new line)", "Not budgeted", `${fmtK(sa.teamCost)}/mo`, "Add to budget"],
+    ["NYC setup", `${fmtK(sa.setup)} planned`, `${fmtK(model.chosen)} cap`, model.planHolds ? "Within plan" : `−${fmtK(sa.setup - model.chosen)} vs plan`],
+    ["Marketing", fmtK(5000) + "/mo", fmtK(5000) + "/mo", "No change"],
+    ["Software", fmtK(9000) + "/mo", fmtK(9000) + "/mo", "Review 3 tools"],
+  ];
+  const rows = view === "cash" ? cashRows : view === "pl" ? plRows : budgetRows;
+  const heads = view === "budget" ? ["Line", "Budget", "With NYC plan", "Variance"] : ["Line (monthly)", "Today", "With NYC plan", "Change"];
+
+  const ask = (text) => {
+    const t = text.toLowerCase();
+    const hit = answers.find((x) => x.q === text) ||
+      (/calcul|math|formula|how is/.test(t) && answers.find((x) => x.calc)) ||
+      (/runway|drop/.test(t) && answers[0]) ||
+      (/month 2|start|earlier/.test(t) && answers[2]) ||
+      (/cap|35|why \$|setup/.test(t) && answers[1]);
+    setAsked((q) => [...q, { q: text, a: hit ? hit.a : "In this demo I can answer questions about runway, the setup cap, receipt timing and how the numbers are calculated. Try one of the suggestions.", calc: hit && hit.calc }]);
+    setDraft("");
+  };
+
+  const recalc = () => {
+    set((s) => { s.analysis.computedWith = answerInputs(s); s.analysis.version += 1; });
+    toast(`Recalculated — saved as version ${a.version + 1}`);
+  };
+  const undo = () => {
+    set((s) => {
+      const { reserve, ...rest } = s.analysis.computedWith;
+      Object.assign(s.analysis, rest);
+      s.analysis.reserve = reserve === s.goals.reserve ? null : reserve;
+      s.analysis.testSetup = s.analysis.setup;
+    });
+    toast("Change undone — back to the last answer");
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <Crumbs right={`Version ${a.version} · ${stale ? "inputs changed" : "auto-saved"}`} />
+        <Stepper current={4} />
+        {stale && (
+          <div className="banner banner-warn" role="alert">
+            <div className="stack" style={{ gap: 2 }}>
+              <span className="strong">These numbers are out of date</span>
+              <span className="small">
+                You changed {changed.map((k) => INPUT_LABELS[k]).join(", ")} after this answer. Showing version {a.version} until you recalculate.
+              </span>
+            </div>
+            <div className="row">
+              <button className="btn btn-primary btn-sm" onClick={recalc}>Recalculate</button>
+              <button className="btn btn-secondary btn-sm" onClick={undo}>Undo change</button>
+            </div>
+          </div>
+        )}
+        <div className={stale ? "stale stack" : "stack"} style={{ gap: 22 }} aria-hidden={stale || undefined}>
+          <section className="card pad card-emph stack" style={{ gap: 16 }} aria-label="Recommendation">
+            <div className="row wrap" style={{ gap: 8 }}>
+              <span className="tag tag-dark">Recommendation</span>
+              <span className={"tag tag-dot " + toneTag}>{model.verdict}</span>
+              <span className="small muted">Q: {NYC_QUESTION}</span>
+            </div>
+            <h1 className="h1" style={{ fontSize: 30 }}>{model.headline}</h1>
+            {model.rangeNote && <span className="small">{model.rangeNote}</span>}
+            <div className="grid-3">
+              {[["What is happening", model.what], ["Why it is happening", model.why], ["What to do next", model.next]].map(([k, v]) => (
+                <div key={k} className="panel stack" style={{ gap: 6 }}><span className="eyebrow">{k}</span><span>{v}</span></div>
+              ))}
+            </div>
+          </section>
+
+          <div className="grid-main">
+            <section className="card pad stack" style={{ gap: 12 }} aria-label="What changes in your financials">
+              <div className="row-between wrap">
+                <h2 className="h2">What changes in your financials</h2>
+                <span className="tag">Downside · {fmtK(model.chosen)} setup</span>
+              </div>
+              <Seg label="Financial view" value={view} onChange={setView}
+                options={[{ value: "cash", label: "Cash view" }, { value: "pl", label: "P&L view (QuickBooks)" }, { value: "budget", label: "Budget view" }]} />
+              <div className="table-wrap">
+                <table className="data">
+                  <thead><tr>{heads.map((h) => <th key={h}>{h}</th>)}</tr></thead>
+                  <tbody>
+                    {rows.map((r) => (
+                      <tr key={r[0]}>
+                        <td className={r[0].startsWith("   ") ? "" : "first"} style={r[0].startsWith("   ") ? { paddingLeft: 28, color: "var(--muted)" } : undefined}>{r[0].trim()}</td>
+                        <td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td>
+                      </tr>
+                    ))}
+                    {view === "cash" && (
+                      <>
+                        <tr className="total"><td>Net burn</td><td>{fmtK(model.netBurnToday)}</td><td>{fmtK(model.burnBefore)} → {fmtK(model.burnAfter)} from Month {model.downStart}</td><td>+{fmtK(model.burnAfter - model.netBurnToday)} ongoing</td></tr>
+                        <tr className="total"><td>Runway</td><td>{fmtMonths(model.none.runway)}</td><td>{fmtMonths(d.runway)} (base {fmtMonthsShort(model.rec.base.runway)})</td><td>−{(model.none.runway - d.runway).toFixed(1)} months</td></tr>
+                      </>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <div className="panel stack" style={{ gap: 6 }}>
+                <span className="eyebrow">Goals affected</span>
+                <span className="small">
+                  Cash reserve floor ({fmtK(model.reserve)}): {model.breach ? `breached from Month ${model.breach}` : "holds all year"}
+                  {state.goals.selected.runway && <> · Runway target ({state.goals.runwayTarget} mo): gap widens from {(state.goals.runwayTarget - model.none.runway).toFixed(1)} to {(state.goals.runwayTarget - d.runway).toFixed(1)} months</>}
+                  {state.goals.selected.expand && <> · NYC team fund: {state.nycTargetUpdated ? `target now ${fmtK(model.chosen)}` : `lower the target from ${fmtK(state.goals.nyc.target)} to ${fmtK(model.chosen)}`}</>}
+                </span>
+              </div>
+              <div className="row-between wrap">
+                <span className="small muted">{view === "pl" ? "P&L split of setup (40% activities, 60% equipment) is an assumption." : "Cash view uses bank actuals; P&L view uses QuickBooks categories."}</span>
+                <div className="row">
+                  <button className="btn btn-secondary btn-sm" onClick={() => toast(`Added “NYC team · ${fmtK(sa.teamCost)}/mo” to your budget draft`)}>Add NYC line to budget</button>
+                  <button className="btn btn-secondary btn-sm" disabled={state.nycTargetUpdated || !state.goals.selected.expand}
+                    onClick={() => { set((s) => { s.nycTargetUpdated = true; }); toast(`NYC team fund target set to ${fmtK(model.chosen)}`, { label: "Undo", run: () => set((s) => { s.nycTargetUpdated = false; }) }); }}>
+                    {state.nycTargetUpdated ? "Goals updated ✓" : "Update goals"}
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <aside className="stack">
+              <section className="card pad stack" style={{ gap: 8 }} aria-label="Scenario behind this answer">
+                <div className="row-between"><span className="eyebrow">Scenario behind this answer</span><button className="btn btn-ghost btn-sm" onClick={() => go("scenarios")}>Compare →</button></div>
+                <h2 className="h2">Downside · {fmtK(model.chosen)} setup</h2>
+                <div className="divider-list">
+                  <div className="kv small"><span className="k">Cash at Month {PROTECT_THROUGH}</span><span className="v">{fmtK(d.cash[PROTECT_THROUGH])}</span></div>
+                  <div className="kv small"><span className="k">Below {fmtK(model.reserve)} reserve</span><span className="v">{model.breach ? `From Month ${model.breach}` : "Never"}</span></div>
+                  <div className="kv small"><span className="k">Runway</span><span className="v">{fmtMonthsShort(d.runway)} months (base {fmtMonthsShort(model.rec.base.runway)})</span></div>
+                </div>
+                <span className="small muted">We plan for the downside so the answer holds if NYC receipts arrive late.</span>
+                <button className="btn btn-ghost btn-sm" style={{ alignSelf: "flex-start", paddingLeft: 0 }} onClick={() => setCalc("months")}>See calculation →</button>
+              </section>
+
+              <section className="panel stack" style={{ gap: 10 }} aria-label="Ask about this analysis">
+                <h2 className="h3">Ask about this analysis</h2>
+                {asked.map((m, i) => (
+                  <React.Fragment key={i}>
+                    <div className="chat-q">{m.q}</div>
+                    <div className="chat-a stack" style={{ gap: 6 }}>
+                      <span>{m.a}</span>
+                      {m.calc && <button className="btn btn-ghost btn-sm" style={{ alignSelf: "flex-start", paddingLeft: 0 }} onClick={() => setCalc("months")}>Open the month-by-month calculation →</button>}
+                    </div>
+                  </React.Fragment>
+                ))}
+                {answers.filter((x) => !asked.some((m) => m.q === x.q)).slice(0, asked.length ? 2 : 3).map((x) => (
+                  <button key={x.q} className="suggest" onClick={() => ask(x.q)}>{x.q}</button>
+                ))}
+                <form className="row" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) ask(draft.trim()); }}>
+                  <input className="input" placeholder="Ask a follow-up…" value={draft} onChange={(e) => setDraft(e.target.value)} aria-label="Ask a follow-up question" />
+                  <button className="btn btn-dark" type="submit">Ask</button>
+                </form>
+              </section>
+            </aside>
+          </div>
+        </div>
+
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("scenarios")}>← Back to scenarios</button>
+          <div className="row">
+            <button className="btn btn-secondary" disabled={stale} onClick={() => { set((s) => { s.analysis.version += 1; }); toast(`Saved as version ${a.version + 1}`); }}>Save version</button>
+            <button className="btn btn-primary btn-lg" disabled={stale} onClick={() => setBrief(true)}>Share decision brief →</button>
+          </div>
+        </div>
+      </main>
+
+      {calc && <CalculationModal initialTab={calc} onClose={() => setCalc(null)} />}
+      {brief && (
+        <Modal title="Decision brief" onClose={() => setBrief(false)}>
+          <p className="small muted" style={{ margin: 0 }}>A plain-text summary your cofounders or board can read in a minute. Every number traces back to this analysis.</p>
+          <pre className="brief">{decisionBrief(state, model)}</pre>
+          <div className="row" style={{ justifyContent: "flex-end" }}>
+            <button className="btn btn-secondary" onClick={() => setBrief(false)}>Close</button>
+            <button className="btn btn-primary" onClick={async () => {
+              try { await navigator.clipboard.writeText(decisionBrief(state, model)); toast("Brief copied — paste it into Slack or email"); }
+              catch { toast("Couldn’t copy automatically — select the text and copy it"); }
+            }}>Copy brief</button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+
+// ---- screens/validate.jsx ----
+// 05 Validate — upload + coverage → 06 Findings + approval
+
+function ValidateCrumbs() {
+  const { go } = useStore();
+  return (
+    <div className="crumbs">
+      <span><button onClick={() => go("home")}>Home</button> / <button onClick={() => go("analyses")}>Analyses</button> / Validate a model</span>
+    </div>
+  );
+}
+
+function ValidateScreen() {
+  const { state, set, go, toast } = useStore();
+  const v = state.validation;
+  const [drag, setDrag] = useState(false);
+  const [error, setError] = useState(null);
+  const fileRef = useRef(null);
+
+  const startReview = (name) => {
+    setError(null);
+    set((s) => { s.validation = { ...INITIAL_STATE.validation, stage: "parsing", fileName: name, question: s.validation.question }; });
+    setTimeout(() => set((s) => { if (s.validation.stage === "parsing") s.validation.stage = "ready"; }), 1800);
+  };
+  const onFile = (file) => {
+    if (!file) return;
+    if (!/\.(xlsx|xls|csv)$/i.test(file.name)) {
+      setError(`We can’t read “${file.name}”. Export your model as .xlsx or .csv and upload that copy.`);
+      return;
+    }
+    toast(`Reviewing a copy of ${file.name}. This demo shows the sample model’s findings.`);
+    startReview(file.name);
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <ValidateCrumbs />
+        <div>
+          <h1 className="h1">Bring the model you already have</h1>
+          <p className="lede">We review a copy and flag issues with location, reason and impact. Nothing changes without your approval.</p>
+        </div>
+
+        <div className="grid-main rail-wide">
+          <div className="stack">
+            <div
+              className={"dropzone" + (drag ? " drag" : "")}
+              onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+              onDragLeave={() => setDrag(false)}
+              onDrop={(e) => { e.preventDefault(); setDrag(false); onFile(e.dataTransfer.files[0]); }}
+            >
+              <span className="logo" style={{ width: 44, height: 52, fontSize: 12 }} aria-hidden="true">XLSX</span>
+              <span className="h3">Drop an Excel model (.xlsx) or a CSV</span>
+              <span className="small muted">We work from a copy — your original file is never changed.</span>
+              <div className="row wrap" style={{ justifyContent: "center" }}>
+                <button className="btn btn-secondary" onClick={() => fileRef.current.click()}>Choose a file</button>
+                <button className="btn btn-primary" onClick={() => startReview(SAMPLE_MODEL.fileName)}>Use the sample model</button>
+              </div>
+              <input ref={fileRef} type="file" hidden accept=".xlsx,.xls,.csv" onChange={(e) => onFile(e.target.files[0])} />
+            </div>
+            {error && (
+              <div className="banner banner-crit" role="alert">
+                <span className="small">{error}</span>
+                <button className="btn btn-secondary btn-sm" onClick={() => startReview(SAMPLE_MODEL.fileName)}>Use the sample instead</button>
+              </div>
+            )}
+            {v.fileName && (
+              <div className="card pad-sm row-between wrap">
+                <span className="row"><span className="logo" aria-hidden="true">X</span><span className="strong">{v.fileName}</span><span className="small muted">{SAMPLE_MODEL.size} · {SAMPLE_MODEL.sheets.length} sheets</span></span>
+                <span className="tag tag-good">Copy · original preserved</span>
+              </div>
+            )}
+            <section className="card pad stack" style={{ gap: 8 }} aria-label="Decision question">
+              <label className="field-label" htmlFor="v-question">What is this model trying to decide?</label>
+              <input id="v-question" className="input" value={v.question} onChange={(e) => set((s) => { s.validation.question = e.target.value; })} />
+              <span className="help">Knowing the decision lets us check the numbers that matter most.</span>
+            </section>
+            <section className="card pad stack" style={{ gap: 8 }} aria-label="Check the model against">
+              <span className="field-label">Check the model against</span>
+              <span className="small">✓ Your connected accounts: Rho, Plaid, QuickBooks (last 18 months)</span>
+              <span className="small">✓ Internal consistency: formulas, totals, timing</span>
+            </section>
+          </div>
+
+          <aside className="stack">
+            {v.stage === "empty" && (
+              <section className="card pad stack" style={{ gap: 8 }}>
+                <h2 className="h2">What we’ll check</h2>
+                <ul className="small muted" style={{ margin: 0, paddingLeft: 18, display: "grid", gap: 4 }}>
+                  <li>Broken or inconsistent formulas and totals</li>
+                  <li>Growth assumptions your real data doesn’t support</li>
+                  <li>Cash-flow gaps and a missing downside case</li>
+                  <li>Costs and drivers the model leaves out</li>
+                </ul>
+                <span className="small muted">We always list what we couldn’t check.</span>
+              </section>
+            )}
+            {v.stage === "parsing" && (
+              <section className="card pad stack" style={{ gap: 10 }} aria-live="polite">
+                <h2 className="h2">Reviewing {v.fileName}…</h2>
+                <div className="progress good"><span style={{ width: "70%", transition: "width 1.6s" }} /></div>
+                <span className="row small muted"><span className="spinner" /> Reading 3 sheets and 415 formulas, comparing to your bank data</span>
+              </section>
+            )}
+            {v.stage === "ready" && (
+              <>
+                <section className="card pad stack" style={{ gap: 4 }} aria-label="Review coverage">
+                  <div className="row-between"><h2 className="h2">What we could check</h2><span className="tag tag-good">Review complete</span></div>
+                  <div className="divider-list">
+                    <div className="kv small"><span className="k">Sheets parsed</span><span className="v">{SAMPLE_MODEL.sheets.join(" · ")}</span></div>
+                    <div className="kv small"><span className="k">Formulas checked</span><span className="v">{SAMPLE_MODEL.checked} of {SAMPLE_MODEL.formulas}</span></div>
+                    <div className="kv small"><span className="k">Months compared to bank data</span><span className="v">18</span></div>
+                    <div className="kv small"><span className="k">Not checked</span><span className="v">{SAMPLE_MODEL.unchecked.join(" · ")}</span></div>
+                  </div>
+                  <div className="panel stack" style={{ gap: 8, marginTop: 8, border: "1px dashed var(--rule-strong)", background: "transparent" }}>
+                    <span className="small">We couldn’t read {SAMPLE_MODEL.unchecked.join(" and ")}. “No findings” there doesn’t mean “correct” — they stay listed in the review.</span>
+                    <div className="row wrap" style={{ gap: 6 }}>
+                      <button className="btn btn-quiet btn-sm" style={{ paddingLeft: 0 }} onClick={() => toast("Tip: save a copy as .xlsx without macros, then upload it again.")}>Upload a copy without macros</button>
+                    </div>
+                  </div>
+                </section>
+                <section className="card pad card-emph stack" style={{ gap: 12 }} aria-label="Finance-health review">
+                  <span className="eyebrow">Finance-health review</span>
+                  <h2 className="h2">Your model overstates Month-6 cash by {fmtK(state.analysis.teamCost * Math.max(0, PROTECT_THROUGH - state.analysis.teamStart + 1))}.</h2>
+                  <div className="grid-2" style={{ gap: 10 }}>
+                    {[["1", "Formula error", "High"], ["1", "Unrealistic growth", "Medium"], ["1", "Cash-flow gap", "Medium"], ["1", "Missing cost driver", "Low"]].map(([n, l, sev]) => (
+                      <div key={l} className="panel stack" style={{ gap: 2, padding: 12 }}>
+                        <span className="big-number" style={{ fontSize: 22 }}>{n}</span>
+                        <span className="row small" style={{ gap: 6 }}>{l} <span className={"tag sev-" + sev}>{sev}</span></span>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="btn btn-primary btn-lg" onClick={() => go("findings")}>Continue with partial review — 4 findings →</button>
+                </section>
+              </>
+            )}
+          </aside>
+        </div>
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("home")}>← Back to Home</button>
+          {v.stage !== "empty" && <button className="btn btn-quiet" onClick={() => set((s) => { s.validation = { ...INITIAL_STATE.validation }; })}>Cancel review</button>}
+        </div>
+      </main>
+    </>
+  );
+}
+
+function FindingsScreen() {
+  const { state, set, go, toast, model } = useStore();
+  const v = state.validation;
+  const findings = validationFindings(state, model);
+  const [whyOpen, setWhyOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (v.stage !== "ready") set((s) => { s.validation.stage = "ready"; s.validation.fileName = s.validation.fileName || SAMPLE_MODEL.fileName; });
+  }, [v.stage, set]);
+
+  const current = findings.find((f) => f.id === v.selected) || findings[0];
+  const idx = findings.indexOf(current);
+  const decided = Object.keys(v.decisions).length;
+  const approved = Object.values(v.decisions).filter((d) => d === "approved").length;
+  const rejected = decided - approved;
+  const decision = v.decisions[current.id];
+
+  const select = (id) => { setWhyOpen(false); set((s) => { s.validation.selected = id; }); };
+  const decide = (kind) => {
+    set((s) => {
+      s.validation.decisions[current.id] = kind;
+      const nextOpen = findings.find((f, i) => i > idx && !s.validation.decisions[f.id]) || findings.find((f) => !s.validation.decisions[f.id]);
+      if (nextOpen) s.validation.selected = nextOpen.id;
+    });
+    toast(kind === "approved" ? `Approved: ${current.short}` : `Rejected — original kept: ${current.short}`, {
+      label: "Undo", run: () => set((s) => { delete s.validation.decisions[current.id]; s.validation.selected = current.id; }),
+    });
+  };
+  const saveVersion = () => {
+    set((s) => { s.validation.savedVersion = { approved, rejected }; });
+    setSaved(true);
+  };
+
+  return (
+    <>
+      <TopBar />
+      <main className="page">
+        <ValidateCrumbs />
+        <div className="page-head">
+          <div>
+            <h1 className="h1">Review findings</h1>
+            <p className="lede">{v.fileName || SAMPLE_MODEL.fileName} · “{v.question}”</p>
+          </div>
+          <div className="row">
+            <span className="tag tag-good">Original preserved</span>
+            <span className={"tag " + (decided === findings.length ? "tag-good" : "")}>{decided} of {findings.length} resolved</span>
+          </div>
+        </div>
+
+        <div className="grid-main rail-left">
+          <aside className="stack" style={{ gap: 10 }} aria-label="Findings">
+            {findings.map((f) => {
+              const d = v.decisions[f.id];
+              return (
+                <button key={f.id} className="finding" aria-current={f.id === current.id} onClick={() => select(f.id)}>
+                  <span className="row-between">
+                    <span className={"tag sev-" + f.severity}>{f.type} · {f.severity}</span>
+                    {d && <span className={"tag " + (d === "approved" ? "tag-good" : "")}>{d === "approved" ? "Approved" : "Rejected"}</span>}
+                  </span>
+                  <span className="strong">{f.short}</span>
+                  <span className="small muted" style={{ fontFamily: "var(--font-mono)" }}>{f.location}</span>
+                </button>
+              );
+            })}
+            <div className="panel stack" style={{ gap: 4, border: "1px dashed var(--rule-strong)", background: "transparent" }}>
+              <span className="small strong">Not checked: {SAMPLE_MODEL.unchecked.join(", ")}</span>
+              <span className="small muted">Review these yourself before sharing the model.</span>
+            </div>
+          </aside>
+
+          <section className="card pad stack" style={{ gap: 18 }} aria-label="Finding detail">
+            <div className="row-between wrap">
+              <span className={"tag sev-" + current.severity}>{current.type} · {current.severity}</span>
+              <div className="row" style={{ gap: 4 }}>
+                <button className="btn btn-quiet btn-sm" disabled={idx === 0} onClick={() => select(findings[idx - 1].id)}>‹ Prev</button>
+                <span className="small muted">Finding {idx + 1} of {findings.length}</span>
+                <button className="btn btn-quiet btn-sm" disabled={idx === findings.length - 1} onClick={() => select(findings[idx + 1].id)}>Next ›</button>
+              </div>
+            </div>
+            <h2 className="h1" style={{ fontSize: 26 }}>{current.title}</h2>
+            <div className="row wrap"><span className="small muted">Location</span><span className="tag" style={{ textTransform: "none" }}>{current.location}</span></div>
+
+            <div className="panel stack" style={{ gap: 10 }}>
+              <span className="eyebrow">What we found</span>
+              <span>{current.found}</span>
+              {current.diff && (
+                <div className="row wrap">
+                  <div className="stack" style={{ gap: 4 }}><span className="eyebrow">Current</span><span className="code">{current.diff.before}</span></div>
+                  <span className="h3" aria-hidden="true">→</span>
+                  <div className="stack" style={{ gap: 4 }}><span className="eyebrow">Suggested</span><span className="code after">{current.diff.after}</span></div>
+                </div>
+              )}
+            </div>
+
+            <div className="stack" style={{ gap: 4 }}>
+              <span className="eyebrow">Why it matters</span>
+              <span>{current.why}</span>
+              {whyOpen && <span className="small muted">{current.detail}</span>}
+            </div>
+
+            <div className="stack" style={{ gap: 8 }}>
+              <span className="eyebrow">Impact preview</span>
+              <div className="grid-2">
+                {current.impact.map((im) => (
+                  <div key={im.label} className="card pad-sm stack" style={{ gap: 6 }}>
+                    <span className="small muted">{im.label}</span>
+                    <div className="row" style={{ alignItems: "flex-end" }}>
+                      <div className="stack" style={{ gap: 0 }}><span className="small muted">Original</span><span className="h3 muted num">{im.before}</span></div>
+                      <span aria-hidden="true">→</span>
+                      <div className="stack" style={{ gap: 0 }}><span className="small muted">With change</span><span className="h2 num">{im.after}</span></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {current.link && <button className="btn btn-ghost btn-sm" style={{ alignSelf: "flex-start", paddingLeft: 0 }} onClick={() => go(current.link.go)}>{current.link.label} →</button>}
+            </div>
+
+            <div className="row-between wrap" style={{ borderTop: "1px solid var(--rule)", paddingTop: 16 }}>
+              <span className="small muted" style={{ maxWidth: 340 }}>
+                {decision
+                  ? decision === "approved" ? "Approved. It goes into the reviewed version when you save." : "Rejected. The original stays as it is; the finding stays listed in the summary."
+                  : "Approving adds this change to a reviewed version. The original file stays untouched."}
+              </span>
+              <div className="row">
+                <button className="btn btn-quiet" onClick={() => setWhyOpen((o) => !o)}>{whyOpen ? "Hide detail" : "Ask why"}</button>
+                {decision ? (
+                  <button className="btn btn-secondary" onClick={() => set((s) => { delete s.validation.decisions[current.id]; })}>Change decision</button>
+                ) : (
+                  <>
+                    <button className="btn btn-secondary" onClick={() => decide("rejected")}>Reject</button>
+                    <button className="btn btn-primary" onClick={() => decide("approved")}>{current.approveLabel}</button>
+                  </>
+                )}
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div className="footer-bar">
+          <button className="btn btn-ghost" onClick={() => go("validate")}>← Back to coverage</button>
+          <div className="row">
+            <span className="small muted">{decided < findings.length ? `${findings.length - decided} still open — you can save anyway` : "All findings resolved"}</span>
+            <button className="btn btn-primary btn-lg" disabled={decided === 0} onClick={saveVersion}>Save reviewed version</button>
+          </div>
+        </div>
+      </main>
+
+      {saved && (
+        <Modal title="Reviewed version saved" onClose={() => setSaved(false)}>
+          <div className="panel stack" style={{ gap: 6 }}>
+            <span className="strong">{(v.fileName || SAMPLE_MODEL.fileName).replace(/\.(xlsx|xls|csv)$/i, "")} (reviewed v2).xlsx</span>
+            <span className="small muted">Saved to your workspace. The original file is unchanged.</span>
+          </div>
+          <div className="divider-list">
+            {findings.map((f) => (
+              <div key={f.id} className="kv small">
+                <span className="k">{f.short}</span>
+                <span className={"tag " + (v.decisions[f.id] === "approved" ? "tag-good" : v.decisions[f.id] === "rejected" ? "" : "tag-warn")}>
+                  {v.decisions[f.id] === "approved" ? "Applied" : v.decisions[f.id] === "rejected" ? "Kept original" : "Still open"}
+                </span>
+              </div>
+            ))}
+            <div className="kv small"><span className="k">{SAMPLE_MODEL.unchecked.join(", ")}</span><span className="tag tag-warn">Not checked</span></div>
+          </div>
+          <div className="row" style={{ justifyContent: "flex-end" }}>
+            <button className="btn btn-secondary" onClick={() => setSaved(false)}>Keep reviewing</button>
+            <button className="btn btn-primary" onClick={() => { setSaved(false); go("analyses"); }}>Done</button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+
+// ---- app.jsx ----
+// App shell: state, routing, persistence, toasts and the presenter's demo menu.
+
+const STORAGE_KEY = "finance-bro-demo-v2";
+const ROUTES = {
+  loading: { label: "00 · Loading", el: LoadingScreen },
+  connect: { label: "01 · Connect your data", el: ConnectScreen },
+  goals: { label: "01b · Set your goals", el: GoalsScreen },
+  home: { label: "02 · Home", el: HomeScreen },
+  recs: { label: "02b · Recommendations", el: RecommendationsScreen },
+  analyses: { label: "Analyses list", el: AnalysesScreen },
+  questions: { label: "03 · Guided questions", el: QuestionsScreen },
+  scenarios: { label: "04a · Scenarios", el: ScenariosScreen },
+  recommendation: { label: "04b · Recommendation", el: RecommendationScreen },
+  validate: { label: "05 · Validate — upload + coverage", el: ValidateScreen },
+  findings: { label: "06 · Validate — findings", el: FindingsScreen },
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(INITIAL_STATE);
+    const saved = JSON.parse(raw);
+    const base = structuredClone(INITIAL_STATE);
+    return {
+      ...base, ...saved,
+      goals: { ...base.goals, ...saved.goals },
+      analysis: { ...base.analysis, ...saved.analysis },
+      validation: { ...base.validation, ...saved.validation, stage: saved.validation?.stage === "parsing" ? "ready" : saved.validation?.stage ?? "empty" },
+    };
+  } catch {
+    return structuredClone(INITIAL_STATE);
+  }
+}
+
+function routeFromHash() {
+  const [name, query] = location.hash.replace(/^#\/?/, "").split("?");
+  return ROUTES[name] ? { route: name, manage: query === "manage" } : null;
+}
+
+function DemoMenu({ go, reset, set, state, toast }) {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+  return (
+    <div className="demo-menu">
+      {open && (
+        <div className="menu" role="menu">
+          {Object.entries(ROUTES).map(([id, r]) => (
+            <button key={id} role="menuitem" onClick={() => { close(); go(id); }}>{r.label}</button>
+          ))}
+          <span className="eyebrow" style={{ padding: "10px 10px 4px", borderTop: "1px solid var(--rule)", marginTop: 4 }}>Recovery states</span>
+          <button role="menuitem" onClick={() => {
+            close();
+            set((s) => { s.syncIssue = s.syncIssue === "failed" ? null : "failed"; ["rho", "plaid", "quickbooks"].forEach((id) => (s.sources[id] = s.sources[id] || "connected")); });
+            if (state.syncIssue !== "failed") go("home");
+          }}>{state.syncIssue === "failed" ? "Clear Rho sync failure" : "Simulate Rho sync failure"}</button>
+          <button role="menuitem" onClick={() => {
+            close();
+            set((s) => {
+              s.analysis.status = "done";
+              if (!s.analysis.computedWith) s.analysis.computedWith = answerInputs(s);
+              s.analysis.setup = s.analysis.computedWith.setup === 45000 ? 60000 : 45000;
+              s.analysis.testSetup = s.analysis.setup;
+            });
+            go("recommendation");
+            toast("Changed NYC setup after the answer — see the out-of-date state");
+          }}>Show out-of-date recommendation</button>
+          <span className="small muted" style={{ padding: "0 10px 6px" }}>Connecting Brex fails on the first try.</span>
+          <button role="menuitem" style={{ borderTop: "1px solid var(--rule)", marginTop: 4, color: "var(--crit)" }} onClick={() => { close(); reset(); }}>
+            Reset demo
+          </button>
+        </div>
+      )}
+      <button onClick={() => setOpen((o) => !o)} aria-expanded={open}>Demo</button>
+    </div>
+  );
+}
+
+function App() {
+  const [state, setState] = useState(() => {
+    const s = loadState();
+    const fromHash = routeFromHash();
+    return fromHash ? { ...s, ...fromHash } : s;
+  });
+  const [toasts, setToasts] = useState([]);
+
+  const set = useCallback((mutate) => {
+    setState((prev) => {
+      const next = structuredClone(prev);
+      mutate(next);
+      return next;
+    });
+  }, []);
+
+  const go = useCallback((route, opts = {}) => {
+    setState((prev) => ({ ...prev, route, manage: !!opts.manage }));
+    const hash = `#/${route}${opts.manage ? "?manage" : ""}`;
+    if (location.hash !== hash) history.pushState(null, "", hash);
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const dismiss = useCallback((id) => setToasts((t) => t.filter((x) => x.id !== id)), []);
+  const toast = useCallback((text, action) => {
+    const id = Math.random().toString(36).slice(2);
+    setToasts((t) => [...t.slice(-2), { id, text, action }]);
+    setTimeout(() => dismiss(id), action ? 6000 : 3500);
+  }, [dismiss]);
+
+  const reset = useCallback(() => {
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    setState(structuredClone(INITIAL_STATE));
+    history.pushState(null, "", "#/loading");
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  useEffect(() => {
+    const onPop = () => {
+      const r = routeFromHash();
+      if (r) setState((prev) => ({ ...prev, ...r }));
+    };
+    window.addEventListener("popstate", onPop);
+    if (!location.hash) history.replaceState(null, "", `#/${state.route}`);
+    return () => window.removeEventListener("popstate", onPop);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }, [state]);
+
+  const model = useMemo(() => buildModel(state), [state]);
+  const store = { state, set, go, toast, model };
+  const Screen = ROUTES[state.route].el;
+
+  return (
+    <StoreContext.Provider value={store}>
+      <div className="app">
+        <Screen key={state.route + (state.manage ? "-m" : "")} />
+      </div>
+      <Toasts toasts={toasts} dismiss={dismiss} />
+      <DemoMenu go={go} reset={reset} set={set} state={state} toast={toast} />
+    </StoreContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+</script>
