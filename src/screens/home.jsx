@@ -151,8 +151,12 @@ function HomeScreen() {
                 height={240}
                 width={520}
                 reserve={state.goals.selected.reserve ? state.goals.reserve : null}
-                series={[{ id: "today", label: "Cash at today’s burn", short: "Today’s burn", cash: model.none.cash, variant: "focus" }]}
-                ariaLabel="Cash at today’s burn over the next 12 months"
+                series={[
+                  { id: "today", label: "Expected · today’s burn", short: "Expected", cash: model.none.cash, variant: "focus" },
+                  { id: "down", label: `Downside · receipts −${OUTLOOK_SWING * 100}%`, short: "Downside", cash: model.outlook.downside.cash, variant: "dash" },
+                  { id: "best", label: `Best case · receipts +${OUTLOOK_SWING * 100}%`, short: "Best case", cash: model.outlook.best.cash, variant: "dot" },
+                ]}
+                ariaLabel="Cash over the next 12 months: expected, downside and best case"
               />
             </section>
             <section className="card pad stack" style={{ gap: 12 }} aria-label="Where your money goes">

@@ -54,6 +54,8 @@ catch { document.documentElement.dataset.theme = "light"; }
   --prov-ink: #1e4776;
   /* charts */
   --chart-focus: #14213d;
+  --chart-dash: #535c6a;
+  --chart-dot: #6b7584;
   --chart-muted: #aeb6c1;
   --chart-grid: #e4e8ed;
   --overlay: rgba(20, 33, 61, 0.45);
@@ -95,6 +97,8 @@ catch { document.documentElement.dataset.theme = "light"; }
     --prov-bg: #153256;
     --prov-ink: #c1dbf6;
     --chart-focus: #b8de81;
+    --chart-dash: #cfd5dd;
+    --chart-dot: #aeb6c1;
     --chart-muted: #6b7584;
     --chart-grid: #2b323d;
     --overlay: rgba(0, 0, 0, 0.6);
@@ -125,6 +129,8 @@ catch { document.documentElement.dataset.theme = "light"; }
   --prov-bg: #153256;
   --prov-ink: #c1dbf6;
   --chart-focus: #b8de81;
+  --chart-dash: #cfd5dd;
+  --chart-dot: #aeb6c1;
   --chart-muted: #6b7584;
   --chart-grid: #2b323d;
   --overlay: rgba(0, 0, 0, 0.6);
@@ -169,9 +175,9 @@ h1, h2, h3 { font-family: var(--font-body); margin: 0; text-wrap: balance; }
 /* ---------- brand ---------- */
 .brand { display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; color: var(--ink); }
 .platform-logo { width: 126px; height: 26px; object-fit: contain; object-position: left center; flex: none; display: block; }
-.loading-logo { width: 220px; height: 46px; }
-.wordmark { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: -0.03em; line-height: 1; }
-.wordmark span { color: var(--blue); }
+/* The navy lockup is the product standard; dark mode shows the same lockup reversed to white. */
+:root[data-theme="dark"] .platform-logo { filter: brightness(0) invert(1); }
+.loading-logo { width: 360px; height: 74px; object-position: center; }
 .brand-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; padding: 2px 6px; border-radius: var(--r-xs); background: var(--surface-2); color: var(--muted); }
 
 /* ---------- shell ---------- */
@@ -254,8 +260,6 @@ table.data tr.below td { color: var(--crit); }
   .topbar, .setupbar { padding: 10px 16px; }
   .topbar .hide-sm, .sync, .nav .avatar, .brand-tag { display: none; }
   .brand { white-space: nowrap; gap: 6px; }
-  .wordmark { font-size: 17px; }
-  .topbar .brand-mark { width: 22px; height: 23px; }
   .topbar { gap: 4px; }
   .nav { gap: 0; }
   .nav button { padding: 6px 8px; font-size: 14px; }
@@ -470,13 +474,7 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
 /* ---------- loading: quiet introduction ---------- */
 .loading-screen { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; background: var(--paper); color: var(--ink); }
 .loading-col { width: 100%; max-width: 720px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
-.loading-art { width: 160px; height: 160px; border-radius: var(--r-xl); background: transparent; overflow: hidden; display: block; }
-.loading-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .loading-screen .brand { color: var(--ink); }
-.loading-screen .brand-mark { width: 40px; height: 41px; }
-
-.loading-screen .wordmark { font-size: 34px; }
-.loading-screen .wordmark span { color: var(--blue); }
 .loading-screen .lede { color: var(--muted); }
 .loading-screen .progress { background: var(--surface-3); }
 .loading-screen .progress > span { background: var(--lime); }
@@ -588,7 +586,7 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
   .setupbar > .small { display: none; }
   .provenance-legend { flex-wrap: wrap; }
   .loading-screen { padding: 24px 16px; }
-  .loading-art { width: 120px; height: 120px; }
+  .loading-logo { width: 240px; height: 50px; }
   .bar-row { grid-template-columns: 80px minmax(0,1fr) 80px; gap: 8px; }
 }
 
@@ -773,6 +771,7 @@ const INITIAL_STATE = {
 const HORIZON = 12; // months shown
 const PROTECT_THROUGH = 6; // keep the reserve intact through this month while raising
 const RAISE_LEAD_MONTHS = 4; // assumed time from first investor talks to cash in the bank
+const OUTLOOK_SWING = 0.2; // Home cash outlook: best case and downside move receipts by ±20%
 const PAYROLL_LOAD = 0.2; // employer taxes + benefits suggested for the "missing driver" finding
 
 // ---------- formatting ----------
@@ -854,6 +853,10 @@ function buildModel(state) {
   const netBurnToday = COMPANY.monthlyOutflows - COMPANY.monthlyReceipts;
 
   const none = project(BASELINE());
+  const outlook = {
+    best: project({ ...BASELINE(), receipts: COMPANY.monthlyReceipts * (1 + OUTLOOK_SWING) }),
+    downside: project({ ...BASELINE(), receipts: COMPANY.monthlyReceipts * (1 - OUTLOOK_SWING) }),
+  };
   const run = (setup, kind, over = {}) =>
     project({
       ...BASELINE(),
@@ -914,7 +917,7 @@ function buildModel(state) {
     : `${planHolds ? "Keep" : "Cap"} setup at ${fmtK(chosen)} to hold the reserve through Month ${PROTECT_THROUGH}. Runway still falls from ${fmtMonthsShort(none.runway)} to ~${Math.floor(rec.downside.runway)} months, so line up a raise.`;
 
   return {
-    reserve, netBurnToday, none, plan, rec, test, custom, cap, chosen, planHolds, breach, raiseBy, verdict,
+    reserve, netBurnToday, none, outlook, plan, rec, test, custom, cap, chosen, planHolds, breach, raiseBy, verdict,
     headline, what, why, next, rangeNote,
     downStart, downReceipts, costsWithNyc, burnBefore, burnAfter,
     noneBreach: firstMonthBelow(none.cash, reserve),
@@ -1362,10 +1365,11 @@ function QuestionBanner({ sub }) {
 // ---- charts.jsx ----
 // Charts: hand-built SVG so every mark, tick and label comes from one scale.
 
+// Three lines by default: the target is the one solid line, the others differ by dash pattern.
 const SERIES_STYLE = {
   focus: { stroke: "var(--chart-focus)", strokeWidth: 3, dash: null },
-  dash: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "9 6" },
-  dot: { stroke: "var(--ink-2)", strokeWidth: 2, dash: "2 5" },
+  dash: { stroke: "var(--chart-dash)", strokeWidth: 2, dash: "9 6" },
+  dot: { stroke: "var(--chart-dot)", strokeWidth: 2.25, dash: "1 5" },
   muted: { stroke: "var(--chart-muted)", strokeWidth: 2, dash: null },
   alt: { stroke: "var(--warn-fill)", strokeWidth: 2, dash: "14 5 3 5" },
 };
@@ -1441,8 +1445,8 @@ function CashChart({ series, reserve, height = 300, width = 760, marker, showLeg
           ))}
           {reserve != null && (
             <g>
-              <line x1={pad.l} x2={W - pad.r} y1={y(reserve)} y2={y(reserve)} style={{ stroke: "var(--crit-fill)", strokeWidth: 1.5, strokeDasharray: "5 4" }} />
-              <text x={W - pad.r} y={y(reserve) - 7} textAnchor="end" style={{ fill: "var(--ink)", fontSize: 12, fontWeight: 600 }}>
+              <line x1={pad.l} x2={W - pad.r} y1={y(reserve)} y2={y(reserve)} style={{ stroke: "var(--ink)", strokeWidth: 1.25, strokeDasharray: "4 4" }} />
+              <text x={pad.l + 6} y={y(reserve) - 7} textAnchor="start" style={{ fill: "var(--ink)", fontSize: 12, fontWeight: 600 }}>
                 Reserve floor {fmtK(reserve)}
               </text>
             </g>
@@ -1459,8 +1463,8 @@ function CashChart({ series, reserve, height = 300, width = 760, marker, showLeg
           )}
           {marker && (
             <g>
-              <circle cx={x(marker.month)} cy={y(marker.value)} r="6" style={{ fill: "var(--surface)", stroke: "var(--crit-fill)", strokeWidth: 2.5 }} />
-              <text x={x(marker.month) - 12} y={y(marker.value) + 22} textAnchor="end" style={{ fill: "var(--crit)", fontSize: 12, fontWeight: 600 }}>
+              <circle cx={x(marker.month)} cy={y(marker.value)} r="6" style={{ fill: "var(--surface)", stroke: "var(--ink)", strokeWidth: 2.5 }} />
+              <text x={x(marker.month) - 12} y={y(marker.value) + 22} textAnchor="end" style={{ fill: "var(--ink)", fontSize: 12, fontWeight: 600 }}>
                 {marker.label}
               </text>
             </g>
@@ -1664,8 +1668,7 @@ function LoadingScreen() {
   return (
     <main className="loading-screen">
       <div className="loading-col">
-        <Illustration subject="planning" className="loading-art" />
-        <div className="stack" style={{ gap: 10, alignItems: "center" }}>
+        <div className="stack" style={{ gap: 14, alignItems: "center" }}>
           <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandLogo className="loading-logo" /></h1>
           <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Make room for your next move." : "Getting your workspace ready…"}</p>
         </div>
@@ -2294,8 +2297,12 @@ function HomeScreen() {
                 height={240}
                 width={520}
                 reserve={state.goals.selected.reserve ? state.goals.reserve : null}
-                series={[{ id: "today", label: "Cash at today’s burn", short: "Today’s burn", cash: model.none.cash, variant: "focus" }]}
-                ariaLabel="Cash at today’s burn over the next 12 months"
+                series={[
+                  { id: "today", label: "Expected · today’s burn", short: "Expected", cash: model.none.cash, variant: "focus" },
+                  { id: "down", label: `Downside · receipts −${OUTLOOK_SWING * 100}%`, short: "Downside", cash: model.outlook.downside.cash, variant: "dash" },
+                  { id: "best", label: `Best case · receipts +${OUTLOOK_SWING * 100}%`, short: "Best case", cash: model.outlook.best.cash, variant: "dot" },
+                ]}
+                ariaLabel="Cash over the next 12 months: expected, downside and best case"
               />
             </section>
             <section className="card pad stack" style={{ gap: 12 }} aria-label="Where your money goes">
@@ -2738,15 +2745,22 @@ function ScenariosScreen() {
   rows.push({ label: `Downside · ${fmtK(model.chosen)} setup`, r: model.rec.downside, emph: true });
   if (model.custom) rows.push({ label: `${a.custom.name} · ${fmtK(a.custom.setup)} setup`, r: model.custom, custom: true });
 
-  const series = [
-    { id: "none", label: "No expansion", short: "No expansion", cash: model.none.cash, variant: "muted" },
-    { id: "base", label: `Base · ${fmtK(t)} setup`, short: "Base", cash: model.test.base.cash, variant: "dot" },
-    t === model.chosen
-      ? { id: "down", label: `Downside · ${fmtK(t)} setup (recommended)`, short: "Downside", cash: model.test.downside.cash, variant: "focus" }
-      : { id: "down", label: `Downside · ${fmtK(t)} setup`, short: "Downside", cash: model.test.downside.cash, variant: "dash" },
-    ...(t !== model.chosen ? [{ id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" }] : []),
-    ...(model.custom ? [{ id: "custom", label: a.custom.name, short: a.custom.name, cash: model.custom.cash, variant: "alt" }] : []),
-  ];
+  // Always three lines: the recommended setup (solid target) against the downside and base of the
+  // setup being compared — the slider value, or your plan when the slider sits on the recommendation.
+  const compare = t !== model.chosen ? t : a.setup;
+  const cmp = compare === a.testSetup ? model.test : model.plan;
+  const series = compare !== model.chosen
+    ? [
+        { id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" },
+        { id: "down", label: `Downside · ${fmtK(compare)} setup`, short: "Downside", cash: cmp.downside.cash, variant: "dash" },
+        { id: "base", label: `Base · ${fmtK(compare)} setup`, short: "Base", cash: cmp.base.cash, variant: "dot" },
+      ]
+    : [
+        { id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" },
+        { id: "base", label: `Base · ${fmtK(model.chosen)} setup`, short: "Base", cash: model.rec.base.cash, variant: "dot" },
+        { id: "none", label: "No expansion", short: "No expansion", cash: model.none.cash, variant: "dash" },
+      ];
+  if (model.custom) series.push({ id: "custom", label: a.custom.name, short: a.custom.name, cash: model.custom.cash, variant: "alt" });
   const downM6 = model.test.downside.cash[PROTECT_THROUGH];
 
   const seeRecommendation = () => {

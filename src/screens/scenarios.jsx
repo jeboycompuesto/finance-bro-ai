@@ -52,15 +52,22 @@ function ScenariosScreen() {
   rows.push({ label: `Downside · ${fmtK(model.chosen)} setup`, r: model.rec.downside, emph: true });
   if (model.custom) rows.push({ label: `${a.custom.name} · ${fmtK(a.custom.setup)} setup`, r: model.custom, custom: true });
 
-  const series = [
-    { id: "none", label: "No expansion", short: "No expansion", cash: model.none.cash, variant: "muted" },
-    { id: "base", label: `Base · ${fmtK(t)} setup`, short: "Base", cash: model.test.base.cash, variant: "dot" },
-    t === model.chosen
-      ? { id: "down", label: `Downside · ${fmtK(t)} setup (recommended)`, short: "Downside", cash: model.test.downside.cash, variant: "focus" }
-      : { id: "down", label: `Downside · ${fmtK(t)} setup`, short: "Downside", cash: model.test.downside.cash, variant: "dash" },
-    ...(t !== model.chosen ? [{ id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" }] : []),
-    ...(model.custom ? [{ id: "custom", label: a.custom.name, short: a.custom.name, cash: model.custom.cash, variant: "alt" }] : []),
-  ];
+  // Always three lines: the recommended setup (solid target) against the downside and base of the
+  // setup being compared — the slider value, or your plan when the slider sits on the recommendation.
+  const compare = t !== model.chosen ? t : a.setup;
+  const cmp = compare === a.testSetup ? model.test : model.plan;
+  const series = compare !== model.chosen
+    ? [
+        { id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" },
+        { id: "down", label: `Downside · ${fmtK(compare)} setup`, short: "Downside", cash: cmp.downside.cash, variant: "dash" },
+        { id: "base", label: `Base · ${fmtK(compare)} setup`, short: "Base", cash: cmp.base.cash, variant: "dot" },
+      ]
+    : [
+        { id: "rec", label: `Downside · ${fmtK(model.chosen)} setup (recommended)`, short: "Recommended", cash: model.rec.downside.cash, variant: "focus" },
+        { id: "base", label: `Base · ${fmtK(model.chosen)} setup`, short: "Base", cash: model.rec.base.cash, variant: "dot" },
+        { id: "none", label: "No expansion", short: "No expansion", cash: model.none.cash, variant: "dash" },
+      ];
+  if (model.custom) series.push({ id: "custom", label: a.custom.name, short: a.custom.name, cash: model.custom.cash, variant: "alt" });
   const downM6 = model.test.downside.cash[PROTECT_THROUGH];
 
   const seeRecommendation = () => {

@@ -5,6 +5,7 @@
 const HORIZON = 12; // months shown
 const PROTECT_THROUGH = 6; // keep the reserve intact through this month while raising
 const RAISE_LEAD_MONTHS = 4; // assumed time from first investor talks to cash in the bank
+const OUTLOOK_SWING = 0.2; // Home cash outlook: best case and downside move receipts by ±20%
 const PAYROLL_LOAD = 0.2; // employer taxes + benefits suggested for the "missing driver" finding
 
 // ---------- formatting ----------
@@ -86,6 +87,10 @@ function buildModel(state) {
   const netBurnToday = COMPANY.monthlyOutflows - COMPANY.monthlyReceipts;
 
   const none = project(BASELINE());
+  const outlook = {
+    best: project({ ...BASELINE(), receipts: COMPANY.monthlyReceipts * (1 + OUTLOOK_SWING) }),
+    downside: project({ ...BASELINE(), receipts: COMPANY.monthlyReceipts * (1 - OUTLOOK_SWING) }),
+  };
   const run = (setup, kind, over = {}) =>
     project({
       ...BASELINE(),
@@ -146,7 +151,7 @@ function buildModel(state) {
     : `${planHolds ? "Keep" : "Cap"} setup at ${fmtK(chosen)} to hold the reserve through Month ${PROTECT_THROUGH}. Runway still falls from ${fmtMonthsShort(none.runway)} to ~${Math.floor(rec.downside.runway)} months, so line up a raise.`;
 
   return {
-    reserve, netBurnToday, none, plan, rec, test, custom, cap, chosen, planHolds, breach, raiseBy, verdict,
+    reserve, netBurnToday, none, outlook, plan, rec, test, custom, cap, chosen, planHolds, breach, raiseBy, verdict,
     headline, what, why, next, rangeNote,
     downStart, downReceipts, costsWithNyc, burnBefore, burnAfter,
     noneBreach: firstMonthBelow(none.cash, reserve),
