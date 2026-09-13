@@ -46,7 +46,8 @@ def build() -> pathlib.Path:
         name: "data:image/png;base64," + base64.b64encode((SRC / "assets" / f"{name}.png").read_bytes()).decode()
         for name in ("clarity", "scenarios", "planning")
     }
-    assets = "const ILLUSTRATIONS = " + json.dumps(illustrations) + ";"
+    logo = "data:image/svg+xml;base64," + base64.b64encode((SRC / "assets" / "logo-navy.svg").read_bytes()).decode()
+    assets = "const ILLUSTRATIONS = " + json.dumps(illustrations) + ";\nconst PLATFORM_LOGO_SRC = " + json.dumps(logo) + ";"
     html = template.replace("/*__CSS__*/", css).replace("//__ASSETS__", assets).replace("//__JS__", js)
 
     # dist/index.html: page content only (the claude.ai artifact host adds <html>/<head>/<body>).

@@ -12,6 +12,7 @@ The previous demo combined a large lime surface, an 800-weight display headline,
 - Put decision areas in a native, keyboard-accessible disclosure. Preserve all ten prompts and their existing demo behavior; keep the modeled NYC question directly accessible.
 - Separate the model-review shortcut from the question form and make recommendations a distinct section.
 - Reserve illustrations for introductions: clarity on Home and loading, branching paths in Analyses, planning in goal setup. No illustration appears in financial warnings, charts or recommendations.
+- Use the Figma `Logo / Lockup · Style=Navy` export for the platform chrome and loading wordmark. It is a transparent navy lockup with the exact Figma proportions; it replaces the hand-built mark + wordmark pairing.
 - Default to light appearance, with a persistent dark-mode control. White-background artwork stays on white art panels in dark mode.
 - Stack metrics in two columns on phones, simplify the introductory art away on Home, and keep goal cards readable.
 

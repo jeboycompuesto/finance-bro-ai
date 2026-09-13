@@ -153,7 +153,8 @@ h1, h2, h3 { font-family: var(--font-body); margin: 0; text-wrap: balance; }
 
 /* ---------- brand ---------- */
 .brand { display: flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; color: var(--ink); }
-.brand-mark { width: 26px; height: 27px; flex: none; display: block; }
+.platform-logo { width: 126px; height: 26px; object-fit: contain; object-position: left center; flex: none; display: block; }
+.loading-logo { width: 220px; height: 46px; }
 .wordmark { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: -0.03em; line-height: 1; }
 .wordmark span { color: var(--blue); }
 .brand-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.06em; padding: 2px 6px; border-radius: var(--r-xs); background: var(--surface-2); color: var(--muted); }

@@ -4,18 +4,10 @@ const { useState, useEffect, useMemo, useRef, useCallback, useContext, createCon
 const StoreContext = createContext(null);
 const useStore = () => useContext(StoreContext);
 
-// Uka's F mark: a blue stroke over a lime stroke (Logo / Mark · Color in Figma).
-function BrandMark({ className = "" }) {
-  return (
-    <svg className={"brand-mark " + className} viewBox="0 0 264 272" aria-hidden="true">
-      <path d="M100 0H214A50 50 0 0 1 214 100H118C58 100 14 110 4 134C2 139 0 138 0 132V100C0 45 45 0 100 0Z" style={{ fill: "var(--blue)" }} />
-      <path d="M96 122H158A42 42 0 0 1 158 206H120C106 206 99 213 99 223A49.5 49.5 0 0 1 0 223V196C0 151 42 122 96 122Z" style={{ fill: "var(--lime)" }} />
-    </svg>
-  );
-}
-
-function Wordmark() {
-  return <span className="wordmark">Finance<span>Bro</span></span>;
+// Figma Logo / Lockup · Style=Navy. The exported asset is transparent and
+// contains the exact mark + wordmark proportions from the design system.
+function BrandLogo({ className = "" }) {
+  return <img className={"platform-logo " + className} src={PLATFORM_LOGO_SRC} alt="FinanceBro" />;
 }
 
 // Decorative art lives on introductory surfaces, never on financial results.
@@ -43,7 +35,7 @@ function TopBar({ setup = false }) {
   return (
     <header className="topbar">
       <button className="brand" onClick={() => (setup ? null : go("home"))} aria-label="Finance Bro AI home">
-        <BrandMark /> <Wordmark /> <span className="brand-tag">AI</span>
+        <BrandLogo /> <span className="brand-tag">AI</span>
       </button>
       {setup ? (
         <div className="row small muted">
