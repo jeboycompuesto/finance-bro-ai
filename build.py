@@ -10,6 +10,7 @@ needs an internet connection the first time it opens.
 """
 import base64
 import pathlib
+import json
 import sys
 import time
 
@@ -41,9 +42,12 @@ def build() -> pathlib.Path:
     )
     if "</script" in js:
         raise SystemExit("A source file contains '</script' — escape it before bundling.")
-    brody = "data:image/jpeg;base64," + base64.b64encode((SRC / "brody.jpg").read_bytes()).decode()
-    js = f"const BRODY_SRC = {brody!r};\n\n" + js
-    html = template.replace("/*__CSS__*/", css).replace("//__JS__", js)
+    illustrations = {
+        name: "data:image/png;base64," + base64.b64encode((SRC / "assets" / f"{name}.png").read_bytes()).decode()
+        for name in ("clarity", "scenarios", "planning")
+    }
+    assets = "const ILLUSTRATIONS = " + json.dumps(illustrations) + ";"
+    html = template.replace("/*__CSS__*/", css).replace("//__ASSETS__", assets).replace("//__JS__", js)
 
     # dist/index.html: page content only (the claude.ai artifact host adds <html>/<head>/<body>).
     DIST.mkdir(exist_ok=True)

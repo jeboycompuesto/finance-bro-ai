@@ -10,8 +10,7 @@ recommended setup cap and recommendation text. Change an assumption or drag the 
 
 **Live demo:** https://jeboycompuesto.github.io/finance-bro-ai/ (GitHub Pages, served from `docs/`)
 
-**Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — lime hero, navy ink, flat neutral cards and pill buttons
-(Wise-inspired), Uka's F logo, Bricolage Grotesque / Figtree / JetBrains Mono.
+**Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — Uka’s F logo and the original lime/navy palette, refined for a quieter financial workspace. Figtree leads the interface; Bricolage Grotesque is reserved for the wordmark. See [product design notes](design/product-refinement.md).
 
 ## Run it
 
@@ -43,6 +42,8 @@ Open http://localhost:5173.
 - `dist/index.html` — page content only, for the private claude.ai artifact (the host adds the HTML wrapper).
 
 ## Presenting
+
+- The appearance button in the header switches between light and dark themes and saves your preference. Light is the default.
 
 - The **Demo** button (bottom-left) jumps to any screen, triggers two recovery states (Rho sync failure, out-of-date recommendation), and has **Reset demo** to start over.
 - Progress saves in the browser, so a refresh keeps your place.
@@ -79,7 +80,7 @@ Only the NYC team decision is modeled. Other questions and decision areas show a
 build.py                 bundles src/ into dist/index.html
 src/index.template.html  page shell (fonts, CDN scripts)
 src/styles.css           design tokens (light + dark) and components, from the Finance Bro AI design system
-src/brody.jpg            Brody illustration for the loading screen (inlined by build.py)
+src/assets/              introductory illustrations (inlined by build.py)
 src/data.js              sample company, integrations catalog, goals, initial state
 src/engine.js            calculation engine, recommendations, templated explanations
 src/ui.jsx               shared components (top bar, stepper, provenance tags, inputs, modal, toasts)

@@ -23,10 +23,10 @@ function LoadingScreen() {
   return (
     <main className="loading-screen">
       <div className="loading-col">
-        <span className="loading-art"><img src={BRODY_SRC} alt="Brody the Bull, the Finance Bro mascot, in a fleece vest holding a notebook" width="180" height="180" /></span>
+        <Illustration subject="clarity" className="loading-art" />
         <div className="stack" style={{ gap: 10, alignItems: "center" }}>
           <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandMark /> <Wordmark /></h1>
-          <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Let’s ask something expensive." : "Getting your workspace ready…"}</p>
+          <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Make room for your next move." : "Getting your workspace ready…"}</p>
         </div>
         <div style={{ width: "100%" }} className="stack">
           <div className="progress good" aria-label="Loading progress"><span style={{ width: `${progress * 100}%` }} /></div>
@@ -380,13 +380,13 @@ function GoalsScreen() {
     <>
       {manage ? <TopBar /> : <><TopBar setup /><SetupBar step={1} /></>}
       <main className="page page-narrow">
-        <div>
-          <h1 className="h1">What is your business working toward?</h1>
+        <div className="row setup-intro">
+          <div><h1 className="h1">What is your business working toward?</h1>
           <p className="lede">
             {manage
               ? "Change your goals anytime. We track them on Home and rank recommendations around them."
               : "Now that we can see your cash, tell us what you’re working toward. We’ve suggested amounts from your real numbers — edit anything."}
-          </p>
+          </p></div><Illustration subject="planning" className="spot-art" />
         </div>
 
         <section className="card pad stack" style={{ gap: 14 }} aria-label="Company">

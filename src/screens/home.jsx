@@ -70,45 +70,65 @@ function HomeScreen() {
   return (
     <>
       <TopBar />
-      <main className="page">
+      <main className="page home-page">
         <SyncBanner />
-        <section className="hero stack" style={{ gap: 18 }} aria-label="Ask">
-          <h1 className="display">What do you want to decide today?</h1>
-          <form className="big-ask" onSubmit={(e) => { e.preventDefault(); submit(); }}>
-            <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="e.g. How much can we afford for NYC team activities and equipment?" aria-label="Ask a business question" />
-            <button className="btn btn-dark" type="submit">Ask →</button>
-          </form>
-          <div className="stack" style={{ gap: 8 }}>
-            <span className="eyebrow">Start from a decision area</span>
-            <div className="row wrap" style={{ gap: 8 }}>
-              {DECISION_AREAS.map((d) => (
-                <button key={d.id} className={"area-tile" + (d.live ? " live" : "")} onClick={() => { setAsk(d.prompt); submit(d.prompt); }}>
-                  <span className="t">{d.label}</span>
-                  <span className="p">{d.prompt}</span>
-                </button>
-              ))}
-            </div>
+        <div className="page-head overview-head">
+          <div><span className="eyebrow">{COMPANY.name} <span className="workspace-dot">/</span> Financial workspace</span>
+            <h1 className="h1">A clearer view of what’s next.</h1>
           </div>
-          <div className="card row-between wrap" style={{ padding: "12px 16px" }}>
-            <span className="small"><span className="strong">Already have a model?</span> <span className="muted">Upload it for a finance-health review — we check a copy, never the original.</span></span>
-            <button className="btn btn-secondary btn-sm" onClick={() => go("validate")}>Upload a model →</button>
-          </div>
+          <span className="workspace-note">Sample company <span aria-hidden="true">·</span> {COMPANY.stage} stage</span>
+        </div>
+
+        <section className="overview-metrics" aria-label="Business snapshot">
+          {[
+            ["Cash available", fmtK(COMPANY.openingCash), state.syncIssue ? "From your last sync" : "Across your accounts"],
+            ["Monthly net burn", fmtK(model.netBurnToday), "Outflows less receipts"],
+            ["Current runway", fmtMonths(model.none.runway), "Before new plans"],
+            ["Monthly receipts", fmtK(COMPANY.monthlyReceipts), "From connected accounts"],
+          ].map(([label, value, note]) => <div className="overview-metric" key={label}>
+            <span className="small muted">{label}</span><span className="metric-value">{value}</span><span className="metric-note">{note}</span>
+          </div>)}
         </section>
 
-        <section className="card pad stack" style={{ gap: 14 }} aria-label="Recommendations">
+        <section className="decision-intro" aria-label="Ask">
+          <div className="decision-copy">
+            <span className="eyebrow">From question to a considered decision</span>
+            <h2 className="display">Make your next move<br />with the full picture.</h2>
+            <p className="lede">Explore a decision, see the trade-offs, and understand what your cash can support.</p>
+            <form className="big-ask" onSubmit={(e) => { e.preventDefault(); submit(); }}>
+              <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="Can we fund a NYC team?" aria-label="Ask a business question" />
+              <button className="btn btn-primary" type="submit">Ask <span aria-hidden="true">↗</span></button>
+            </form>
+            <div className="decision-starter"><span className="small muted">Try a question</span><button onClick={startNyc}>Can we fund a NYC team? <span aria-hidden="true">↗</span></button></div>
+          </div>
+          <Illustration subject="clarity" className="hero-art" />
+        </section>
+        <div className="decision-tools">
+          <details className="decision-library">
+            <summary>Explore decision areas <span className="small muted">10 areas</span></summary>
+            <div className="decision-areas">
+              {DECISION_AREAS.map((d) => <button key={d.id} className="area-tile" onClick={() => { setAsk(d.prompt); submit(d.prompt); }}>
+                <span className="t">{d.label}</span><span className="p">{d.prompt}</span>
+              </button>)}
+            </div>
+          </details>
+          <div className="model-shortcut"><span className="small muted">Already have a financial model?</span><button className="btn btn-ghost btn-sm" onClick={() => go("validate")}>Review a model ↗</button></div>
+        </div>
+
+        <section className="home-recommendations stack" style={{ gap: 16 }} aria-label="Recommendations">
           <div className="row-between wrap">
             <div className="stack" style={{ gap: 2 }}>
               <span className="eyebrow">Recommendations for your business</span>
-              <h2 className="h2">{recs.length} suggestions from your accounts{done ? " and active plans" : ""} · {recs.filter((r) => r.impact === "High").length} high impact</h2>
+              <h2 className="h2">Worth your attention <span className="section-count">{recs.length}</span></h2>
             </div>
-            <button className="btn btn-secondary" onClick={() => go("recs")}>View all recommendations →</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => go("recs")}>View recommendations →</button>
           </div>
           <div className="grid-3">
             {recs.slice(0, 3).map((r) => (
-              <button key={r.id} className="panel stack" style={{ gap: 6, textAlign: "left", border: 0 }} onClick={() => go("recs")}>
+              <button key={r.id} className={"recommendation-preview stack" + (r.impact === "High" ? " priority" : "")} onClick={() => go("recs")}>
                 <span className="row-between"><span className="eyebrow">{r.category}</span><span className={"tag " + (r.impact === "High" ? "tag-dark" : "")}>{r.impact}</span></span>
                 <span className="h3">{r.title}</span>
-                <span className="small muted">{r.metric}</span>
+                <span className="small muted rec-metric">{r.metric}<span aria-hidden="true">↗</span></span>
               </button>
             ))}
           </div>
@@ -215,10 +235,10 @@ function AnalysesScreen() {
       <TopBar />
       <main className="page">
         <div className="page-head">
-          <div>
+          <div className="row"><Illustration subject="scenarios" className="spot-art" /><div>
             <h1 className="h1">Analyses</h1>
             <p className="lede">Decisions you’re modeling and models you’re checking. Every answer keeps its versions.</p>
-          </div>
+          </div></div>
           <div className="row">
             <button className="btn btn-secondary" onClick={() => go("validate")}>Upload a model</button>
             <button className="btn btn-primary" onClick={() => go("home")}>New analysis</button>
