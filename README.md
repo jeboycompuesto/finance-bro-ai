@@ -8,6 +8,8 @@ Everything is simulated (a fictional seed-stage company, Fieldnote Labs), but th
 a deterministic calculation engine (`src/engine.js`) computes every cash projection, runway, reserve breach,
 recommended setup cap and recommendation text. Change an assumption or drag the setup-cost slider and every screen updates.
 
+**Live demo:** https://jeboycompuesto.github.io/finance-bro-ai/ (GitHub Pages, served from `docs/`)
+
 ## Run it
 
 No installs needed (Python 3 is already on macOS).
@@ -16,7 +18,7 @@ No installs needed (Python 3 is already on macOS).
 python3 build.py
 ```
 
-Then open `dist/index.html` in a browser. React and Babel load from cdnjs, so the first open needs internet.
+Then open `docs/index.html` in a browser. React and Babel load from cdnjs, so the page needs internet.
 
 While editing, rebuild automatically and serve locally:
 
@@ -25,10 +27,17 @@ python3 build.py --watch
 ```
 
 ```bash
-python3 -m http.server 5173 --directory dist
+python3 -m http.server 5173 --directory docs
 ```
 
 Open http://localhost:5173.
+
+## Publishing
+
+`build.py` writes two copies of the same page:
+
+- `docs/index.html` — a complete HTML document. GitHub Pages serves it; commit and push to update the live demo.
+- `dist/index.html` — page content only, for the private claude.ai artifact (the host adds the HTML wrapper).
 
 ## Presenting
 

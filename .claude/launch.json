@@ -4,7 +4,7 @@
     {
       "name": "demo",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5173", "--directory", "dist"],
+      "runtimeArgs": ["-m", "http.server", "5173", "--directory", "docs"],
       "port": 5173
     }
   ]
