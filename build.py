@@ -44,7 +44,7 @@ def build() -> pathlib.Path:
         raise SystemExit("A source file contains '</script' — escape it before bundling.")
     illustrations = {
         name: f"data:image/{kind};base64," + base64.b64encode((SRC / "assets" / f"{name}.{ext}").read_bytes()).decode()
-        for name, ext, kind in (("clarity", "png", "png"), ("scenarios", "png", "png"), ("planning", "png", "png"), ("brody", "jpg", "jpeg"))
+        for name, ext, kind in (("clarity", "png", "png"), ("scenarios", "png", "png"), ("planning", "png", "png"), ("brody", "jpg", "jpeg"), ("brody-thinking", "jpg", "jpeg"), ("brody-celebrate", "jpg", "jpeg"))
     }
     logo = "data:image/svg+xml;base64," + base64.b64encode((SRC / "assets" / "logo-navy.svg").read_bytes()).decode()
     assets = "const ILLUSTRATIONS = " + json.dumps(illustrations) + ";\nconst PLATFORM_LOGO_SRC = " + json.dumps(logo) + ";"

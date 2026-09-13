@@ -49,7 +49,7 @@ function ValidateScreen() {
               onDragLeave={() => setDrag(false)}
               onDrop={(e) => { e.preventDefault(); setDrag(false); onFile(e.dataTransfer.files[0]); }}
             >
-              <span className="logo" style={{ width: 44, height: 52, fontSize: 12 }} aria-hidden="true">XLSX</span>
+              <Brody pose="thinking" className="brody-review-art" />
               <span className="h3">Drop an Excel model (.xlsx) or a CSV</span>
               <span className="small muted">We work from a copy — your original file is never changed.</span>
               <div className="row wrap" style={{ justifyContent: "center" }}>
@@ -296,7 +296,7 @@ function FindingsScreen() {
       {saved && (
         <Modal title="Reviewed version saved" onClose={() => setSaved(false)}>
           <div className="brody-celebrate">
-            <Brody className="brody-celebrate-art" />
+            <Brody pose="celebrate" className="brody-celebrate-art" />
             <div className="stack" style={{ gap: 2 }}>
               <span className="strong">{findings.every((f) => v.decisions[f.id]) ? "Model checked. Nailed it." : "Nice work — progress saved."}</span>
               <span className="small muted">{findings.every((f) => v.decisions[f.id]) ? "Every change you approved is in the new version, and nothing touched your original." : "Your approved changes are in. Come back to the open findings anytime — your original is untouched."}</span>

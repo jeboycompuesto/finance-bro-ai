@@ -575,8 +575,15 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
   .bar-row { grid-template-columns: 80px minmax(0,1fr) 80px; gap: 8px; }
 }
 
-/* ---------- Brody (brand moments only) ---------- */
+/* ---------- Brody: welcome, thinking and a little celebration ---------- */
 .brody-art { background: #fff; border-radius: var(--r-lg); }
+.brody-home-scene { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 12px 18px; background: #fff; border-radius: 14px; color: #14213d; }
+.brody-home-art { width: 260px; max-width: 100%; aspect-ratio: 1; }
+.brody-caption { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; font-size: 13px; line-height: 1.4; color: #535c6a; }
+.brody-name { font-size: 15px; font-weight: 600; color: #14213d; }
+.brody-question-intro { display: flex; align-items: center; gap: 16px; }
+.brody-question-art { width: 92px; height: 92px; border: 1px solid var(--rule); }
+.brody-review-art { width: 160px; height: 160px; }
 .brody-welcome { display: flex; align-items: center; gap: 24px; padding: 20px 24px; border-radius: var(--r-xl); background: var(--lime); color: #14213d; }
 .brody-welcome .eyebrow { color: #14213d; opacity: 0.75; }
 .brody-welcome .btn-quiet { color: #14213d; }
@@ -584,10 +591,17 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
 .brody-welcome .btn-primary:hover { background: #2a3a5c; }
 .brody-welcome-art { width: 120px; height: 120px; }
 .brody-empty { display: flex; align-items: center; gap: 20px; }
-.brody-empty-art { width: 96px; height: 96px; }
+.brody-empty-art { width: 132px; height: 132px; }
 .brody-celebrate { display: flex; align-items: center; gap: 16px; }
-.brody-celebrate-art { width: 88px; height: 88px; border: 1px solid var(--rule); }
+.brody-celebrate-art { width: 144px; height: 144px; border: 1px solid var(--rule); }
 @media (max-width: 720px) {
+  .brody-home-scene { flex-direction: row; justify-content: center; gap: 16px; padding: 12px; margin-top: 24px; border: 1px solid #edf0f3; }
+  .brody-home-art { width: 112px; }
+  .brody-caption { align-items: flex-start; text-align: left; max-width: 150px; }
+  .brody-question-art { width: 72px; height: 72px; }
+  .brody-review-art { width: 132px; height: 132px; }
+  .brody-empty-art, .brody-celebrate-art { width: 100px; height: 100px; }
+  .brody-empty, .brody-celebrate { align-items: flex-start; gap: 14px; }
   .brody-welcome { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
   .brody-welcome-art { width: 88px; height: 88px; }
 }

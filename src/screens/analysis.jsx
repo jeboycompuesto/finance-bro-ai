@@ -53,11 +53,14 @@ function QuestionsScreen() {
           </section>
 
           <section className="card pad stack" style={{ gap: 18 }} aria-label="What we need from you">
-            <div className="row-between">
+            <div className="brody-question-intro">
+              <Brody pose="thinking" className="brody-question-art" />
+              <div className="stack" style={{ gap: 6, flex: 1 }}>
               <h2 className="h2">What we need from you</h2>
               <span className={"small " + (complete ? "muted" : "")} style={{ color: complete ? undefined : "var(--crit)" }}>
                 {complete ? "All 4 required answered" : `${answered} of 4 required answered`}
               </span>
+              </div>
             </div>
             <span className="small muted" style={{ marginTop: -10 }}>Only the inputs this question needs. Your bank data can’t see the future.</span>
 
@@ -143,4 +146,3 @@ function QuestionsScreen() {
     </>
   );
 }
-

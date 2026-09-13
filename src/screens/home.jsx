@@ -52,6 +52,7 @@ function reviewRow(state) {
 function HomeScreen() {
   const { state, set, go, toast, model } = useStore();
   const [ask, setAsk] = useState("");
+  const [asking, setAsking] = useState(false);
   const recs = buildRecommendations(state, model);
   const goals = goalMetrics(state, model);
   const done = state.analysis.status === "done";
@@ -74,11 +75,10 @@ function HomeScreen() {
         <SyncBanner />
         {state.welcome === "show" && (
           <section className="brody-welcome" aria-label="Setup complete">
-            <Brody className="brody-welcome-art" />
             <div className="stack" style={{ gap: 6, flex: 1 }}>
               <span className="eyebrow">Setup complete</span>
               <h2 className="h2">Setup done. Nice.</h2>
-              <p className="small" style={{ margin: 0 }}>Your accounts are in and your goals are set. I’ll keep an eye on the numbers — let’s ask something expensive.</p>
+              <p className="small" style={{ margin: 0 }}>Your workspace and goals are set. Let’s think through your next move.</p>
             </div>
             <div className="row wrap">
               <button className="btn btn-primary" onClick={() => { set((s) => { s.welcome = "dismissed"; }); startNyc(); }}>Try the NYC question →</button>
@@ -110,12 +110,15 @@ function HomeScreen() {
             <h2 className="display">Make your next move<br />with the full picture.</h2>
             <p className="lede">Explore a decision, see the trade-offs, and understand what your cash can support.</p>
             <form className="big-ask" onSubmit={(e) => { e.preventDefault(); submit(); }}>
-              <input value={ask} onChange={(e) => setAsk(e.target.value)} placeholder="Can we fund a NYC team?" aria-label="Ask a business question" />
+              <input value={ask} onChange={(e) => setAsk(e.target.value)} onFocus={() => setAsking(true)} onBlur={() => setAsking(false)} placeholder="Can we fund a NYC team?" aria-label="Ask a business question" />
               <button className="btn btn-primary" type="submit">Ask <span aria-hidden="true">↗</span></button>
             </form>
             <div className="decision-starter"><span className="small muted">Try a question</span><button onClick={startNyc}>Can we fund a NYC team? <span aria-hidden="true">↗</span></button></div>
           </div>
-          <Illustration subject="clarity" className="hero-art" />
+          <div className="brody-home-scene">
+            <Brody pose={asking || ask.trim() ? "thinking" : state.welcome === "show" ? "celebrate" : "welcome"} className="brody-home-art" />
+            <div className="brody-caption"><span className="brody-name">Brody</span><span>{asking || ask.trim() ? "Let’s think it through." : state.welcome === "show" ? "All set. Nice work." : "Big plans? Let’s take a look."}</span></div>
+          </div>
         </section>
         <div className="decision-tools">
           <details className="decision-library">
@@ -329,10 +332,10 @@ function RecommendationsScreen() {
         </div>
         {recs.length === 0 && (
           <div className="card pad brody-empty">
-            <Brody className="brody-empty-art" />
+            <Brody pose="celebrate" className="brody-empty-art" />
             <div className="stack" style={{ gap: 4 }}>
               <h2 className="h3">Nothing needs you right now.</h2>
-              <span className="small muted">You’ve cleared every recommendation. Brody’s watching the accounts — new ones appear after the next sync.</span>
+              <span className="small muted">You’ve worked through this list. Come back when you’re ready to explore your next decision.</span>
             </div>
           </div>
         )}

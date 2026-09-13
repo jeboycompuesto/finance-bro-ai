@@ -1,0 +1,11 @@
+# Brody pose assets
+
+Created using the built-in image generation tool, September 13, 2026. Original PNGs are archived beside this file; optimized runtime JPEGs live in `src/assets/`.
+
+## thinking
+
+Use case: stylized-concept. Create a single standalone full-body 3D illustration of Brody, the exact same bull mascot in the reference. Reference 1 is definitive character identity, reference 2 shows pose ideas only. Preserve warm brown coat, tan broad muzzle, cream side horns, small dark blue eyes, navy fleece vest, lime zipper, navy hooves, compact adult proportions and finely textured tactile material. Match camera, scale and soft studio light to reference 1. Entire body including horns, tail and feet in a square composition with 8% clear margin. Pure uniform white #FFFFFF background. No text, labels, extra characters, borders, scenery, checkerboard, coins or charts. Keep subtle contact shadow only. POSE: thoughtful, head slightly tilted, one hoof-hand resting under his chin, other hand holds the same blue notebook at his side. Calm inquisitive closed smile, looking slightly toward viewer's left. This will accompany questions and model-review introductions in a financial app.
+
+## celebrate
+
+Use case: stylized-concept. Create a single standalone full-body 3D illustration of Brody, the exact same bull mascot in the reference. Reference 1 is definitive character identity, reference 2 shows pose ideas only. Preserve warm brown coat, tan broad muzzle, cream side horns, small dark blue eyes, navy fleece vest, lime zipper, navy hooves, compact adult proportions and finely textured tactile material. Match camera, scale and soft studio light to reference 1. Entire body including horns, tail and feet in a square composition with 8% clear margin. Pure uniform white #FFFFFF background. No text, labels, extra characters, borders, scenery, checkerboard, coins or charts. Keep subtle contact shadow only. POSE: modest celebration after saving work, one bent arm with hoof raised near shoulder in a small fist-pump, other arm holding the blue notebook beside his hip. Soft happy closed-mouth smile, relaxed stance. No confetti, no exaggerated jumping. This will appear when setup or model review is complete.
