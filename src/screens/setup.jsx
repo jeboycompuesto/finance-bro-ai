@@ -25,7 +25,7 @@ function LoadingScreen() {
       <div className="loading-col">
         <Illustration subject="clarity" className="loading-art" />
         <div className="stack" style={{ gap: 10, alignItems: "center" }}>
-          <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandMark /> <Wordmark /></h1>
+          <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandLogo className="loading-logo" /></h1>
           <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Make room for your next move." : "Getting your workspace ready…"}</p>
         </div>
         <div style={{ width: "100%" }} className="stack">
