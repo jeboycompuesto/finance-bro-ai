@@ -295,6 +295,13 @@ function FindingsScreen() {
 
       {saved && (
         <Modal title="Reviewed version saved" onClose={() => setSaved(false)}>
+          <div className="brody-celebrate">
+            <Brody className="brody-celebrate-art" />
+            <div className="stack" style={{ gap: 2 }}>
+              <span className="strong">{findings.every((f) => v.decisions[f.id]) ? "Model checked. Nailed it." : "Nice work — progress saved."}</span>
+              <span className="small muted">{findings.every((f) => v.decisions[f.id]) ? "Every change you approved is in the new version, and nothing touched your original." : "Your approved changes are in. Come back to the open findings anytime — your original is untouched."}</span>
+            </div>
+          </div>
           <div className="panel stack" style={{ gap: 6 }}>
             <span className="strong">{(v.fileName || SAMPLE_MODEL.fileName).replace(/\.(xlsx|xls|csv)$/i, "")} (reviewed v2).xlsx</span>
             <span className="small muted">Saved to your workspace. The original file is unchanged.</span>

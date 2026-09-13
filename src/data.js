@@ -153,4 +153,5 @@ const INITIAL_STATE = {
   depositsReviewed: false,
   nycTargetUpdated: false,
   hiddenRecs: {},
+  welcome: null, // null | "show" (after setup) | "dismissed"
 };

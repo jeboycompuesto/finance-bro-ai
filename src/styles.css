@@ -574,3 +574,20 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
   .loading-logo { width: 240px; height: 50px; }
   .bar-row { grid-template-columns: 80px minmax(0,1fr) 80px; gap: 8px; }
 }
+
+/* ---------- Brody (brand moments only) ---------- */
+.brody-art { background: #fff; border-radius: var(--r-lg); }
+.brody-welcome { display: flex; align-items: center; gap: 24px; padding: 20px 24px; border-radius: var(--r-xl); background: var(--lime); color: #14213d; }
+.brody-welcome .eyebrow { color: #14213d; opacity: 0.75; }
+.brody-welcome .btn-quiet { color: #14213d; }
+.brody-welcome .btn-primary { background: #14213d; color: #fff; }
+.brody-welcome .btn-primary:hover { background: #2a3a5c; }
+.brody-welcome-art { width: 120px; height: 120px; }
+.brody-empty { display: flex; align-items: center; gap: 20px; }
+.brody-empty-art { width: 96px; height: 96px; }
+.brody-celebrate { display: flex; align-items: center; gap: 16px; }
+.brody-celebrate-art { width: 88px; height: 88px; border: 1px solid var(--rule); }
+@media (max-width: 720px) {
+  .brody-welcome { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
+  .brody-welcome-art { width: 88px; height: 88px; }
+}

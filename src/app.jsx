@@ -64,6 +64,7 @@ function DemoMenu({ go, reset, set, state, toast }) {
             go("recommendation");
             toast("Changed NYC setup after the answer — see the out-of-date state");
           }}>Show out-of-date recommendation</button>
+          <button role="menuitem" onClick={() => { close(); set((s) => { s.welcome = "show"; }); go("home"); }}>Show setup-complete welcome (Brody)</button>
           <span className="small muted" style={{ padding: "0 10px 6px" }}>Connecting Brex fails on the first try.</span>
           <button role="menuitem" style={{ borderTop: "1px solid var(--rule)", marginTop: 4, color: "var(--crit)" }} onClick={() => { close(); reset(); }}>
             Reset demo

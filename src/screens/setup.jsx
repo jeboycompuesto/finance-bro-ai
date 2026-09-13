@@ -371,6 +371,7 @@ function GoalsScreen() {
   const pickedCount = Object.values(g.selected).filter(Boolean).length;
 
   const finish = () => {
+    if (!manage) set((s) => { if (s.welcome !== "dismissed") s.welcome = "show"; });
     go("home");
     toast(manage ? "Goals saved" : "Setup complete — here’s your Home");
   };

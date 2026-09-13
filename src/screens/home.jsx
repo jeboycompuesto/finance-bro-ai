@@ -72,6 +72,20 @@ function HomeScreen() {
       <TopBar />
       <main className="page home-page">
         <SyncBanner />
+        {state.welcome === "show" && (
+          <section className="brody-welcome" aria-label="Setup complete">
+            <Brody className="brody-welcome-art" />
+            <div className="stack" style={{ gap: 6, flex: 1 }}>
+              <span className="eyebrow">Setup complete</span>
+              <h2 className="h2">Setup done. Nice.</h2>
+              <p className="small" style={{ margin: 0 }}>Your accounts are in and your goals are set. I’ll keep an eye on the numbers — let’s ask something expensive.</p>
+            </div>
+            <div className="row wrap">
+              <button className="btn btn-primary" onClick={() => { set((s) => { s.welcome = "dismissed"; }); startNyc(); }}>Try the NYC question →</button>
+              <button className="btn btn-quiet" onClick={() => set((s) => { s.welcome = "dismissed"; })}>Dismiss</button>
+            </div>
+          </section>
+        )}
         <div className="page-head overview-head">
           <div><span className="eyebrow">{COMPANY.name} <span className="workspace-dot">/</span> Financial workspace</span>
             <h1 className="h1">A clearer view of what’s next.</h1>
@@ -313,7 +327,15 @@ function RecommendationsScreen() {
             </div>
           ))}
         </div>
-        {recs.length === 0 && <div className="card pad muted">You’ve cleared every recommendation. New ones appear after the next sync.</div>}
+        {recs.length === 0 && (
+          <div className="card pad brody-empty">
+            <Brody className="brody-empty-art" />
+            <div className="stack" style={{ gap: 4 }}>
+              <h2 className="h3">Nothing needs you right now.</h2>
+              <span className="small muted">You’ve cleared every recommendation. Brody’s watching the accounts — new ones appear after the next sync.</span>
+            </div>
+          </div>
+        )}
         <div className="grid-2">
           {recs.map((r) => (
             <section key={r.id} className="card pad rec-card" aria-label={r.title}>

@@ -10,6 +10,12 @@ function BrandLogo({ className = "" }) {
   return <img className={"platform-logo " + className} src={PLATFORM_LOGO_SRC} alt="FinanceBro" />;
 }
 
+// Brody the Bull, the Finance Bro mascot. Brand moments only: welcome, celebrations, empty states.
+// Never inside charts, answers or warnings (design system, Chapter 02).
+function Brody({ className = "" }) {
+  return <div className={"illustration brody-art " + className}><img src={ILLUSTRATIONS.brody} alt="Brody the Bull, the Finance Bro mascot, in a fleece vest" width="280" height="280" /></div>;
+}
+
 // Decorative art lives on introductory surfaces, never on financial results.
 function Illustration({ subject = "clarity", className = "" }) {
   return <div className={"illustration illustration-" + subject + " " + className} aria-hidden="true"><img src={ILLUSTRATIONS[subject]} alt="" width="320" height="320" /></div>;
