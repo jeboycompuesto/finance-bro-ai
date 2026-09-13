@@ -1,5 +1,7 @@
 # Finance Bro AI — product demo
 
+Licensed under the [MIT License](LICENSE). Third-party dependencies retain their respective licenses.
+
 A clickable demo of Finance Bro AI built from the FigJam low-fi mockup (section 04).
 It turns a business question into a decision you can defend:
 connect data → set goals → Home → recommendations → guided questions → scenarios → recommendation.
