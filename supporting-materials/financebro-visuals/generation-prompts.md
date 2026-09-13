@@ -1,0 +1,30 @@
+# Exact generation prompts
+
+Mode: built-in image generation.
+
+## 03 / Standalone Brody welcome illustration · accepted
+
+Reference: `02-brody-direction.png`.
+Output: `assets/brody-welcome-white.png` (1254 × 1254 RGB PNG).
+An earlier transparency attempt produced a baked checkerboard and was rejected. This accepted asset uses a solid white background.
+
+Exact prompt:
+
+Extract/recreate ONLY the central full-body Brody bull from this reference as a standalone app illustration. Same warm brown bull, cream horns, tan muzzle, navy fleece vest with lime zip, navy hooves and blue notebook, calm smile, hand on hip. Entire character including horns tail and feet centered in a square with 10% clear margin. Remove ALL text, other poses and layout. Background MUST be solid perfectly uniform pure white #FFFFFF. Do NOT draw a checkerboard or any texture in the background. No frame or shadow extending into margins. Clean tactile 3D illustration. Output one single full-body bull on pure white, no lettering.
+
+## 01 / Object-led direction
+
+Use case: stylized-concept.
+Create one polished landscape art-direction concept sheet for Financebro, an AI financial planning app for founders. This is original brand illustration development inspired by the bold tactile 3D object approach of Wise, without copying Wise assets.
+Canvas 1536x1024 or similar landscape, cool off-white #F8F9FB background, generous editorial whitespace, crisp navy typography. Top small label "FINANCEBRO / VISUAL EXPLORATION 01"; main title "Make the numbers tangible." Bottom small label "OBJECT-LED • TACTILE • A LITTLE UNEXPECTED". Use accurate understated typography, not a UI screenshot.
+Three beautiful distinct physical sculptures arranged across the board as a cohesive illustration family, one large hero on left occupying half width and two smaller sculptures stacked on right. Hero: a broad satin lime ribbon passes through a chunky navy rounded sorting arch; on its input side the ribbon is a loose messy knot, and on the output side it becomes one clear, elegant flat path curling forward. A small blue rounded tile beside it provides scale. The metaphor is financial complexity becoming clarity. Right upper: a chunky sculptural sky-blue Y-shaped forked path with two equally plausible branches, and a small orange sphere resting at the fork, expressing scenario planning without depicting data or guaranteed gains. Right lower: an oversized lime spring-like folded strip of calendar paper resting in a navy holder, three small embossed rounded calendar ticks, suggesting room to plan; no dates or dollar signs.
+Under each sculpture, small clear labels respectively "01 / Find clarity", "02 / Explore the options", "03 / Make room to plan".
+Materials: smooth glazed ceramic blended with soft satin coated metal, subtle microtexture visible at close range, occasional translucent blue resin accent, clear material distinctions, satisfying thick edges, slightly exaggerated proportions. Sophisticated art-directed studio product render, confident sculptural forms, soft upper-left lighting, short soft contact shadows, three-quarter view, carefully restrained palette from existing Financebro tokens: lime #A1D459 dominant, navy #14213D, blue #3D8FE3, small orange #F9834F. Colors should be rich not pastel washed-out. Dynamic but grounded compositions, polished boutique design studio quality. No characters, no bull, no coins, no currency symbols, no stock charts, no rockets, no logo imitation, no fluffy clay blobs, no busy background, no extra decorative sparkles. This is a proposal sheet, not final editable artwork.
+
+## 02 / Brody direction
+
+Use case: stylized-concept.
+Create one polished landscape character exploration sheet for Financebro's mascot Brody, reimagining a flat generic brown bull with fleece vest as a highly distinctive sculptural 3D character. Brand personality is the one friend who actually read the spreadsheet: competent, calm, dry humor, low ego. Canvas 1536x1024 or similar landscape with cool white #F8F9FB backdrop and lots of whitespace. Top small label "FINANCEBRO / VISUAL EXPLORATION 02", headline "Brody, with a little more character." At bottom a small label "CALM CONFIDENCE. SMALL DOSE OF BRO."
+Main left half: full-body collectible design-object bull, compact solid rounded body, stylized sculptural warm terracotta tan coat, broad rectangular soft muzzle with two tiny nostrils, small matte navy bead eyes with subtle raised brow, SHORT rounded ivory horns sweeping SIDEWAYS rather than sharp long horns. No human teeth. Adult clever expression, subtle amused half-smile, slightly asymmetric relaxed pose. Navy textured fleece vest with single lime #A1D459 zip, small pockets, rounded short legs ending in navy hooves. Holds a small closed blue #3D8FE3 planning notebook loosely under one arm. This is a refined boutique animation studio character, not a generic plush baby mascot, no oversized glossy cute anime eyes, no muscles or finance-guy swagger, no nose ring, no business suit or tie. Visual balance: strong silhouette, broad low center of gravity, intentional details, premium physical sculpture feel. One relaxed hand rests on hip.
+Right side two smaller consistent full-body views of THE EXACT SAME CHARACTER stacked vertically with the same vest and colors. Upper: listening thoughtfully, head tilted slightly, tiny rounded hoof-hand touching chin; label "01 / Thinking it through". Lower: understated celebration with one low raised hoof-hand and tiny closed smile, notebook held by side; label "02 / Nice work". Main left label "Brody / Your calm finance friend".
+Material: subtle fine coat texture, short dense fleece vest, smooth ivory ceramic-like horns, satin hoof finish. Sophisticated studio 3D render with upper-left soft lighting, soft grounded contact shadows. Restricted Financebro palette navy #14213D, lime #A1D459, blue #3D8FE3 and warm terracotta coat, ivory horns. No environmental scene, no coins, no currency symbols, no charts, no rockets, no confetti, no made-up logo. Typography navy, accurate and minimal. Same character anatomy and proportions across all three views.

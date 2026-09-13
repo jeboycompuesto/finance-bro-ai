@@ -12,6 +12,18 @@ recommended setup cap and recommendation text. Change an assumption or drag the 
 
 **Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — Uka’s F logo and the original lime/navy palette, refined for a quieter financial workspace. Figtree leads the interface; Bricolage Grotesque is reserved for the wordmark. See [product design notes](design/product-refinement.md).
 
+## Hackathon submission links
+
+- [Code repository](https://github.com/jeboycompuesto/finance-bro-ai)
+- [Live project](https://jeboycompuesto.github.io/finance-bro-ai/)
+- [Demo video — 2:03](https://drive.google.com/file/d/1O4IjXHmprM71rIpjaA29QgI6__s-9Tjv/view?usp=sharing)
+- [Published X post](https://x.com/jeboymotion/status/2099171873137590762)
+- [LOCK IN Hack event and requirements](https://luma.com/rhoevents-otbo)
+- [Submission housekeeping review](SUBMISSION-CHECKLIST.md)
+- [Archived scripts and visual source materials](supporting-materials/README.md)
+
+The working prototype runs entirely in the browser. It has no backend or live AI/API calls: calculations and explanation templates run locally, and connections and workbook reviews use fictional sample data. No API keys, bank accounts, uploaded workbook or credentials are needed to try it. The sample company and model metadata are bundled in `src/data.js`; choose **Use the sample model** in the model-review flow.
+
 ## Tech stack
 
 | Layer | What we use |
@@ -93,7 +105,7 @@ Only the NYC team decision is modeled. Other questions and decision areas show a
 ## Project layout
 
 ```
-build.py                 bundles src/ into dist/index.html
+build.py                 bundles src/ into docs/index.html and dist/index.html
 src/index.template.html  page shell (fonts, CDN scripts)
 src/styles.css           design tokens (light + dark) and components, from the Finance Bro AI design system
 src/assets/              introductory illustrations (inlined by build.py)
