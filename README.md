@@ -80,7 +80,7 @@ Open http://localhost:5173.
 
 - The **Demo** button (bottom-left) jumps to any screen, triggers two recovery states (Rho sync failure, out-of-date recommendation), shows Brody's setup-complete welcome, and has **Reset demo** to start over.
 - Progress saves in the browser, so a refresh keeps your place.
-- **Brody the Bull** shows up only on brand moments: the setup-complete welcome on Home, the empty Recommendations list, and the “Reviewed version saved” celebration. He never appears in charts, answers or warnings.
+- **Brody the Bull** is a contextual companion: his welcome pose lives beside the Home question, his thinking pose appears when a question or model review begins, and his celebration pose marks completed review work and an empty recommendation list. He never appears inside charts, financial answers or warnings.
 - Suggested live moments:
   1. On **Scenarios**, drag *NYC setup cost* from $60k to $35k and watch the status flip from “Downside breaks the reserve in Month 6”
      to “Reserve holds through Month 6”. Drag it back to $60k and click **See recommendation**.

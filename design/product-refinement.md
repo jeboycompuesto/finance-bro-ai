@@ -11,7 +11,7 @@ The previous demo combined a large lime surface, an 800-weight display headline,
 - Use lime for primary actions and a small priority accent. Use navy, neutral surfaces, thin borders and modest corner radii elsewhere.
 - Put decision areas in a native, keyboard-accessible disclosure. Preserve all ten prompts and their existing demo behavior; keep the modeled NYC question directly accessible.
 - Separate the model-review shortcut from the question form and make recommendations a distinct section.
-- Reserve illustrations for introductions: clarity on Home and loading, branching paths in Analyses, planning in goal setup. No illustration appears in financial warnings, charts or recommendations.
+- Reserve illustrations for introductions: Brody on Home and decision entry points, branching paths in Analyses, and planning in goal setup. No illustration appears in financial warnings, charts or recommendation content.
 - Use the Figma `Logo / Lockup · Style=Navy` export for the platform chrome and loading wordmark. It is a transparent navy lockup with the exact Figma proportions; it replaces the hand-built mark + wordmark pairing.
 - Default to light appearance, with a persistent dark-mode control. White-background artwork stays on white art panels in dark mode.
 - Stack metrics in two columns on phones, simplify the introductory art away on Home, and keep goal cards readable.
@@ -21,6 +21,8 @@ The previous demo combined a large lime surface, an 800-weight display headline,
 The three PNG assets are the previously created Financebro illustration library from this workspace, reused without visual modification. Build embeds them in a plain script separately from the Babel-transformed application, preserving both single-file outputs and avoiding transforming megabytes of image data.
 
 The app remains a simulated clickable demo. Its calculation engine, integrations, sample data, routing and review behavior are unchanged. React/Babel and fonts still load from their existing CDNs.
+
+Brody now has three contextual poses in the product: welcome on Home, thinking beside guided inputs and model review, and a small celebration after reviewed work is saved. The same character identity and white art panel are preserved across all three assets.
 
 Visual reference: [Wise design direction](https://wise.design/direction). The implementation follows Financebro’s existing colors and artwork rather than importing Wise assets.
 
