@@ -467,7 +467,7 @@ button.integration:hover { box-shadow: var(--shadow-hover); }
 /* ---------- loading: quiet introduction ---------- */
 .loading-screen { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; background: var(--paper); color: var(--ink); }
 .loading-col { width: 100%; max-width: 720px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
-.loading-art { width: 160px; height: 160px; border-radius: var(--r-xl); background: #fff; overflow: hidden; display: block; }
+.loading-art { width: 160px; height: 160px; border-radius: var(--r-xl); background: transparent; overflow: hidden; display: block; }
 .loading-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .loading-screen .brand { color: var(--ink); }
 .loading-screen .brand-mark { width: 40px; height: 41px; }
@@ -1659,7 +1659,7 @@ function LoadingScreen() {
   return (
     <main className="loading-screen">
       <div className="loading-col">
-        <Illustration subject="clarity" className="loading-art" />
+        <Illustration subject="planning" className="loading-art" />
         <div className="stack" style={{ gap: 10, alignItems: "center" }}>
           <h1 className="brand" style={{ margin: 0 }} aria-label="Finance Bro AI"><BrandLogo className="loading-logo" /></h1>
           <p className="lede" style={{ margin: 0 }}>{ready ? "Your workspace is ready. Make room for your next move." : "Getting your workspace ready…"}</p>
