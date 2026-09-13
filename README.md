@@ -12,6 +12,21 @@ recommended setup cap and recommendation text. Change an assumption or drag the 
 
 **Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — Uka’s F logo and the original lime/navy palette, refined for a quieter financial workspace. Figtree leads the interface; Bricolage Grotesque is reserved for the wordmark. See [product design notes](design/product-refinement.md).
 
+## Tech stack
+
+| Layer | What we use |
+|---|---|
+| UI | React 18.3.1 (UMD build) with JSX compiled in the browser by Babel Standalone 7.26.4 — both loaded from cdnjs |
+| Build | No npm, no bundler. `build.py` (Python 3, standard library only) inlines the CSS, JS and image assets into one self-contained `index.html` |
+| Styling | Hand-written CSS with design tokens (CSS custom properties) for light and dark themes, from the Figma design system |
+| Charts | Hand-built SVG — every line, tick and tooltip comes from one scale; no charting library |
+| Calculations | Plain JavaScript calculation engine (`src/engine.js`): deterministic cash projections, runway, reserve breaches and recommendations |
+| Data | Simulated sample company; the Rho, Plaid, QuickBooks and other connections are mock flows, not live integrations |
+| State | In-memory app state saved to the browser's `localStorage`, with hash-based routing (`#/home`, `#/scenarios`, …) |
+| Fonts | Google Fonts: Figtree (interface), Bricolage Grotesque (wordmark), JetBrains Mono (tags and figures) |
+| Hosting | GitHub Pages, served from `docs/` |
+| Design | Figma design system and FigJam research board with the low-fi mockup |
+
 ## Run it
 
 No installs needed (Python 3 is already on macOS).
