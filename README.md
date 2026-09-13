@@ -2,7 +2,7 @@
 
 Licensed under the [MIT License](LICENSE). Third-party dependencies retain their respective licenses.
 
-A clickable demo of Finance Bro AI built from the FigJam low-fi mockup (section 04).
+A clickable demo of Finance Bro AI built from the [FigJam low-fi mockup](https://www.figma.com/board/MsyLhQcuvfcRN3JkBRdzl5/FinanceBro-AI?node-id=75-468) (section 04).
 It turns a business question into a decision you can defend:
 connect data → set goals → Home → recommendations → guided questions → scenarios → recommendation.
 
@@ -12,12 +12,16 @@ recommended setup cap and recommendation text. Change an assumption or drag the 
 
 **Live demo:** https://jeboycompuesto.github.io/finance-bro-ai/ (GitHub Pages, served from `docs/`)
 
+**Research board (FigJam):** https://www.figma.com/board/MsyLhQcuvfcRN3JkBRdzl5/FinanceBro-AI — where most of our research lives: problem and market research, ICP and competitors,
+the product overview and end-to-end user flow, the low-fi mockup (section 04), teammate feedback and the link to this demo (section 05).
+
 **Design system:** https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo — Uka’s F logo and the original lime/navy palette, refined for a quieter financial workspace. Figtree leads the interface; Bricolage Grotesque is reserved for the wordmark. See [product design notes](design/product-refinement.md).
 
 ## Hackathon submission links
 
 - [Code repository](https://github.com/jeboycompuesto/finance-bro-ai)
 - [Live project](https://jeboycompuesto.github.io/finance-bro-ai/)
+- [FigJam research board](https://www.figma.com/board/MsyLhQcuvfcRN3JkBRdzl5/FinanceBro-AI)
 - [Demo video — 2:03](https://drive.google.com/file/d/1O4IjXHmprM71rIpjaA29QgI6__s-9Tjv/view?usp=sharing)
 - [Published X post](https://x.com/jeboymotion/status/2099171873137590762)
 - [LOCK IN Hack event and requirements](https://luma.com/rhoevents-otbo)
@@ -39,7 +43,7 @@ The working prototype runs entirely in the browser. It has no backend or live AI
 | State | In-memory app state saved to the browser's `localStorage`, with hash-based routing (`#/home`, `#/scenarios`, …) |
 | Fonts | Google Fonts: Figtree (interface), Bricolage Grotesque (wordmark), JetBrains Mono (tags and figures) |
 | Hosting | GitHub Pages, served from `docs/` |
-| Design | Figma design system and FigJam research board with the low-fi mockup |
+| Design | [Figma design system](https://www.figma.com/design/NgrotxV7Njc0D60IIEgRJo) and [FigJam research board](https://www.figma.com/board/MsyLhQcuvfcRN3JkBRdzl5/FinanceBro-AI) with the low-fi mockup |
 
 ## Run it
 
